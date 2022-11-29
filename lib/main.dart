@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_akuntansi/ui/components/SideNavigation.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 void main() {
   runApp(MyApp());
