@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_akuntansi/ui/components/detailText.dart';
+import 'package:sistem_akuntansi/ui/components/text_template.dart';
 
 class DetailCOA extends StatefulWidget {
   const DetailCOA({Key? key}) : super(key: key);
