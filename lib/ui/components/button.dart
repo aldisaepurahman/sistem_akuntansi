@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 
-class Button extends StatelessWidget {
+class ButtonHide extends StatefulWidget {
   final Color bg_color;
   final Color text_color;
-  final Function onPressed;
   final String content;
-  final Icon icon;
 
-  const Button(
+  const ButtonHide(
       {Key? key,
       required this.bg_color,
       required this.text_color,
-      required this.onPressed,
-      required this.content,
-      required this.icon})
+      required this.content})
       : super(key: key);
+
+  @override
+  State<ButtonHide> createState() => ButtonHideState();
+}
+
+class ButtonHideState extends State<ButtonHide> {
+  bool show = false;
+
+  void showToast() {
+    setState(() {
+      show = !show;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: bg_color, padding: EdgeInsets.all(18)),
-        onPressed: () {
-          onPressed(content);
-        },
+            backgroundColor: widget.bg_color, padding: EdgeInsets.all(18)),
+        onPressed: showToast,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -39,6 +46,49 @@ class Button extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
+                Text(
+                  widget.content,
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                    color: widget.text_color,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ));
+  }
+}
+
+class ButtonNoIcon extends StatelessWidget {
+  final Color bg_color;
+  final Color text_color;
+  final Function onPressed;
+  final String content;
+
+  const ButtonNoIcon(
+      {Key? key,
+      required this.bg_color,
+      required this.text_color,
+      required this.onPressed,
+      required this.content})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: bg_color, padding: EdgeInsets.all(18)),
+        onPressed: () {
+          onPressed;
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
                 Text(
                   content,
                   style: TextStyle(
