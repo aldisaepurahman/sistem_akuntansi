@@ -17,6 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SideNavigationBar());
+    return MaterialApp(home: SideNavigationBar(client: Supabase.instance.client));
   }
 }
