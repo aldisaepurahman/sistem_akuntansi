@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
+import 'package:supabase/supabase.dart';
+
+import '../screen/CoA/list_coa.dart';
 
 class SideNavigationBar extends StatefulWidget{
+  const SideNavigationBar({required this.client, super.key});
+
+  final SupabaseClient client;
+
   @override
   State<SideNavigationBar> createState() {
     return _SideNavigationBar();
@@ -16,21 +23,33 @@ class _SideNavigationBar extends State<SideNavigationBar> {
   String greyFontColor = "#b7b7b7".replaceAll('#', '0xff');
   String yellowTextColor = "#ffcc00".replaceAll('#', '0xff');
 
+  late List<Widget> _mainContents = [];
+
   void _changeIndex(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
+    _mainContents = [
+      Text('Ini page dashboard'),
+
+      ListCOA(client: widget.client),
+
+      Text('Ini page Saldo Awal'),
+
+      Text('Ini page Jurnal Umum'),
+    ];
   }
 
-  final List<Widget> _mainContents = [
+  /*final List<Widget> _mainContents = [
     Text('Ini page dashboard'),
 
-    DetailCOA(),
+    ListCOA(client: widget.client),
 
     Text('Ini page Saldo Awal'),
 
     Text('Ini page Jurnal Umum'),
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {
