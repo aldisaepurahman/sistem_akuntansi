@@ -34,8 +34,7 @@ class ActionButton extends StatelessWidget {
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                padding: EdgeInsets.all(20)),
-            onPressed: onPressed,
+                padding: EdgeInsets.all(20)),onPressed: onPressed,
             child: Text(
               textContent,
               style: TextStyle(

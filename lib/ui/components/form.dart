@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 
 class DropdownForm extends StatelessWidget {
-  final List<String> item;
+  final List<String> item;=
   final Function(String?) onChanged;
   final String content;
 
