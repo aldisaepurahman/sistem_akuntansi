@@ -8,6 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SideNavigationBar());
+    return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0,));
   }
 }
