@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
-// import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
-// import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
+import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
+import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
+import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesar.dart';
 
 class SideNavigationBar extends StatefulWidget{
