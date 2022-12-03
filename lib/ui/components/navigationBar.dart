@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
 
 class SideNavigationBar extends StatefulWidget{
   @override
@@ -23,42 +24,46 @@ class _SideNavigationBar extends State<SideNavigationBar> {
 
   final List<Widget> _mainContents = [
     Text('Ini page dashboard'),
-    Text('Ini page CoA'),
+
+    DetailCOA(),
+
     Text('Ini page Saldo Awal'),
+
     Text('Ini page Jurnal Umum'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 5,
-            child: NavigationRail(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _changeIndex,
-              labelType: NavigationRailLabelType.all,
-              destinations: _buildDestinations(),
-
-              selectedIconTheme: IconThemeData(color: Color(int.parse(yellowTextColor))),
-              unselectedIconTheme: IconThemeData(color: Color(int.parse(greyFontColor))),
-              selectedLabelTextStyle: TextStyle(color: Color(int.parse(yellowTextColor))),
-              unselectedLabelTextStyle: TextStyle(color: Color(int.parse(greyFontColor))),
+        body: Row(
+          children: [
+            Container(
+              color: Color(int.parse(whiteColor)),
+              width: MediaQuery.of(context).size.width / 5,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25),
+                child: NavigationRail(
+                  selectedIndex: _selectedIndex,
+                  onDestinationSelected: _changeIndex,
+                  labelType: NavigationRailLabelType.all,
+                  destinations: _buildDestinations(),
+                  selectedIconTheme: IconThemeData(color: Color(int.parse(yellowTextColor))),
+                  unselectedIconTheme: IconThemeData(color: Color(int.parse(greyFontColor))),
+                  selectedLabelTextStyle: TextStyle(color: Color(int.parse(yellowTextColor))),
+                  unselectedLabelTextStyle: TextStyle(color: Color(int.parse(greyFontColor))),
+                ),
+              )
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Color(int.parse(greyBackgroundColor)),
-              width: double.infinity,
-              height: double.infinity,
-              child: _mainContents[_selectedIndex],
+            Expanded(
+              child: Container(
+                color: Color(int.parse(greyBackgroundColor)),
+                width: double.infinity,
+                height: double.infinity,
+                child: _mainContents[_selectedIndex],
+              ),
             ),
-          ),
-        ],
-      )
+          ],
+        )
     );
   }
 
@@ -66,8 +71,6 @@ class _SideNavigationBar extends State<SideNavigationBar> {
     return [
       NavigationRailDestination(
         icon: SizedBox.shrink(),
-        // icon: Icon(Icons.grid_view_outlined),
-        // selectedIcon: Icon(Icons.grid_view_sharp),
         label: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -83,8 +86,6 @@ class _SideNavigationBar extends State<SideNavigationBar> {
       ),
       NavigationRailDestination(
         icon: SizedBox.shrink(),
-        // icon: Icon(Icons.grid_view_outlined),
-        // selectedIcon: Icon(Icons.grid_view_sharp),
         label: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -100,8 +101,6 @@ class _SideNavigationBar extends State<SideNavigationBar> {
       ),
       NavigationRailDestination(
         icon: SizedBox.shrink(),
-        // icon: Icon(Icons.grid_view_outlined),
-        // selectedIcon: Icon(Icons.grid_view_sharp),
         label: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -117,8 +116,6 @@ class _SideNavigationBar extends State<SideNavigationBar> {
       ),
       NavigationRailDestination(
         icon: SizedBox.shrink(),
-        // icon: Icon(Icons.grid_view_outlined),
-        // selectedIcon: Icon(Icons.grid_view_sharp),
         label: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
