@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class ListCOA extends StatefulWidget {
   const ListCOA({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class ListCOA extends StatefulWidget {
 
 class ListCOAState extends State<ListCOA> {
   @override
-  void dispose() {}
+  // void dispose() {}
 
   String kode_akun = "1.1-1104-01-02-01-05-05";
   String nama_akun =
@@ -60,7 +61,10 @@ class ListCOAState extends State<ListCOA> {
                                         Color.fromARGB(255, 255, 204, 0),
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
-                                  setState(() {});
+                                  setState(() {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0)));
+                                  });
                                 },
                                 child: Row(
                                   mainAxisAlignment:
@@ -172,7 +176,15 @@ class ListCOAState extends State<ListCOA> {
                             RowContent(content: nama_akun),
                             RowContent(content: keterangan),
                             RowContent(content: kode_reference),
-                            ActionButton()
+                            ActionButton(
+                              textContent: 'Lihat Detail',
+                              onPressed: (){
+                                setState(() {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0,)));
+                                });
+                              }
+                            )
                           ])
                         ],
                       ),

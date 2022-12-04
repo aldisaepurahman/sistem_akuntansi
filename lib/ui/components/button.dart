@@ -64,7 +64,7 @@ class ButtonHideState extends State<ButtonHide> {
 class ButtonNoIcon extends StatelessWidget {
   final Color bg_color;
   final Color text_color;
-  final Function onPressed;
+  final VoidCallback? onPressed;
   final String content;
 
   const ButtonNoIcon(
@@ -80,9 +80,7 @@ class ButtonNoIcon extends StatelessWidget {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: bg_color, padding: EdgeInsets.all(18)),
-        onPressed: () {
-          onPressed;
-        },
+        onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -101,5 +99,29 @@ class ButtonNoIcon extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class ButtonBack extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const ButtonBack({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: abu_transparan,
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        style: IconButton.styleFrom(
+          backgroundColor: abu_tua,
+        ),
+        onPressed: onPressed,
+        icon: Icon(Icons.arrow_back_rounded),
+        iconSize: 40,
+      ),
+    );
   }
 }

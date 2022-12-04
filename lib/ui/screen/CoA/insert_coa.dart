@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
 
 class InsertCOA extends StatefulWidget {
   const InsertCOA({Key? key}) : super(key: key);
@@ -21,6 +22,22 @@ class InsertCOAState extends State<InsertCOA> {
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: ListView(
               children: [
+                Container(
+                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ButtonBack(
+                          onPressed: (){
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                        )
+                      ],
+                    )
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                   child: const Text(
@@ -197,7 +214,9 @@ class InsertCOAState extends State<InsertCOA> {
                                   Color.fromARGB(255, 255, 255, 255),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            setState(() {});
+                            setState(() {
+                              Navigator.pop(context);
+                            });
                           },
                           child: const Text(
                             "Batalkan",
