@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
 
 class DetailCOA extends StatefulWidget {
   const DetailCOA({Key? key}) : super(key: key);
@@ -26,6 +27,22 @@ class DetailCOAState extends State<DetailCOA> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        Container(
+            margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ButtonBack(
+                  onPressed: (){
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                )
+              ],
+            )
+        ),
         Container(
           margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
           child: const Text(

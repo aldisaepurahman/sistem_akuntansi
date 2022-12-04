@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/ui/components/color.dart';
+import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
-import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
@@ -18,13 +19,33 @@ class ListBukuBesarState extends State<ListBukuBesar> {
   // @override
   // void dispose() {}
 
-  String _selectedMonthValue = 'Bulan';
-  String _selectedYearValue = 'Tahun';
+  String _selectedMonthFilter = 'Januari';
+  String _selectedYearFilter = '2022';
 
-  List<String> month = ['Bulan', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  List<String> year = ['Tahun', '2022'];
+  String _selectedMonthInsert = 'Januari';
+  String _selectedYearInsert = '2022';
+
+  List<String> month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  List<String> year = ['2022', '2023'];
 
   var tableRow;
+
+  bool show = false;
+  bool disable_button = false;
+
+  void showForm() {
+    setState(() {
+      show = true;
+      disable_button = true;
+    });
+  }
+
+  void disableForm() {
+    setState(() {
+      show = false;
+      disable_button = false;
+    });
+  }
 
   @override
   void initState() {
@@ -34,7 +55,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
       seeDetail: (){
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SideNavigationBar(index: 1, coaIndex: 2)));
+              builder: (context) => SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
         });
       },
       context: context,
@@ -49,6 +70,22 @@ class ListBukuBesarState extends State<ListBukuBesar> {
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: ListView(
               children: [
+                // Container(
+                //   margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       ButtonBack(
+                //         onPressed: (){
+                //           setState(() {
+                //             Navigator.pop(context);
+                //           });
+                //         },
+                //       )
+                //     ],
+                //   )
+                // ),
                 Container(
                   margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                   child: Column(
@@ -63,7 +100,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                             fontSize: 32,
                             color: Color.fromARGB(255, 50, 52, 55)),
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 25),
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
@@ -71,12 +108,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                             backgroundColor: Color.fromARGB(255, 255, 204, 0),
                             padding: EdgeInsets.all(20),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SideNavigationBar(index: 1, coaIndex: 1)));
-                            });
-                          },
+                          onPressed: disable_button ? null : showForm,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -110,6 +142,77 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                     ],
                   )
                 ),
+                Visibility(
+                  visible: show,
+                  child: Container(
+                    margin: EdgeInsets.all(25),
+                    padding: EdgeInsets.all(25),
+                    color: background2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 15),
+                          child: HeaderText(
+                              content: "Tambah Buku Besar",
+                              size: 18,
+                              color: hitam),
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              SizedBox(
+                                width:
+                                MediaQuery.of(context).size.width * 0.25,
+                                child: DropdownForm(
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedMonthInsert = newValue!;
+                                    });
+                                  },
+                                  content: _selectedMonthInsert,
+                                  items: month,
+                                  label: "--Pilih Bulan--"),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.25,
+                                  child: DropdownForm(
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedYearInsert = newValue!;
+                                      });
+                                    },
+                                    content: _selectedYearInsert,
+                                    items: year,
+                                    label: "--Pilih Tahun--")),
+                            ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ButtonNoIcon(
+                              bg_color: background2,
+                              text_color: merah,
+                              onPressed: disableForm,
+                              content: "Batal"),
+                            SizedBox(width: 20),
+                            ButtonNoIcon(
+                              bg_color: kuning,
+                              text_color: hitam,
+                              onPressed: () {
+                                setState(() {});
+                              },
+                              content: "Simpan"
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ),
                 Container(
                   margin: EdgeInsets.all(25),
                   padding: EdgeInsets.all(25),
@@ -121,28 +224,28 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          DropdownForm(
+                          DropdownFilter(
                             onChanged: (String? newValue){
                               setState(() {
                                 if (newValue != null) {
-                                  _selectedMonthValue = newValue;
+                                  _selectedMonthFilter = newValue;
                                 }
                               });
                             },
-                            content: _selectedMonthValue,
-                            item: month,
+                            content: _selectedMonthFilter,
+                            items: month,
                           ),
                           SizedBox(width: 20),
-                          DropdownForm(
+                          DropdownFilter(
                             onChanged: (String? newValue){
                               setState(() {
                                 if (newValue != null) {
-                                  _selectedYearValue = newValue;
+                                  _selectedYearFilter = newValue;
                                 }
                               });
                             },
-                            content: _selectedYearValue,
-                            item: year,
+                            content: _selectedYearFilter,
+                            items: year,
                           ),
                         ],
                       ),

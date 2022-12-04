@@ -63,7 +63,7 @@ class ListCOAState extends State<ListCOA> {
                                 onPressed: () {
                                   setState(() {
                                     Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1)));
+                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0)));
                                   });
                                 },
                                 child: Row(
@@ -181,7 +181,7 @@ class ListCOAState extends State<ListCOA> {
                               onPressed: (){
                                 setState(() {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SideNavigationBar(index: 1, coaIndex: 2)));
+                                      builder: (context) => SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0,)));
                                 });
                               }
                             )

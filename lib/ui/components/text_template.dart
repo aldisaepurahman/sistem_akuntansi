@@ -38,9 +38,9 @@ class HeaderText extends StatelessWidget {
 
   const HeaderText(
       {Key? key,
-      required this.content,
-      required this.size,
-      required this.color})
+        required this.content,
+        required this.size,
+        required this.color})
       : super(key: key);
 
   @override
@@ -54,6 +54,22 @@ class HeaderText extends StatelessWidget {
             fontSize: size,
             color: color),
       ),
+    );
+  }
+}
+
+class HeaderTable extends StatelessWidget {
+  final content;
+
+  const HeaderTable({Key? key, required this.content}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20),
+      child: Text(content,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.bold)),
     );
   }
 }

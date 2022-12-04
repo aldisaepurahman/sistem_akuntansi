@@ -7,11 +7,13 @@ import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesar.dart';
 class SideNavigationBar extends StatefulWidget{
   final int index;
   final int coaIndex;
+  final int bukuBesarIndex;
 
   SideNavigationBar(
       {Key? key,
         required this.index,
         required this.coaIndex,
+        required this.bukuBesarIndex,
       })
       : super(key: key);
 
