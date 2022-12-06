@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   supabase: ^1.2.0
   supabase_flutter: ^1.2.2
+  intl: ^0.17.0
+  textfield_search: ^0.10.0
 
 dev_dependencies:
   flutter_test:

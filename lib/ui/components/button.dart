@@ -120,7 +120,31 @@ class ButtonBack extends StatelessWidget {
         ),
         onPressed: onPressed,
         icon: Icon(Icons.arrow_back_rounded),
-        iconSize: 40,
+        iconSize: 25,
+      ),
+    );
+  }
+}
+
+class ButtonAdd extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const ButtonAdd({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: background2,
+          shape: BoxShape.circle,
+          border: Border.all(color: abu_tua)),
+      child: IconButton(
+        style: IconButton.styleFrom(
+          backgroundColor: abu_tua,
+        ),
+        onPressed: onPressed,
+        icon: Icon(Icons.add),
+        iconSize: 25,
       ),
     );
   }

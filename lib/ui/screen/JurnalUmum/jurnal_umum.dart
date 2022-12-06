@@ -4,6 +4,9 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+
+import '../../components/navigationBar.dart';
 
 class JurnalUmumList extends StatefulWidget {
   const JurnalUmumList({Key? key}) : super(key: key);
@@ -21,6 +24,24 @@ class JurnalUmumListState extends State<JurnalUmumList> {
   bool show = false;
   bool disable_button = false;
 
+  var tableRow;
+
+  @override
+  void initState() {
+    super.initState();
+    tableRow = new RowTable(
+      contentData: contents,
+      seeDetail: () {
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
+        });
+      },
+      context: context,
+    );
+  }
+
   void showForm() {
     setState(() {
       show = true;
@@ -36,47 +57,27 @@ class JurnalUmumListState extends State<JurnalUmumList> {
   }
 
   //Inisialisasi untuk Dropdown
-  String value_bulan = "Januari";
-  String value_tahun = "2025";
+  String _selectedMonthFilter = 'Januari';
+  String _selectedYearFilter = '2022';
 
-  List<DropdownMenuItem<String>> get dropdownBulan {
-    List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Januari"), value: "Januari"),
-      DropdownMenuItem(child: Text("Februari"), value: "Februari"),
-      DropdownMenuItem(child: Text("Maret"), value: "Maret"),
-      DropdownMenuItem(child: Text("April"), value: "April"),
-      DropdownMenuItem(child: Text("Mei"), value: "Mei"),
-      DropdownMenuItem(child: Text("Juni"), value: "Juni"),
-      DropdownMenuItem(child: Text("Juli"), value: "Juli"),
-      DropdownMenuItem(child: Text("Agustus"), value: "Agustus"),
-      DropdownMenuItem(child: Text("September"), value: "September"),
-      DropdownMenuItem(child: Text("Oktober"), value: "Oktober"),
-      DropdownMenuItem(child: Text("November"), value: "November"),
-      DropdownMenuItem(child: Text("Desember"), value: "Desember"),
-    ];
-    return menuItems;
-  }
+  String _selectedMonthInsert = 'Januari';
+  String _selectedYearInsert = '2022';
 
-  List<DropdownMenuItem<String>> get dropdownTahun {
-    List<DropdownMenuItem<String>> menuItems2 = [
-      DropdownMenuItem(child: Text("2025"), value: "2025"),
-      DropdownMenuItem(child: Text("2024"), value: "2024"),
-      DropdownMenuItem(child: Text("2023"), value: "2023"),
-      DropdownMenuItem(child: Text("2022"), value: "2022"),
-      DropdownMenuItem(child: Text("2021"), value: "2021"),
-      DropdownMenuItem(child: Text("2020"), value: "2020"),
-    ];
-    return menuItems2;
-  }
-
-  //Table
-  final List<Map<String, String>> listOfColumns = [
-    {
-      "Name": "AAAAAA",
-      "Number": "1",
-      "State": "Yes",
-    }
+  List<String> month = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
   ];
+  List<String> year = ['2021', '2022', '2023', '2024', '2025'];
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +87,21 @@ class JurnalUmumListState extends State<JurnalUmumList> {
             backgroundColor: background,
             body: ListView(
               children: [
+                Container(
+                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ButtonBack(
+                          onPressed: () {
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                        )
+                      ],
+                    )),
                 Container(
                     margin: EdgeInsets.only(top: 25, left: 25),
                     child: HeaderText(
@@ -144,7 +160,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: 15),
+                            margin: EdgeInsets.only(bottom: 20),
                             child: HeaderText(
                                 content: "Tambah Jurnal Umum",
                                 size: 18,
@@ -160,11 +176,11 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                   child: DropdownForm(
                                       onChanged: (String? newValue) {
                                         setState(() {
-                                          value_bulan = newValue!;
+                                          _selectedMonthInsert = newValue!;
                                         });
                                       },
-                                      content: value_bulan,
-                                      items: dropdownBulan,
+                                      content: _selectedMonthInsert,
+                                      items: month,
                                       label: "--Pilih Bulan--"),
                                 ),
                                 SizedBox(
@@ -176,13 +192,16 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                     child: DropdownForm(
                                         onChanged: (String? newValue) {
                                           setState(() {
-                                            value_tahun = newValue!;
+                                            _selectedYearInsert = newValue!;
                                           });
                                         },
-                                        content: value_tahun,
-                                        items: dropdownTahun,
+                                        content: _selectedYearInsert,
+                                        items: year,
                                         label: "--Pilih Tahun--")),
                               ]),
+                          SizedBox(
+                            height: 30,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -204,42 +223,66 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                         ],
                       ),
                     )),
-
-                // Container(
-                //   margin: EdgeInsets.all(25),
-                //   padding: EdgeInsets.all(25),
-                //   color: background2,
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       DataTable(
-                //         border: TableBorder(
-                //             bottom: BorderSide(
-                //                 color: Color.fromARGB(50, 117, 117, 117),
-                //                 width: 1)),
-                //         columns: [
-                //           TableRow(
-                //               decoration: BoxDecoration(
-                //                   color: Color.fromARGB(255, 245, 245, 245)),
-                //               children: [
-                //                 HeaderTable(content: "No"),
-                //                 HeaderTable(content: "Bulan"),
-                //                 HeaderTable(content: "Tahun"),
-                //                 HeaderTable(content: "Aksi")
-                //               ]),
-                //           TableRow(children: [
-                //             RowContent(content: "1"),
-                //             RowContent(content: kode_akun),
-                //             RowContent(content: nama_akun),
-                //             RowContent(content: keterangan),
-                //             RowContent(content: kode_reference),
-                //             ActionButton()
-                //           ])
-                //         ],
-                //       )
-                //     ],
-                //   ),
-                // )
+                Container(
+                  margin:
+                      EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
+                  padding: EdgeInsets.all(25),
+                  color: background2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          DropdownFilter(
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                if (newValue != null) {
+                                  _selectedMonthFilter = newValue;
+                                }
+                              });
+                            },
+                            content: _selectedMonthFilter,
+                            items: month,
+                          ),
+                          SizedBox(width: 20),
+                          DropdownFilter(
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                if (newValue != null) {
+                                  _selectedYearFilter = newValue;
+                                }
+                              });
+                            },
+                            content: _selectedYearFilter,
+                            items: year,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 25),
+                      PaginatedDataTable(
+                        columns: <DataColumn>[
+                          DataColumn(
+                            label: Text("No."),
+                          ),
+                          DataColumn(
+                            label: Text("Bulan"),
+                          ),
+                          DataColumn(
+                            label: Text("Tahun"),
+                          ),
+                          DataColumn(
+                            label: Text("Action"),
+                          ),
+                        ],
+                        source: tableRow,
+                        rowsPerPage: 10,
+                        showCheckboxColumn: false,
+                      )
+                    ],
+                  ),
+                )
               ],
             )));
   }
