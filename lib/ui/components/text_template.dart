@@ -57,3 +57,19 @@ class HeaderText extends StatelessWidget {
     );
   }
 }
+
+class HeaderTable extends StatelessWidget {
+  final content;
+
+  const HeaderTable({Key? key, required this.content}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20),
+      child: Text(content,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.bold)),
+    );
+  }
+}
