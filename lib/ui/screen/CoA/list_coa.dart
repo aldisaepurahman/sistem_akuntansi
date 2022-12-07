@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 
 class ListCOA extends StatefulWidget {
   const ListCOA({Key? key}) : super(key: key);
@@ -170,22 +171,22 @@ class ListCOAState extends State<ListCOA> {
                                   child: Text(""),
                                 ),
                               ]),
-                          TableRow(children: [
-                            RowContent(content: "1"),
-                            RowContent(content: kode_akun),
-                            RowContent(content: nama_akun),
-                            RowContent(content: keterangan),
-                            RowContent(content: kode_reference),
-                            ActionButton(
-                              textContent: 'Lihat Detail',
-                              onPressed: (){
-                                setState(() {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0,)));
-                                });
-                              }
-                            )
-                          ])
+                          // TableData(children: [
+                          //   RowContent(content: "1"),
+                          //   RowContent(content: kode_akun),
+                          //   RowContent(content: nama_akun),
+                          //   RowContent(content: keterangan),
+                          //   RowContent(content: kode_reference),
+                          //   ActionButton(
+                          //     textContent: 'Lihat Detail',
+                          //     onPressed: (){
+                          //       setState(() {
+                          //         Navigator.of(context).push(MaterialPageRoute(
+                          //             builder: (context) => SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0,)));
+                          //       });
+                          //     }
+                          //   )
+                          // ])
                         ],
                       ),
                       SizedBox(height: 25),
