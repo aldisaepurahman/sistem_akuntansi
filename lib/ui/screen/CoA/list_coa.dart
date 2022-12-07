@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_state.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListCOA extends StatefulWidget {
-  const ListCOA({Key? key}) : super(key: key);
+  const ListCOA({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   ListCOAState createState() {
@@ -29,17 +37,20 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
-            body: ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                  child: const Text(
-                    "Chart of Account",
-                    style: TextStyle(
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 32,
-                        color: Color.fromARGB(255, 50, 52, 55)),
+            body: BlocProvider(
+              create: (_) => AkunBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+              child: ListView(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+                    child: const Text(
+                      "Chart of Account",
+                      style: TextStyle(
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32,
+                          color: Color.fromARGB(255, 50, 52, 55)),
+                    ),
                   ),
                 ),
                 Container(
@@ -87,29 +98,15 @@ class ListCOAState extends State<ListCOA> {
                                           "Tambah Chart of Account",
                                           style: TextStyle(
                                             fontFamily: "Inter",
-                                            color:
-                                                Color.fromARGB(255, 50, 52, 55),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                )),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.19,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  fillColor: Color.fromARGB(255, 117, 117, 117),
-                                  prefixIcon: Icon(Icons.search),
-                                  prefixIconColor:
-                                      Color.fromARGB(255, 117, 117, 117),
-                                  hintText: 'Cari Chart of Account',
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8))),
+                                              color:
+                                              Color.fromARGB(255, 50, 52, 55),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  )),
                             ),
                           ),
                         ],
