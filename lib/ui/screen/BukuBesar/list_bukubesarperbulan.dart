@@ -37,7 +37,7 @@ class ListBukuBesarPerBulanState extends State<ListBukuBesarPerBulan> {
             body: ListView(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+                  margin: EdgeInsets.only(top: 25, bottom: 15, left: 25, right: 25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,45 +53,200 @@ class ListBukuBesarPerBulanState extends State<ListBukuBesarPerBulan> {
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  margin: EdgeInsets.only(top: 25, bottom: 15, left: 25, right: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Buku Besar",
-                        style: TextStyle(
-                            fontFamily: "Inter",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32,
-                            color: Color.fromARGB(255, 50, 52, 55)
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Buku Besar",
+                            style: TextStyle(
+                                fontFamily: "Inter",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                                color: Color.fromARGB(255, 50, 52, 55)
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            "November 2022",
+                            style: TextStyle(
+                                fontFamily: "Inter",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Color.fromARGB(255, 50, 52, 55)
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Buku Besar",
-                        style: TextStyle(
-                            fontFamily: "Inter",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32,
-                            color: Color.fromARGB(255, 50, 52, 55)
-                        ),
-                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Kode Akun: ",
+                                style: TextStyle(
+                                    fontFamily: "Inter",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 50, 52, 55)
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "2.5-5101-10-01-01",
+                                style: TextStyle(
+                                    fontFamily: "Inter",
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 50, 52, 55)
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            "Akun, Debit",
+                            style: TextStyle(
+                                fontFamily: "Inter",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Color.fromARGB(255, 50, 52, 55)
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   )
                 ),
                 Container(
                   margin: EdgeInsets.all(25),
-                  padding: EdgeInsets.all(25),
+                  padding: EdgeInsets.symmetric(horizontal: 25),
                   color: Color.fromARGB(255, 255, 255, 255),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                  'Total Saldo: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    fontFamily: "Inter",
+                                  )
+                              ),
+                              Text(
+                                  'Rp 500.000',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: "Inter",
+                                  )
+                              ),
+                            ],
+                          ),
+                          ActionButton(
+                            textContent: 'Cetak Buku Besar',
+                            onPressed: () {
+                              //
+                            }
+                          )
+                        ],
+                      ),
                       PaginatedDataTable(
+                        columnSpacing: 0,
+                        horizontalMargin: 0,
                         columns: <DataColumn>[
-                          DataColumn(label: Text("Tanggal"),),
-                          DataColumn(label: Text("Nama Transaksi"),),
-                          DataColumn(label: Text("No. Bukti"),),
-                          DataColumn(label: Text("Keterangan"),),
-                          DataColumn(label: Text("Saldo (Rp.)"),),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Tanggal",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Nama Transaksi",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No. Bukti",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            )
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Keterangan",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            )
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Saldo (Rp.)",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            )
+                          ),
                         ],
                         source: tableRow,
                         rowsPerPage: 5,

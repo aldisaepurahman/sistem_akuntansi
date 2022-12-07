@@ -66,12 +66,6 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     ];
   }
 
-
-  String whiteColor = "#ffffff".replaceAll('#', '0xff');
-  String greyBackgroundColor = "#f8f9fd".replaceAll('#', '0xff');
-  String greyFontColor = "#b7b7b7".replaceAll('#', '0xff');
-  String yellowTextColor = "#ffcc00".replaceAll('#', '0xff');
-
   void _changeIndex(int index) {
     setState(() {
       selectedIndex = index;

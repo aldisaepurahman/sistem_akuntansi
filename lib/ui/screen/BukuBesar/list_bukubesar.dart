@@ -54,22 +54,6 @@ class ListBukuBesarState extends State<ListBukuBesar> {
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: ListView(
               children: [
-                // Container(
-                //   margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                //   child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.start,
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       ButtonBack(
-                //         onPressed: (){
-                //           setState(() {
-                //             Navigator.pop(context);
-                //           });
-                //         },
-                //       )
-                //     ],
-                //   )
-                // ),
                 Container(
                   margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                   child: Text(
@@ -120,11 +104,77 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                       ),
                       SizedBox(height: 25),
                       PaginatedDataTable(
+                        columnSpacing: 0,
+                        horizontalMargin: 0,
                         columns: <DataColumn>[
-                          DataColumn(label: Text("No."),),
-                          DataColumn(label: Text("Bulan"),),
-                          DataColumn(label: Text("Tahun"),),
-                          DataColumn(label: Text("Action"),),
+                          DataColumn(
+                            label: Expanded(
+                                child: Container(
+                                  color: Color(int.parse(greyHeaderColor)),
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "No.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Inter",
+                                    ),
+                                  ),
+                                )
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Bulan",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Tahun",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                                child: Container(
+                                  color: Color(int.parse(greyHeaderColor)),
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Action",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Inter",
+                                    ),
+                                  ),
+                                )
+                            ),
+                          ),
                         ],
                         source: tableRow,
                         rowsPerPage: 5,

@@ -22,19 +22,43 @@ class BulanTahunTableData extends DataTableSource {
         DataCell(
             SizedBox(
               width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${index+1}"),
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "${index+1}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              )
             )
         ),
         DataCell(
             SizedBox(
               width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.bulan}"),
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "${_content.bulan}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              ),
             )
         ),
         DataCell(
             SizedBox(
               width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.tahun}"),
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "${_content.tahun}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              ),
             )
         ),
         DataCell(
@@ -86,33 +110,75 @@ class BukuBesarTableData extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.tgl}"),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 10 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${_content.tgl}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
             )
+          )
         ),
         DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.nama_transaksi}"),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3 - 50,
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "${_content.nama_transaksi}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
             )
+          )
         ),
         DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.no_bukti}"),
-            )
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 10 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${_content.no_bukti}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
+            ),
+          )
         ),
         DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.keterangan}"),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 10 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${_content.keterangan}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
             )
-        ),DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Text("${_content.saldo}"),
+          )
+        ),
+        DataCell(
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 8 - 50,
+            child: Container(
+              padding: EdgeInsets.only(right: 20),
+              alignment: Alignment.centerRight,
+              child: Text(
+                "${_content.saldo}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
             )
+          )
         ),
 
       ],
@@ -143,17 +209,21 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(20),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                padding: EdgeInsets.all(20)),onPressed: onPressed,
-            child: Text(
-              textContent,
-              style: TextStyle(
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 50, 52, 55),
-                  fontWeight: FontWeight.bold),
-            )));
+      padding: EdgeInsets.all(20),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 255, 204, 0),
+            padding: EdgeInsets.all(20)
+        ),
+        onPressed: onPressed,
+        child: Text(
+          textContent,
+          style: TextStyle(
+              fontFamily: "Inter",
+              color: Color.fromARGB(255, 50, 52, 55),
+              fontWeight: FontWeight.bold),
+        )
+      )
+    );
   }
 }
