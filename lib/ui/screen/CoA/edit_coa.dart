@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 
-class InsertCOA extends StatefulWidget {
-  const InsertCOA({Key? key}) : super(key: key);
+class EditCOA extends StatefulWidget {
+  const EditCOA({Key? key}) : super(key: key);
 
   @override
-  InsertCOAState createState() {
-    return InsertCOAState();
+  EditCOAState createState() {
+    return EditCOAState();
   }
 }
 
-class InsertCOAState extends State<InsertCOA> {
+class EditCOAState extends State<EditCOA> {
   @override
   void dispose() {}
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Tambah Chart of Account',
+        title: 'Edit Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: ListView(
@@ -40,7 +40,7 @@ class InsertCOAState extends State<InsertCOA> {
                 Container(
                   margin: EdgeInsets.only(top: 25, left: 25),
                   child: const Text(
-                    "Tambah Chart of Account",
+                    "Edit Chart of Account",
                     style: TextStyle(
                         fontFamily: "Inter",
                         fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ class InsertCOAState extends State<InsertCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.30,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
@@ -123,7 +123,7 @@ class InsertCOAState extends State<InsertCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.30,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
@@ -147,7 +147,7 @@ class InsertCOAState extends State<InsertCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.30,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(

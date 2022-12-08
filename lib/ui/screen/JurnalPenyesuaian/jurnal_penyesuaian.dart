@@ -29,7 +29,7 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTable(
+    tableRow = new RowTableMonth(
       contentData: contents,
       seeDetail: () {
         setState(() {

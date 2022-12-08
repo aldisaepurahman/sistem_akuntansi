@@ -29,7 +29,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTable(
+    tableRow = new RowTableMonth(
       contentData: contents,
       seeDetail: () {
         setState(() {
