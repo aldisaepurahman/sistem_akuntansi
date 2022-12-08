@@ -1,18 +1,24 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+//<<<<<<< branch_prilla
+//=======
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
+//>>>>>>> branch_aldi_backend
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
+import 'package:sistem_akuntansi/ui/components/form.dart';
+import 'package:sistem_akuntansi/utils/V_lookup.dart';
 
 class ListCOA extends StatefulWidget {
-  const ListCOA({required this.client, Key? key}) : super(key: key);
-
-  final SupabaseClient client;
+  const ListCOA({Key? key}) : super(key: key);
 
   @override
   ListCOAState createState() {
@@ -31,6 +37,29 @@ class ListCOAState extends State<ListCOA> {
   String kode_reference = "2";
   String saldo_awal = "-";
   String saldo_awal_baru = "Rp 29.702.072";
+  var tableRow;
+
+  int total_row = 5;
+
+  String _selectedEntries = '5';
+
+  List<String> row = ['5', '10', '25', '50', '100'];
+
+  @override
+  void initState() {
+    super.initState();
+    tableRow = new RowTableCOA(
+      contentData: contents,
+      seeDetail: () {
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
+        });
+      },
+      context: context,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +67,44 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
+/*<<<<<<< branch_prilla
+            body: ListView(
+              children: [
+                Container(
+=======*/
             body: BlocProvider(
               create: (_) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
               child: ListView(
                 children: [
                   Container(
+//>>>>>>> branch_aldi_backend
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: const Text(
-                      "Chart of Account",
-                      style: TextStyle(
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                          color: Color.fromARGB(255, 50, 52, 55)),
-                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ButtonBack(
+                          onPressed: () {
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                        )
+                      ],
+                    )),
+                Container(
+                  margin: EdgeInsets.only(top: 25, left: 25),
+                  child: const Text(
+                    "Chart of Account",
+                    style: TextStyle(
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32,
+                        color: Color.fromARGB(255, 50, 52, 55)),
                   ),
                 Container(
-                  margin: EdgeInsets.all(25),
+                  margin:
+                      EdgeInsets.only(top: 25, bottom: 50, left: 25, right: 25),
                   padding: EdgeInsets.all(25),
                   color: Color.fromARGB(255, 255, 255, 255),
                   child: Column(
@@ -73,8 +123,18 @@ class ListCOAState extends State<ListCOA> {
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
                                   setState(() {
+/*<<<<<<< branch_prilla
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SideNavigationBar(
+                                                    index: 1,
+                                                    coaIndex: 1,
+                                                    bukuBesarIndex: 0)));
+=======*/
                                     Navigator.of(context).push(MaterialPageRoute(
                                         builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0, client: widget.client)));
+//>>>>>>> branch_aldi_backend
                                   });
                                 },
                                 child: Row(
@@ -98,7 +158,85 @@ class ListCOAState extends State<ListCOA> {
                                           "Tambah Chart of Account",
                                           style: TextStyle(
                                             fontFamily: "Inter",
-                                              color:
+//<<<<<<< branch_prilla
+                                            color:
+                                                Color.fromARGB(255, 50, 52, 55),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.19,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      fillColor:
+                                          Color.fromARGB(255, 117, 117, 117),
+                                      prefixIcon: Icon(Icons.search),
+                                      prefixIconColor:
+                                          Color.fromARGB(255, 117, 117, 117),
+                                      hintText: 'Cari Chart of Account',
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8))),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              SizedBox(
+                                child: DropdownFilter(
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      if (newValue != null) {
+                                        total_row = int.parse(newValue);
+                                      }
+                                    });
+                                  },
+                                  content: _selectedEntries,
+                                  items: row,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 25),
+                      PaginatedDataTable(
+                        columns: <DataColumn>[
+                          DataColumn(
+                            label: Text("No."),
+                          ),
+                          DataColumn(
+                            label: Text("Kode"),
+                          ),
+                          DataColumn(
+                            label: Text("Nama Akun"),
+                          ),
+                          DataColumn(
+                            label: Text("Keterangan"),
+                          ),
+                          DataColumn(
+                            label: Text("Indentasi"),
+                          ),
+                          DataColumn(
+                            label: Text("Action"),
+                          ),
+                        ],
+                        source: tableRow,
+                        rowsPerPage: total_row,
+                        showCheckboxColumn: false,
+                        dataRowHeight: 70,
+                      )
+//=======
+                                              /*color:
                                               Color.fromARGB(255, 50, 52, 55),
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -110,7 +248,7 @@ class ListCOAState extends State<ListCOA> {
                             ),
                         ],
                       ),
-                      SizedBox(height: 25),
+                      SizedBox(height: 25),*/
                       /*PaginatedDataTable(
                         columns: <DataColumn>[
                           DataColumn(
@@ -158,6 +296,7 @@ class ListCOAState extends State<ListCOA> {
                         rowsPerPage: 10,
                         showCheckboxColumn: false,
                       )*/
+//>>>>>>> branch_aldi_backend
                     ],
                   ),
                 )

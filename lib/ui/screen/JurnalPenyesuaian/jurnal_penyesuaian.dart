@@ -32,7 +32,7 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTable(
+    tableRow = new RowTableMonth(
       contentData: contents,
       seeDetail: () {
         setState(() {
@@ -109,10 +109,6 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
                     margin: EdgeInsets.only(top: 25, left: 25),
                     child: HeaderText(
                         content: "Jurnal Penyesuaian", size: 32, color: hitam)),
-                Container(
-                    margin: EdgeInsets.only(bottom: 15, left: 25),
-                    child: HeaderText(
-                        content: "Jurnal Maret 2022", size: 18, color: hitam)),
                 Container(
                     width: 30,
                     margin: EdgeInsets.only(left: 25, top: 10),

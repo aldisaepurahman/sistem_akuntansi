@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 
 class DetailTransaksi extends StatefulWidget {
   const DetailTransaksi({Key? key}) : super(key: key);
@@ -24,7 +26,18 @@ class DetailTransaksiState extends State<DetailTransaksi> {
   String no_bukti = "BK51";
   String nama_jurnal = "Jurnal Pengeluaran BRI STIKes Santo Borromeus";
 
-  int total_row = 100;
+  int total_row = 1;
+
+  var tableRow;
+
+  @override
+  void initState() {
+    super.initState();
+    tableRow = new RowTableDetail(
+        contentDataDebit: contents_debit,
+        contentDataKredit: contents_kredit,
+        context: context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,30 +113,25 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                             ),
                           ],
                         ),
-                        // PaginatedDataTable(
-                        //   rowsPerPage: total_row,
-                        //   columnSpacing: 115,
-                        //   horizontalMargin: 60,
-                        //   columns: const [
-                        //     DataColumn(
-                        //       label: HeaderTable(content: "Nama Akun"),
-                        //     ),
-                        //     DataColumn(
-                        //       label: HeaderTable(content: "Saldo"),
-                        //     ),
-                        //     DataColumn(
-                        //       label: HeaderTable(content: "Nama Akun"),
-                        //     ),
-                        //     DataColumn(
-                        //       label: HeaderTable(content: "Saldo"),
-                        //     ),
-                        //   ],
-                        //   source: RowSource4Column(
-                        //       column1: 0.05,
-                        //       column2: 0.25,
-                        //       column3: 0.15,
-                        //       cellWidth: context),
-                        // ),
+                        PaginatedDataTable(
+                          rowsPerPage: total_row,
+                          dataRowHeight: 150,
+                          columns: const [
+                            DataColumn(
+                              label: HeaderTable(content: "Nama Akun"),
+                            ),
+                            DataColumn(
+                              label: HeaderTable(content: "Saldo"),
+                            ),
+                            DataColumn(
+                              label: HeaderTable(content: "Nama Akun"),
+                            ),
+                            DataColumn(
+                              label: HeaderTable(content: "Saldo"),
+                            ),
+                          ],
+                          source: tableRow,
+                        ),
                         Container(
                             margin: EdgeInsets.only(top: 40, bottom: 20),
                             width: double.infinity,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 
@@ -20,7 +20,7 @@ class DetailCOAState extends State<DetailCOA> {
   String nama_akun =
       "Penyisihan Piutang Mahasiswa angkatan 2016/2017 D3 Perekam & Inf. Kes";
   String keterangan = "Akun, Debit";
-  String kode_reference = "2";
+  String indentasi = "2";
   String saldo_awal = "-";
   String saldo_awal_baru = "Rp 29.702.072";
 
@@ -80,8 +80,7 @@ class DetailCOAState extends State<DetailCOA> {
                               DetailText(
                                   header: "Nama Akun", content: nama_akun),
                               DetailText(
-                                  header: "Kode Reference",
-                                  content: kode_reference),
+                                  header: "Indentasi", content: indentasi),
                               DetailText(
                                   header: "Saldo Awal Baru",
                                   content: saldo_awal_baru)
@@ -118,7 +117,23 @@ class DetailCOAState extends State<DetailCOA> {
                                   Color.fromARGB(255, 255, 255, 255),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            setState(() {});
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog2Button(
+                                      content: "Hapus Chart of Account",
+                                      content_detail:
+                                          "Anda yakin ingin menghapus data ini?",
+                                      path_image: 'assets/images/hapus_coa.png',
+                                      button1: "Tetap Simpan",
+                                      button2: "Ya, Hapus",
+                                      onPressed1: () {
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      onPressed2: () {});
+                                });
                           },
                           child: const Text(
                             "Hapus",
