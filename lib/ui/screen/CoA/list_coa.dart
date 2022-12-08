@@ -1,17 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
-import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
-import 'package:sistem_akuntansi/bloc/akun/akun_state.dart';
-import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
+import 'package:sistem_akuntansi/ui/components/form.dart';
+import 'package:sistem_akuntansi/utils/V_lookup.dart';
 
 class ListCOA extends StatefulWidget {
-  const ListCOA({required this.client, Key? key}) : super(key: key);
-
-  final SupabaseClient client;
+  const ListCOA({Key? key}) : super(key: key);
 
   @override
   ListCOAState createState() {
@@ -30,6 +28,29 @@ class ListCOAState extends State<ListCOA> {
   String kode_reference = "2";
   String saldo_awal = "-";
   String saldo_awal_baru = "Rp 29.702.072";
+  var tableRow;
+
+  int total_row = 5;
+
+  String _selectedEntries = '5';
+
+  List<String> row = ['5', '10', '25', '50', '100'];
+
+  @override
+  void initState() {
+    super.initState();
+    tableRow = new RowTableCOA(
+      contentData: contents,
+      seeDetail: () {
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
+        });
+      },
+      context: context,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +58,37 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
-            body: BlocProvider(
-              create: (_) => AkunBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
-              child: ListView(
-                children: [
-                  Container(
+            body: ListView(
+              children: [
+                Container(
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: const Text(
-                      "Chart of Account",
-                      style: TextStyle(
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                          color: Color.fromARGB(255, 50, 52, 55)),
-                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ButtonBack(
+                          onPressed: () {
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                        )
+                      ],
+                    )),
+                Container(
+                  margin: EdgeInsets.only(top: 25, left: 25),
+                  child: const Text(
+                    "Chart of Account",
+                    style: TextStyle(
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32,
+                        color: Color.fromARGB(255, 50, 52, 55)),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.all(25),
+                  margin:
+                      EdgeInsets.only(top: 25, bottom: 50, left: 25, right: 25),
                   padding: EdgeInsets.all(25),
                   color: Color.fromARGB(255, 255, 255, 255),
                   child: Column(
@@ -73,8 +107,13 @@ class ListCOAState extends State<ListCOA> {
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
                                   setState(() {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0)));
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SideNavigationBar(
+                                                    index: 1,
+                                                    coaIndex: 1,
+                                                    bukuBesarIndex: 0)));
                                   });
                                 },
                                 child: Row(
@@ -98,95 +137,82 @@ class ListCOAState extends State<ListCOA> {
                                           "Tambah Chart of Account",
                                           style: TextStyle(
                                             fontFamily: "Inter",
-                                              color:
-                                              Color.fromARGB(255, 50, 52, 55),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                            ),
+                                            color:
+                                                Color.fromARGB(255, 50, 52, 55),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.19,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      fillColor:
+                                          Color.fromARGB(255, 117, 117, 117),
+                                      prefixIcon: Icon(Icons.search),
+                                      prefixIconColor:
+                                          Color.fromARGB(255, 117, 117, 117),
+                                      hintText: 'Cari Chart of Account',
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8))),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              SizedBox(
+                                child: DropdownFilter(
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      if (newValue != null) {
+                                        total_row = int.parse(newValue);
+                                      }
+                                    });
+                                  },
+                                  content: _selectedEntries,
+                                  items: row,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 25),
+                      PaginatedDataTable(
+                        columns: <DataColumn>[
+                          DataColumn(
+                            label: Text("No."),
+                          ),
+                          DataColumn(
+                            label: Text("Kode"),
+                          ),
+                          DataColumn(
+                            label: Text("Nama Akun"),
+                          ),
+                          DataColumn(
+                            label: Text("Keterangan"),
+                          ),
+                          DataColumn(
+                            label: Text("Indentasi"),
+                          ),
+                          DataColumn(
+                            label: Text("Action"),
                           ),
                         ],
-                      ),
-                      SizedBox(height: 25),
-                      Table(
-                        border: TableBorder(
-                            bottom: BorderSide(
-                                color: Color.fromARGB(50, 117, 117, 117),
-                                width: 1)),
-                        children: [
-                          TableRow(
-                              decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 245, 245, 245)),
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("No",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Kode",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Nama Akun",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Keterangan",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Indentasi",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text(""),
-                                ),
-                              ]),
-                          TableRow(children: [
-                            RowContent(content: "1"),
-                            RowContent(content: kode_akun),
-                            RowContent(content: nama_akun),
-                            RowContent(content: keterangan),
-                            RowContent(content: kode_reference),
-                            ActionButton(
-                              textContent: 'Lihat Detail',
-                              onPressed: (){
-                                setState(() {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0,)));
-                                });
-                              }
-                            )
-                          ])
-                        ],
-                      ),
-                      SizedBox(height: 25),
-                      Text("1 dari 1")
+                        source: tableRow,
+                        rowsPerPage: total_row,
+                        showCheckboxColumn: false,
+                        dataRowHeight: 70,
+                      )
                     ],
                   ),
                 )
