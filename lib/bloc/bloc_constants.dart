@@ -1,0 +1,1 @@
+enum SystemStatus { loading, success, failure }

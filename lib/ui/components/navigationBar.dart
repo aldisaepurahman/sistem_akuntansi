@@ -16,6 +16,7 @@ class SideNavigationBar extends StatefulWidget{
         required this.bukuBesarIndex,
       })
       : super(key: key);
+  // final SupabaseClient client;
 
   @override
   State<SideNavigationBar> createState() {
@@ -65,11 +66,33 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   String greyFontColor = "#b7b7b7".replaceAll('#', '0xff');
   String yellowTextColor = "#ffcc00".replaceAll('#', '0xff');
 
+  late List<Widget> _mainContents = [];
+
   void _changeIndex(int index) {
     setState(() {
       selectedIndex = index;
     });
+
+    _mainContents = [
+      Text('Ini page dashboard'),
+
+      ListCOA(client: widget.client),
+
+      Text('Ini page Saldo Awal'),
+
+      Text('Ini page Jurnal Umum'),
+    ];
   }
+
+  /*final List<Widget> _mainContents = [
+    Text('Ini page dashboard'),
+
+    ListCOA(client: widget.client),
+
+    Text('Ini page Saldo Awal'),
+
+    Text('Ini page Jurnal Umum'),
+  ];*/
 
   @override
   Widget build(BuildContext context) {

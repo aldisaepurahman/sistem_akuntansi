@@ -18,5 +18,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, bukuBesarIndex: 0,));
+    // return MaterialApp(home: SideNavigationBar(client: Supabase.instance.client));
   }
 }
