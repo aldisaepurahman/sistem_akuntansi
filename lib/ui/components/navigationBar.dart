@@ -3,19 +3,28 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
+import 'package:sistem_akuntansi/ui/screen/CoA/edit_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesar.dart';
 import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesarperbulan.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/detail_transaksi.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/jurnal_umum.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/transaksi.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SideNavigationBar extends StatefulWidget{
   final int index;
   final int coaIndex;
+  final int jurnalUmumIndex;
   final int bukuBesarIndex;
+  final SupabaseClient client;
 
   SideNavigationBar(
       {Key? key,
         required this.index,
         required this.coaIndex,
+        required this.jurnalUmumIndex,
         required this.bukuBesarIndex,
+        required this.client
       })
       : super(key: key);
 
@@ -28,27 +37,41 @@ class SideNavigationBar extends StatefulWidget{
 class _SideNavigationBarState extends State<SideNavigationBar> {
   int selectedIndex = 0;
   int selectedCoaIndex = 0;
+  int selectedJurnalUmumIndex = 0;
   int selectedBukuBesarIndex = 0;
   List<Widget> _mainContents = [];
   bool isExtended = false;
 
   Widget getCoaPage(){
     if (selectedCoaIndex == 1) {
-      return InsertCOA();
+      return InsertCOA(client: widget.client);
     }
     else if (selectedCoaIndex == 2) {
-      return DetailCOA();
+      return DetailCOA(client: widget.client);
     }
-    return ListCOA();
+    else if (selectedCoaIndex == 3) {
+      return EditCOA(client: widget.client);
+    }
+    return ListCOA(client: widget.client);
+  }
+
+  Widget getJurnalUmum() {
+    if (selectedJurnalUmumIndex == 1) {
+      return TransaksiList();
+    }
+    else if (selectedJurnalUmumIndex == 2) {
+      return DetailTransaksi();
+    }
+    return JurnalUmumList(client: widget.client);
   }
 
   Widget getBukuBesarPage(){
     if (selectedBukuBesarIndex == 1) {
       return ListBukuBesarPerBulan();
     }
-    return ListBukuBesar();
+    return ListBukuBesar(client: widget.client);
   }
-
+  
   @override
   void initState() {
     selectedIndex = widget.index;
@@ -60,7 +83,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
       getCoaPage(),
 
-      Text('Ini page Jurnal Umum'),
+      getJurnalUmum(),
 
       getBukuBesarPage(),
     ];

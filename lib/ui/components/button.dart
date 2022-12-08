@@ -8,9 +8,9 @@ class ButtonHide extends StatefulWidget {
 
   const ButtonHide(
       {Key? key,
-        required this.bg_color,
-        required this.text_color,
-        required this.content})
+      required this.bg_color,
+      required this.text_color,
+      required this.content})
       : super(key: key);
 
   @override
@@ -69,10 +69,10 @@ class ButtonNoIcon extends StatelessWidget {
 
   const ButtonNoIcon(
       {Key? key,
-        required this.bg_color,
-        required this.text_color,
-        required this.onPressed,
-        required this.content})
+      required this.bg_color,
+      required this.text_color,
+      required this.onPressed,
+      required this.content})
       : super(key: key);
 
   @override
@@ -98,18 +98,14 @@ class ButtonNoIcon extends StatelessWidget {
               ],
             ),
           ],
-        )
-    );
+        ));
   }
 }
 
 class ButtonBack extends StatelessWidget {
   final VoidCallback? onPressed;
 
-  const ButtonBack(
-      {Key? key,
-        required this.onPressed})
-      : super(key: key);
+  const ButtonBack({Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +120,31 @@ class ButtonBack extends StatelessWidget {
         ),
         onPressed: onPressed,
         icon: Icon(Icons.arrow_back_rounded),
-        iconSize: 40,
+        iconSize: 25,
+      ),
+    );
+  }
+}
+
+class ButtonAdd extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const ButtonAdd({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: background2,
+          shape: BoxShape.circle,
+          border: Border.all(color: abu_tua)),
+      child: IconButton(
+        style: IconButton.styleFrom(
+          backgroundColor: abu_tua,
+        ),
+        onPressed: onPressed,
+        icon: Icon(Icons.add),
+        iconSize: 25,
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:dropdown_text_search/dropdown_text_search.dart';
 
 class DropdownForm extends StatelessWidget {
@@ -11,10 +11,10 @@ class DropdownForm extends StatelessWidget {
 
   const DropdownForm(
       {Key? key,
-        required this.onChanged,
-        required this.content,
-        required this.items,
-        this.label})
+      required this.onChanged,
+      required this.content,
+      required this.items,
+      this.label})
       : super(key: key);
 
   @override
@@ -60,9 +60,9 @@ class DropdownFilter extends StatelessWidget {
 
   const DropdownFilter(
       {Key? key,
-        required this.onChanged,
-        required this.content,
-        required this.items})
+      required this.onChanged,
+      required this.content,
+      required this.items})
       : super(key: key);
 
   @override
@@ -71,24 +71,25 @@ class DropdownFilter extends StatelessWidget {
       decoration: ShapeDecoration(
         color: background2,
         shape: RoundedRectangleBorder(
-          side:
-          BorderSide(width: 1.0, style: BorderStyle.solid, color: abu_tua),
+          side: BorderSide(width: 1.0, style: BorderStyle.solid, color: abu_tua),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
       ),
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: DropdownButton(
-            value: content,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            items: items.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: onChanged,
-          )),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: DropdownButton(
+          value: content,
+          underline: SizedBox(),
+          icon: const Icon(Icons.keyboard_arrow_down),
+          items: items.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        )
+      ),
     );
   }
 }
@@ -105,19 +106,21 @@ class TextForm extends StatelessWidget {
       child: TextField(
         style: TextStyle(fontSize: 13),
         decoration: InputDecoration(
-            hintText: hintText,
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: kuning),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: abu_tua),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            contentPadding: const EdgeInsets.all(3),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: abu_transparan))),
+          hintText: hintText,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kuning),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: abu_tua),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: const EdgeInsets.all(3),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: abu_transparan)
+          )
+        ),
       ),
     );
   }

@@ -38,9 +38,9 @@ class HeaderText extends StatelessWidget {
 
   const HeaderText(
       {Key? key,
-        required this.content,
-        required this.size,
-        required this.color})
+      required this.content,
+      required this.size,
+      required this.color})
       : super(key: key);
 
   @override
