@@ -80,6 +80,7 @@ class DropdownFilter extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: DropdownButton(
             value: content,
+            underline: SizedBox(),
             icon: const Icon(Icons.keyboard_arrow_down),
             items: items.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem(
