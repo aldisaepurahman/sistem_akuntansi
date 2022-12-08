@@ -3,20 +3,25 @@ import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesar.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/detail_transaksi.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/jurnal_umum.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/transaksi.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SideNavigationBar extends StatefulWidget{
   final int index;
   final int coaIndex;
   final int bukuBesarIndex;
+  final SupabaseClient client;
 
   SideNavigationBar(
       {Key? key,
         required this.index,
         required this.coaIndex,
         required this.bukuBesarIndex,
+        required this.client
       })
       : super(key: key);
-  // final SupabaseClient client;
 
   @override
   State<SideNavigationBar> createState() {
@@ -37,11 +42,21 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     else if (selectedCoaIndex == 2) {
       return DetailCOA();
     }
-    return ListCOA();
+    return ListCOA(client: widget.client);
   }
 
   Widget getBukuBesarPage(){
-    return ListBukuBesar();
+    return ListBukuBesar(client: widget.client);
+  }
+
+  Widget getJurnalUmum() {
+    if (selectedCoaIndex == 1) {
+      return TransaksiList();
+    }
+    else if (selectedCoaIndex == 2) {
+      return DetailTransaksi();
+    }
+    return JurnalUmumList(client: widget.client);
   }
 
   @override
@@ -54,7 +69,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
       getCoaPage(),
 
-      Text('Ini page Jurnal Umum'),
+      getJurnalUmum(),
 
       getBukuBesarPage(),
     ];
@@ -66,33 +81,11 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   String greyFontColor = "#b7b7b7".replaceAll('#', '0xff');
   String yellowTextColor = "#ffcc00".replaceAll('#', '0xff');
 
-  late List<Widget> _mainContents = [];
-
   void _changeIndex(int index) {
     setState(() {
       selectedIndex = index;
     });
-
-    _mainContents = [
-      Text('Ini page dashboard'),
-
-      ListCOA(client: widget.client),
-
-      Text('Ini page Saldo Awal'),
-
-      Text('Ini page Jurnal Umum'),
-    ];
   }
-
-  /*final List<Widget> _mainContents = [
-    Text('Ini page dashboard'),
-
-    ListCOA(client: widget.client),
-
-    Text('Ini page Saldo Awal'),
-
-    Text('Ini page Jurnal Umum'),
-  ];*/
 
   @override
   Widget build(BuildContext context) {

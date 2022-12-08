@@ -5,9 +5,12 @@ import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListBukuBesar extends StatefulWidget {
-  const ListBukuBesar({Key? key}) : super(key: key);
+  const ListBukuBesar({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   ListBukuBesarState createState() {
@@ -69,7 +72,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
+                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
         });
       },
       context: context,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
-import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
-import 'package:sistem_akuntansi/bloc/akun/akun_state.dart';
+import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
@@ -38,7 +39,7 @@ class ListCOAState extends State<ListCOA> {
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: BlocProvider(
-              create: (_) => AkunBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+              create: (_) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
               child: ListView(
                 children: [
                   Container(
@@ -52,7 +53,6 @@ class ListCOAState extends State<ListCOA> {
                           color: Color.fromARGB(255, 50, 52, 55)),
                     ),
                   ),
-                ),
                 Container(
                   margin: EdgeInsets.all(25),
                   padding: EdgeInsets.all(25),
@@ -74,7 +74,7 @@ class ListCOAState extends State<ListCOA> {
                                 onPressed: () {
                                   setState(() {
                                     Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0)));
+                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0, client: widget.client)));
                                   });
                                 },
                                 child: Row(
@@ -108,89 +108,62 @@ class ListCOAState extends State<ListCOA> {
                                     ],
                                   )),
                             ),
+                        ],
+                      ),
+                      SizedBox(height: 25),
+                      /*PaginatedDataTable(
+                        columns: <DataColumn>[
+                          DataColumn(
+                            label: Text("No."),
+                          ),
+                          DataColumn(
+                            label: Text("Bulan"),
+                          ),
+                          DataColumn(
+                            label: Text("Tahun"),
+                          ),
+                          DataColumn(
+                            label: Text("Action"),
                           ),
                         ],
-                      ),
-                      SizedBox(height: 25),
-                      Table(
-                        border: TableBorder(
-                            bottom: BorderSide(
-                                color: Color.fromARGB(50, 117, 117, 117),
-                                width: 1)),
-                        children: [
-                          TableRow(
-                              decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 245, 245, 245)),
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("No",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Kode",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Nama Akun",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Keterangan",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text("Indentasi",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text(""),
-                                ),
-                              ]),
-                          TableRow(children: [
-                            RowContent(content: "1"),
-                            RowContent(content: kode_akun),
-                            RowContent(content: nama_akun),
-                            RowContent(content: keterangan),
-                            RowContent(content: kode_reference),
-                            ActionButton(
-                              textContent: 'Lihat Detail',
-                              onPressed: (){
-                                setState(() {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0,)));
-                                });
-                              }
-                            )
-                          ])
-                        ],
-                      ),
-                      SizedBox(height: 25),
-                      Text("1 dari 1")
+                        source: BlocBuilder<VLookupBloc, VLookupState>(
+                          builder: (context, state) {
+                            switch (state.status) {
+                              case SystemStatus.failure:
+                                return const Center(child: Text("Failed to fetch data"));
+                              case SystemStatus.success:
+                                if (state.list_coa.isEmpty) {
+                                  return const Center(child: Text("No Data"));
+                                }
+                                return ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      RowTable(
+                                        contentData: state.list_coa,
+                                        seeDetail: (){
+                                          setState(() {
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client)));
+                                          });
+                                        },
+                                        context: context
+                                      );
+                                    },
+                                );
+                              case SystemStatus.loading:
+                                return const Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                        rowsPerPage: 10,
+                        showCheckboxColumn: false,
+                      )*/
                     ],
                   ),
                 )
               ],
-            )));
+            )
+          )
+      ));
   }
 }
