@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   supabase: ^1.2.0
   supabase_flutter: ^1.2.2
+  dropdown_text_search: ^0.0.1
 
 dev_dependencies:
   flutter_test:
