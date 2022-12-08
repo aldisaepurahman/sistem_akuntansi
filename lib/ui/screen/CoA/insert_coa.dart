@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
 
 class InsertCOA extends StatefulWidget {
   const InsertCOA({Key? key}) : super(key: key);
@@ -193,7 +196,19 @@ class InsertCOAState extends State<InsertCOA> {
                               backgroundColor: Color.fromARGB(255, 255, 204, 0),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            setState(() {});
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    Navigator.of(context).pop(true);
+                                  });
+                                  return DialogNoButton(
+                                      content: "Berhasil Ditambahkan!",
+                                      content_detail:
+                                          "Chart of Account baru berhasil ditambahkan",
+                                      path_image:
+                                          'assets/images/tambah_coa.png');
+                                });
                           },
                           child: const Text(
                             "Simpan",
@@ -214,9 +229,24 @@ class InsertCOAState extends State<InsertCOA> {
                                   Color.fromARGB(255, 255, 255, 255),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog2Button(
+                                      content: "Batalkan Perubahan",
+                                      content_detail:
+                                          "Anda yakin ingin membatalkan perubahan ini?",
+                                      path_image:
+                                          'assets/images/berhasil_hapus_coa.png',
+                                      button1: "Tetap Simpan",
+                                      button2: "Ya, Hapus",
+                                      onPressed1: () {
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      onPressed2: () {});
+                                });
                           },
                           child: const Text(
                             "Batalkan",
