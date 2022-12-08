@@ -1,6 +1,15 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+//<<<<<<< branch_prilla
+//=======
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
+//>>>>>>> branch_aldi_backend
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
@@ -58,9 +67,17 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
+/*<<<<<<< branch_prilla
             body: ListView(
               children: [
                 Container(
+=======*/
+            body: BlocProvider(
+              create: (_) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+              child: ListView(
+                children: [
+                  Container(
+//>>>>>>> branch_aldi_backend
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -85,7 +102,6 @@ class ListCOAState extends State<ListCOA> {
                         fontSize: 32,
                         color: Color.fromARGB(255, 50, 52, 55)),
                   ),
-                ),
                 Container(
                   margin:
                       EdgeInsets.only(top: 25, bottom: 50, left: 25, right: 25),
@@ -107,6 +123,7 @@ class ListCOAState extends State<ListCOA> {
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
                                   setState(() {
+/*<<<<<<< branch_prilla
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -114,6 +131,10 @@ class ListCOAState extends State<ListCOA> {
                                                     index: 1,
                                                     coaIndex: 1,
                                                     bukuBesarIndex: 0)));
+=======*/
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0, client: widget.client)));
+//>>>>>>> branch_aldi_backend
                                   });
                                 },
                                 child: Row(
@@ -137,6 +158,7 @@ class ListCOAState extends State<ListCOA> {
                                           "Tambah Chart of Account",
                                           style: TextStyle(
                                             fontFamily: "Inter",
+//<<<<<<< branch_prilla
                                             color:
                                                 Color.fromARGB(255, 50, 52, 55),
                                             fontWeight: FontWeight.bold,
@@ -213,10 +235,74 @@ class ListCOAState extends State<ListCOA> {
                         showCheckboxColumn: false,
                         dataRowHeight: 70,
                       )
+//=======
+                                              /*color:
+                                              Color.fromARGB(255, 50, 52, 55),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: 25),*/
+                      /*PaginatedDataTable(
+                        columns: <DataColumn>[
+                          DataColumn(
+                            label: Text("No."),
+                          ),
+                          DataColumn(
+                            label: Text("Bulan"),
+                          ),
+                          DataColumn(
+                            label: Text("Tahun"),
+                          ),
+                          DataColumn(
+                            label: Text("Action"),
+                          ),
+                        ],
+                        source: BlocBuilder<VLookupBloc, VLookupState>(
+                          builder: (context, state) {
+                            switch (state.status) {
+                              case SystemStatus.failure:
+                                return const Center(child: Text("Failed to fetch data"));
+                              case SystemStatus.success:
+                                if (state.list_coa.isEmpty) {
+                                  return const Center(child: Text("No Data"));
+                                }
+                                return ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      RowTable(
+                                        contentData: state.list_coa,
+                                        seeDetail: (){
+                                          setState(() {
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client)));
+                                          });
+                                        },
+                                        context: context
+                                      );
+                                    },
+                                );
+                              case SystemStatus.loading:
+                                return const Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                        rowsPerPage: 10,
+                        showCheckboxColumn: false,
+                      )*/
+//>>>>>>> branch_aldi_backend
                     ],
                   ),
                 )
               ],
-            )));
+            )
+          )
+      ));
   }
 }
