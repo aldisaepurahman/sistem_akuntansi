@@ -67,6 +67,7 @@ flutter:
     - assets/images/berhasil_hapus_coa.png
     - assets/images/hapus_coa.png
     - assets/images/tambah_coa.png
+    - assets/images/logo_stikes.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
