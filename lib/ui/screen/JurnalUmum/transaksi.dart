@@ -97,68 +97,73 @@ class TransaksiListState extends State<TransaksiList> {
             body: ListView(
               children: [
                 Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                        )
-                      ],
-                    )),
+                  margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ButtonBack(
+                        onPressed: () {
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        },
+                      )
+                    ],
+                  )
+                ),
                 Container(
-                    margin: EdgeInsets.only(top: 25, left: 25),
-                    child: HeaderText(
-                        content: "Daftar Transaksi", size: 32, color: hitam)),
+                  margin: EdgeInsets.only(top: 25, left: 25),
+                  child: HeaderText(content: "Daftar Transaksi", size: 32, color: hitam)
+                ),
                 Container(
-                    margin: EdgeInsets.only(bottom: 15, left: 25),
-                    child: HeaderText(
-                        content: "Jurnal Maret 2022", size: 18, color: hitam)),
+                  margin: EdgeInsets.only(bottom: 15, left: 25),
+                  child: HeaderText(
+                    content: "Jurnal Maret 2022", size: 18, color: hitam
+                  ),
+                ),
                 Container(
-                    width: 30,
-                    margin: EdgeInsets.only(left: 25, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: kuning,
-                                padding: const EdgeInsets.all(18)),
-                            onPressed: disable_button ? null : showForm,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  width: 30,
+                  margin: EdgeInsets.only(left: 25, top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: kuning,
+                            padding: const EdgeInsets.all(18)),
+                        onPressed: disable_button ? null : showForm,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 13,
-                                      color: hitam,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Tambah Transaksi",
-                                      style: TextStyle(
-                                        fontFamily: "Inter",
-                                        color: hitam,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
+                                Icon(
+                                  Icons.add,
+                                  size: 13,
+                                  color: hitam,
                                 ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Tambah Transaksi",
+                                  style: TextStyle(
+                                    fontFamily: "Inter",
+                                    color: hitam,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
                               ],
-                            ))
-                      ],
-                    )),
+                            ),
+                          ],
+                        )
+                      )
+                    ],
+                  )
+                ),
                 Visibility(
                     visible: show,
                     child: Container(
@@ -176,78 +181,71 @@ class TransaksiListState extends State<TransaksiList> {
                                 color: hitam),
                           ),
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.13,
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.only(top: 10, bottom: 20),
-                                      child: TextField(
-                                        controller: input,
-                                        style: TextStyle(fontSize: 13),
-                                        readOnly: true,
-                                        onTap: () async {
-                                          DateTime? date = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(1900),
-                                              lastDate: DateTime(2100));
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.13,
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 10, bottom: 20),
+                                  child: TextField(
+                                    controller: input,
+                                    style: TextStyle(fontSize: 13),
+                                    readOnly: true,
+                                    onTap: () async {
+                                      DateTime? date = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1900),
+                                          lastDate: DateTime(2100));
 
-                                          if (date != null) {
-                                            String formattedDate =
-                                                DateFormat('yyyy-MM-dd')
-                                                    .format(date);
-                                            setState(() {
-                                              input.text = formattedDate;
-                                            });
-                                          }
-                                        },
-                                        decoration: InputDecoration(
-                                            hintText:
-                                                "Masukkan tanggal transaksi",
-                                            prefixIcon:
-                                                Icon(Icons.calendar_today),
-                                            contentPadding:
-                                                const EdgeInsets.all(5),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8))),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.25,
-                                    child: TextForm(
-                                        hintText: "Masukkan nama transaksi")),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.35,
-                                    child: DropdownForm(
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            _selectedJurnalInsert = newValue!;
-                                          });
-                                        },
-                                        content: _selectedJurnalInsert,
-                                        items: jurnal)),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
-                                    child: TextForm(
-                                        hintText: "Masukkan no bukti")),
-                              ]),
+                                      if (date != null) {
+                                        String formattedDate =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(date);
+                                        setState(() {
+                                          input.text = formattedDate;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: "Masukkan tanggal transaksi",
+                                      prefixIcon: Icon(Icons.calendar_today),
+                                      contentPadding: const EdgeInsets.all(5),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8)
+                                      )
+                                    ),
+                                  ),
+                                )
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                child: TextForm(hintText: "Masukkan nama transaksi")),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: DropdownForm(
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedJurnalInsert = newValue!;
+                                    });
+                                  },
+                                  content: _selectedJurnalInsert,
+                                  items: jurnal)),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.15,
+                                child: TextForm(hintText: "Masukkan no bukti")),
+                            ]
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.max,

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailCOA extends StatefulWidget {
-  const DetailCOA({Key? key}) : super(key: key);
+  final SupabaseClient client;
+
+  const DetailCOA({required this.client, Key? key}) : super(key: key);
 
   @override
   DetailCOAState createState() {
@@ -32,6 +37,22 @@ class DetailCOAState extends State<DetailCOA> {
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: ListView(
               children: [
+                Container(
+                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25, right: 25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ButtonBack(
+                          onPressed: (){
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          },
+                        )
+                      ],
+                    )
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                   child: const Text(
@@ -96,7 +117,11 @@ class DetailCOAState extends State<DetailCOA> {
                               backgroundColor: Color.fromARGB(255, 255, 204, 0),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            setState(() {});
+                            setState(() {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                  SideNavigationBar(index: 1, coaIndex: 3, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                            });
                           },
                           child: const Text(
                             "Edit",
@@ -132,7 +157,13 @@ class DetailCOAState extends State<DetailCOA> {
                                           Navigator.pop(context);
                                         });
                                       },
-                                      onPressed2: () {});
+                                      onPressed2: () {
+                                        setState(() {
+                                          Navigator.of(context).push(MaterialPageRoute(
+                                            builder: (context) =>
+                                              SideNavigationBar(index: 1, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                        });
+                                      });
                                 });
                           },
                           child: const Text(

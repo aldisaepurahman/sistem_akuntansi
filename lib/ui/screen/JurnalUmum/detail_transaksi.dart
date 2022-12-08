@@ -78,15 +78,17 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                            child: const Text(
-                          "Detail Transaksi",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontFamily: "Inter",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Color.fromARGB(255, 255, 204, 0)),
-                        )),
+                          child: const Text(
+                            "Detail Transaksi",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontFamily: "Inter",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                color: Color.fromARGB(255, 255, 204, 0)
+                            ),
+                          )
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           mainAxisSize: MainAxisSize.max,

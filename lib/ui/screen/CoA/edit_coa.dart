@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditCOA extends StatefulWidget {
-  const EditCOA({Key? key}) : super(key: key);
+  final SupabaseClient client;
+
+  const EditCOA({required this.client, Key? key}) : super(key: key);
 
   @override
   EditCOAState createState() {
@@ -40,7 +44,7 @@ class EditCOAState extends State<EditCOA> {
                     )),
                 Container(
                   margin: EdgeInsets.only(top: 25, left: 25),
-                  child: const Text(
+                  child: Text(
                     "Edit Chart of Account",
                     style: TextStyle(
                         fontFamily: "Inter",
@@ -58,7 +62,7 @@ class EditCOAState extends State<EditCOA> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                          child: const Text(
+                          child: Text(
                         "Informasi CoA",
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -208,7 +212,7 @@ class EditCOAState extends State<EditCOA> {
                                           'assets/images/tambah_coa.png');
                                 });
                           },
-                          child: const Text(
+                          child: Text(
                             "Simpan",
                             style: TextStyle(
                               fontFamily: "Inter",
@@ -228,25 +232,33 @@ class EditCOAState extends State<EditCOA> {
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
                             showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Dialog2Button(
-                                      content: "Batalkan Perubahan",
-                                      content_detail:
-                                          "Anda yakin ingin membatalkan perubahan ini?",
-                                      path_image:
-                                          'assets/images/berhasil_hapus_coa.png',
-                                      button1: "Tetap Simpan",
-                                      button2: "Ya, Hapus",
-                                      onPressed1: () {
-                                        setState(() {
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      onPressed2: () {});
-                                });
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog2Button(
+                                  content: "Batalkan Perubahan",
+                                  content_detail:
+                                      "Anda yakin ingin membatalkan perubahan ini?",
+                                  path_image:
+                                      'assets/images/berhasil_hapus_coa.png',
+                                  button1: "Tetap Simpan",
+                                  button2: "Ya, Hapus",
+                                  onPressed1: () {
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  onPressed2: () {
+                                    setState(() {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) =>
+                                          SideNavigationBar(index: 1, coaIndex: 2, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                    });
+                                  }
+                                );
+                              }
+                            );
                           },
-                          child: const Text(
+                          child: Text(
                             "Batalkan",
                             style: TextStyle(
                               fontFamily: "Inter",
@@ -260,6 +272,8 @@ class EditCOAState extends State<EditCOA> {
                   ),
                 )
               ],
-            )));
+            )
+        )
+    );
   }
 }
