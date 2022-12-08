@@ -6,7 +6,7 @@ enum TableViewType {
   transaksi,
   transaksi_debit_kredit,
   jurnal,
-  v_lookup,
+  list_coa_saldo,
   v_pendapatan_beban_lookup,
   v_jurnal,
   v_bulan_jurnal,

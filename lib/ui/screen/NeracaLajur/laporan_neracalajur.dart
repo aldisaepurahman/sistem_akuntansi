@@ -5,11 +5,14 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../components/navigationBar.dart';
 
 class LaporanNeracaLajur extends StatefulWidget {
-  const LaporanNeracaLajur({Key? key}) : super(key: key);
+  const LaporanNeracaLajur({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   LaporanNeracaLajurState createState() {
@@ -35,7 +38,7 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
+                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
         });
       },
       context: context,

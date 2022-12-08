@@ -7,7 +7,7 @@ class VLookup extends Equatable {
   final int saldo;
   final int bulan;
   final int tahun;
-  final String keterangan;
+  // final String keterangan;
   final int indentasi;
 
   const VLookup({
@@ -17,7 +17,7 @@ class VLookup extends Equatable {
     required this.saldo,
     required this.bulan,
     required this.tahun,
-    required this.keterangan,
+    // required this.keterangan,
     required this.indentasi
   });
 
@@ -29,11 +29,13 @@ class VLookup extends Equatable {
         saldo: json['saldo'],
         bulan: json['bulan'],
         tahun: json['tahun'],
-        keterangan: json['keterangan'],
+        // keterangan: json['keterangan'],
         indentasi: json['indentasi']);
   }
 
   @override
-  List<Object> get props => [nama_akun, kode, saldo, bulan, tahun, keterangan, indentasi];
+  List<Object> get props => [nama_akun, kode, saldo, bulan, tahun,
+    // keterangan,
+    indentasi];
 
 }

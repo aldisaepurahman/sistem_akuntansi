@@ -16,7 +16,7 @@ class VLookupBloc extends Bloc<Event, VLookupState> {
   Future<void> _getAllCoaData(AkunFetched event, Emitter<VLookupState> emit) async {
     try {
       emit(state.copyWith(status: SystemStatus.loading));
-      final list_coa = await service.getAllCOA(TableViewType.v_lookup.name, {"nama_akun": "%${event.keyword}%"});
+      final list_coa = await service.getAllCOA(TableViewType.list_coa_saldo.name, {"nama_akun": "%${event.keyword}%"});
       emit(
           state.copyWith(
               status: SystemStatus.success,

@@ -13,16 +13,15 @@ class SupabaseService {
       String table_name, Map<String, String> keyword) async {
     try {
       final response = (keyword.isEmpty)
-          ? await _supabaseClient.from(table_name).select().execute()
+          ? await _supabaseClient.from(table_name).select()
           : await _supabaseClient
               .from(table_name)
               .select()
-              .like(keyword.keys.first, keyword.values.first)
-              .execute();
+              .like(keyword.keys.first, keyword.values.first);
 
       final data = response.data as List<Map<String, dynamic>>;
       return data.map((e) => VLookup.fromJson(e)).toList();
-    } catch (error, stackTrace) {
+    } on PostgrestException catch (error, stackTrace) {
       Error.throwWithStackTrace(error, stackTrace);
     }
   }

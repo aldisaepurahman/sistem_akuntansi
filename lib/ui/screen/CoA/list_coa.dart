@@ -1,24 +1,24 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-//<<<<<<< branch_prilla
-//=======
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
-//>>>>>>> branch_aldi_backend
+import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
-import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListCOA extends StatefulWidget {
-  const ListCOA({Key? key}) : super(key: key);
+  const ListCOA({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   ListCOAState createState() {
@@ -49,12 +49,12 @@ class ListCOAState extends State<ListCOA> {
   void initState() {
     super.initState();
     tableRow = new RowTableCOA(
-      contentData: contents,
+      contentData: const <VLookup>[],
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1)));
+                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
         });
       },
       context: context,
@@ -67,17 +67,11 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
-/*<<<<<<< branch_prilla
-            body: ListView(
-              children: [
-                Container(
-=======*/
             body: BlocProvider(
               create: (_) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
               child: ListView(
                 children: [
                   Container(
-//>>>>>>> branch_aldi_backend
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -102,6 +96,7 @@ class ListCOAState extends State<ListCOA> {
                         fontSize: 32,
                         color: Color.fromARGB(255, 50, 52, 55)),
                   ),
+                ),
                 Container(
                   margin:
                       EdgeInsets.only(top: 25, bottom: 50, left: 25, right: 25),
@@ -123,18 +118,8 @@ class ListCOAState extends State<ListCOA> {
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
                                   setState(() {
-/*<<<<<<< branch_prilla
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SideNavigationBar(
-                                                    index: 1,
-                                                    coaIndex: 1,
-                                                    bukuBesarIndex: 0)));
-=======*/
                                     Navigator.of(context).push(MaterialPageRoute(
                                         builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0, client: widget.client)));
-//>>>>>>> branch_aldi_backend
                                   });
                                 },
                                 child: Row(
@@ -158,7 +143,6 @@ class ListCOAState extends State<ListCOA> {
                                           "Tambah Chart of Account",
                                           style: TextStyle(
                                             fontFamily: "Inter",
-//<<<<<<< branch_prilla
                                             color:
                                                 Color.fromARGB(255, 50, 52, 55),
                                             fontWeight: FontWeight.bold,
@@ -209,46 +193,56 @@ class ListCOAState extends State<ListCOA> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Kode"),
-                          ),
-                          DataColumn(
-                            label: Text("Nama Akun"),
-                          ),
-                          DataColumn(
-                            label: Text("Keterangan"),
-                          ),
-                          DataColumn(
-                            label: Text("Indentasi"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: tableRow,
-                        rowsPerPage: total_row,
-                        showCheckboxColumn: false,
-                        dataRowHeight: 70,
+                      BlocBuilder<VLookupBloc, VLookupState>(
+                          builder: (context, state) {
+                            switch (state.status) {
+                              case SystemStatus.failure:
+                                return const Center(child: Text("Failed to fetch data"));
+                              case SystemStatus.success:
+                                if (state.list_coa.isEmpty) {
+                                  return const Center(child: Text("No Data"));
+                                }
+                                return PaginatedDataTable(
+                                  columns: <DataColumn>[
+                                    DataColumn(
+                                      label: Text("No."),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Kode"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Nama Akun"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Keterangan"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Indentasi"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Action"),
+                                    ),
+                                  ],
+                                  source: RowTableCOA(
+                                    contentData: state.list_coa,
+                                    seeDetail: () {
+                                      setState(() {
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+                                      });
+                                    },
+                                    context: context,
+                                  ),
+                                  rowsPerPage: total_row,
+                                  showCheckboxColumn: false,
+                                  dataRowHeight: 70,
+                                );
+                              case SystemStatus.loading:
+                                return const Center(child: CircularProgressIndicator());
+                            }
+                          },
                       )
-//=======
-                                              /*color:
-                                              Color.fromARGB(255, 50, 52, 55),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                        ],
-                      ),
-                      SizedBox(height: 25),*/
                       /*PaginatedDataTable(
                         columns: <DataColumn>[
                           DataColumn(
@@ -296,7 +290,6 @@ class ListCOAState extends State<ListCOA> {
                         rowsPerPage: 10,
                         showCheckboxColumn: false,
                       )*/
-//>>>>>>> branch_aldi_backend
                     ],
                   ),
                 )

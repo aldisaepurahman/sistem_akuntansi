@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
@@ -118,12 +119,12 @@ class RowTableCOA extends DataTableSource {
   Function seeDetail;
   BuildContext context;
   RowTableCOA(
-      {required List<V_lookup> contentData,
+      {required List<VLookup> contentData,
       required this.seeDetail,
       required this.context})
       : _contentData = contentData,
         assert(contentData != null);
-  final List<V_lookup> _contentData;
+  final List<VLookup> _contentData;
 
   @override
   DataRow? getRow(int index) {
@@ -150,7 +151,7 @@ class RowTableCOA extends DataTableSource {
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text("${_content.keterangan}"),
+          child: Text("${_content.saldo}"),
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.04 - 50,
