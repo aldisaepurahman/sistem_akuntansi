@@ -55,8 +55,8 @@ class ListBukuBesarState extends State<ListBukuBesar> {
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+            builder: (context) =>
+              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
         });
       },
       context: context,

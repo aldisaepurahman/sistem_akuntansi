@@ -20,11 +20,8 @@ class JurnalUmumList extends StatefulWidget {
 }
 
 class JurnalUmumListState extends State<JurnalUmumList> {
-  @override
-  void dispose() {}
-
-  bool show = false;
-  bool disable_button = false;
+  // bool show = false;
+  // bool disable_button = false;
 
   var tableRow;
 
@@ -36,27 +33,27 @@ class JurnalUmumListState extends State<JurnalUmumList> {
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
+            builder: (context) =>
+              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
         });
       },
       context: context,
     );
   }
 
-  void showForm() {
-    setState(() {
-      show = true;
-      disable_button = true;
-    });
-  }
-
-  void disableForm() {
-    setState(() {
-      show = false;
-      disable_button = false;
-    });
-  }
+  // void showForm() {
+  //   setState(() {
+  //     show = true;
+  //     disable_button = true;
+  //   });
+  // }
+  //
+  // void disableForm() {
+  //   setState(() {
+  //     show = false;
+  //     disable_button = false;
+  //   });
+  // }
 
   //Inisialisasi untuk Dropdown
   String _selectedMonthFilter = 'Januari';
@@ -90,21 +87,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
         body: ListView(
           children: [
             Container(
-                margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ButtonBack(
-                      onPressed: () {
-                        setState(() {
-                          Navigator.pop(context);
-                        });
-                      },
-                    )
-                  ],
-                )),
-            Container(
                 margin: EdgeInsets.only(top: 25, left: 25),
                 child: HeaderText(
                     content: "Jurnal Umum", size: 32, color: hitam)),
@@ -112,120 +94,120 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                 margin: EdgeInsets.only(bottom: 15, left: 25),
                 child: HeaderText(
                     content: "Jurnal Maret 2022", size: 18, color: hitam)),
-            Container(
-              width: 30,
-              margin: EdgeInsets.only(left: 25, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kuning,
-                      padding: const EdgeInsets.all(18)),
-                    onPressed: showForm,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              size: 13,
-                              color: hitam,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Tambah Jurnal",
-                              style: TextStyle(
-                                fontFamily: "Inter",
-                                color: hitam,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  )
-                ],
-              )
-            ),
-            Visibility(
-              visible: show,
-              child: Container(
-                margin: EdgeInsets.all(25),
-                padding: EdgeInsets.all(25),
-                color: background2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: HeaderText(
-                          content: "Tambah Jurnal Umum",
-                          size: 18,
-                          color: hitam),
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            child: DropdownForm(
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedMonthInsert = newValue!;
-                                  });
-                                },
-                                content: _selectedMonthInsert,
-                                items: month,
-                                label: "--Pilih Bulan--"),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width *
-                                  0.25,
-                              child: DropdownForm(
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _selectedYearInsert = newValue!;
-                                    });
-                                  },
-                                  content: _selectedYearInsert,
-                                  items: year,
-                                  label: "--Pilih Tahun--")),
-                        ]),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ButtonNoIcon(
-                            bg_color: background2,
-                            text_color: merah,
-                            onPressed: disableForm,
-                            content: "Batal"),
-                        SizedBox(width: 20),
-                        ButtonNoIcon(
-                            bg_color: kuning,
-                            text_color: hitam,
-                            onPressed: () {
-                              setState(() {});
-                            },
-                            content: "Simpan")
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ),
+            // Container(
+            //   width: 30,
+            //   margin: EdgeInsets.only(left: 25, top: 10),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.start,
+            //     children: [
+            //       ElevatedButton(
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: kuning,
+            //           padding: const EdgeInsets.all(18)),
+            //         onPressed: showForm,
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //               children: [
+            //                 Icon(
+            //                   Icons.add,
+            //                   size: 13,
+            //                   color: hitam,
+            //                 ),
+            //                 const SizedBox(
+            //                   width: 10,
+            //                 ),
+            //                 Text(
+            //                   "Tambah Jurnal",
+            //                   style: TextStyle(
+            //                     fontFamily: "Inter",
+            //                     color: hitam,
+            //                     fontWeight: FontWeight.bold,
+            //                   ),
+            //                 )
+            //               ],
+            //             ),
+            //           ],
+            //         )
+            //       )
+            //     ],
+            //   )
+            // ),
+            // Visibility(
+            //   visible: show,
+            //   child: Container(
+            //     margin: EdgeInsets.all(25),
+            //     padding: EdgeInsets.all(25),
+            //     color: background2,
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Container(
+            //           margin: EdgeInsets.only(bottom: 20),
+            //           child: HeaderText(
+            //               content: "Tambah Jurnal Umum",
+            //               size: 18,
+            //               color: hitam),
+            //         ),
+            //         Row(
+            //             mainAxisAlignment: MainAxisAlignment.start,
+            //             mainAxisSize: MainAxisSize.max,
+            //             children: [
+            //               SizedBox(
+            //                 width: MediaQuery.of(context).size.width * 0.25,
+            //                 child: DropdownForm(
+            //                     onChanged: (String? newValue) {
+            //                       setState(() {
+            //                         _selectedMonthInsert = newValue!;
+            //                       });
+            //                     },
+            //                     content: _selectedMonthInsert,
+            //                     items: month,
+            //                     label: "--Pilih Bulan--"),
+            //               ),
+            //               SizedBox(
+            //                 width: 10,
+            //               ),
+            //               SizedBox(
+            //                   width: MediaQuery.of(context).size.width *
+            //                       0.25,
+            //                   child: DropdownForm(
+            //                       onChanged: (String? newValue) {
+            //                         setState(() {
+            //                           _selectedYearInsert = newValue!;
+            //                         });
+            //                       },
+            //                       content: _selectedYearInsert,
+            //                       items: year,
+            //                       label: "--Pilih Tahun--")),
+            //             ]),
+            //         SizedBox(
+            //           height: 30,
+            //         ),
+            //         Row(
+            //           mainAxisAlignment: MainAxisAlignment.end,
+            //           children: [
+            //             ButtonNoIcon(
+            //                 bg_color: background2,
+            //                 text_color: merah,
+            //                 onPressed: disableForm,
+            //                 content: "Batal"),
+            //             SizedBox(width: 20),
+            //             ButtonNoIcon(
+            //                 bg_color: kuning,
+            //                 text_color: hitam,
+            //                 onPressed: () {
+            //                   setState(() {});
+            //                 },
+            //                 content: "Simpan")
+            //           ],
+            //         )
+            //       ],
+            //     ),
+            //   )
+            // ),
             Container(
               margin: EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
               padding: EdgeInsets.all(25),

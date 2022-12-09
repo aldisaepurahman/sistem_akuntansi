@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
 import 'package:sistem_akuntansi/utils/Buku_besar.dart';
 import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
@@ -91,7 +92,6 @@ class BukuBesarTableData extends DataTableSource {
             )
           )
         ),
-
       ],
     );
   }
