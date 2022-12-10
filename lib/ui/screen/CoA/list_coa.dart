@@ -184,32 +184,35 @@ class ListCOAState extends State<ListCOA> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      PaginatedDataTable(
-                        source: tableRow,
-                        rowsPerPage: total_row,
-                        showCheckboxColumn: false,
-                        dataRowHeight: 70,
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Kode"),
-                          ),
-                          DataColumn(
-                            label: Text("Nama Akun"),
-                          ),
-                          DataColumn(
-                            label: Text("Keterangan"),
-                          ),
-                          DataColumn(
-                            label: Text("Indentasi"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                      ),
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          source: tableRow,
+                          rowsPerPage: total_row,
+                          showCheckboxColumn: false,
+                          dataRowHeight: 70,
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Text("No."),
+                            ),
+                            DataColumn(
+                              label: Text("Kode"),
+                            ),
+                            DataColumn(
+                              label: Text("Nama Akun"),
+                            ),
+                            DataColumn(
+                              label: Text("Keterangan"),
+                            ),
+                            DataColumn(
+                              label: Text("Indentasi"),
+                            ),
+                            DataColumn(
+                              label: Text("Action"),
+                            ),
+                          ],
+                        ),
+                      )
 //=======
                                               /*color:
                                               Color.fromARGB(255, 50, 52, 55),

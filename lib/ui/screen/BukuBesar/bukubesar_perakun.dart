@@ -6,9 +6,12 @@ import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/Buku_besar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BukuBesarPerAkun extends StatefulWidget {
-  BukuBesarPerAkun({Key? key}) : super(key: key);
+  final SupabaseClient client;
+
+  BukuBesarPerAkun({required this.client, Key? key}) : super(key: key);
 
   @override
   BukuBesarPerAkunState createState() {
@@ -63,7 +66,9 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                       ButtonBack(
                         onPressed: (){
                           setState(() {
-                            Navigator.pop(context);
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
                           });
                         },
                       )
@@ -194,100 +199,103 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                             )
                           ],
                         ),
-                        PaginatedDataTable(
-                          columnSpacing: 0,
-                          horizontalMargin: 0,
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Expanded(
-                                child: Container(
-                                  color: Color(int.parse(greyHeaderColor)),
-                                  height: double.infinity,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Tanggal",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: "Inter",
-                                    ),
-                                  ),
-                                )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Nama Transaksi",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
+                        Container(
+                          width: double.infinity,
+                          child: PaginatedDataTable(
+                            columnSpacing: 0,
+                            horizontalMargin: 0,
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Expanded(
+                                    child: Container(
+                                      color: Color(int.parse(greyHeaderColor)),
+                                      height: double.infinity,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Tanggal",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Inter",
+                                        ),
                                       ),
-                                    ),
+                                    )
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                    child: Container(
+                                      color: Color(int.parse(greyHeaderColor)),
+                                      height: double.infinity,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Nama Transaksi",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Inter",
+                                        ),
+                                      ),
+                                    )
+                                ),
+                              ),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Container(
+                                        color: Color(int.parse(greyHeaderColor)),
+                                        height: double.infinity,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "No. Bukti",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: "Inter",
+                                          ),
+                                        ),
+                                      )
                                   )
                               ),
-                            ),
-                            DataColumn(
-                                label: Expanded(
-                                    child: Container(
-                                      color: Color(int.parse(greyHeaderColor)),
-                                      height: double.infinity,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "No. Bukti",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Inter",
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Container(
+                                        color: Color(int.parse(greyHeaderColor)),
+                                        height: double.infinity,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Keterangan",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: "Inter",
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                )
-                            ),
-                            DataColumn(
-                                label: Expanded(
-                                    child: Container(
-                                      color: Color(int.parse(greyHeaderColor)),
-                                      height: double.infinity,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Keterangan",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Inter",
+                                      )
+                                  )
+                              ),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Container(
+                                        color: Color(int.parse(greyHeaderColor)),
+                                        height: double.infinity,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Saldo (Rp.)",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: "Inter",
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                )
-                            ),
-                            DataColumn(
-                                label: Expanded(
-                                    child: Container(
-                                      color: Color(int.parse(greyHeaderColor)),
-                                      height: double.infinity,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Saldo (Rp.)",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Inter",
-                                        ),
-                                      ),
-                                    )
-                                )
-                            ),
-                          ],
-                          source: tableRow,
-                          rowsPerPage: 5,
-                          showCheckboxColumn: false,
-                        ),
+                                      )
+                                  )
+                              ),
+                            ],
+                            source: tableRow,
+                            rowsPerPage: 5,
+                            showCheckboxColumn: false,
+                          ),
+                        )
                       ],
                     ),
                   ),

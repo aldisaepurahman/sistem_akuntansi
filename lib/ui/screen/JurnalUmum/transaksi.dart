@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/utils/Transaksi.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 
 class TransaksiList extends StatefulWidget {
-  const TransaksiList({Key? key}) : super(key: key);
+  final SupabaseClient client;
+
+  const TransaksiList({required this.client, Key? key}) : super(key: key);
 
   @override
   TransaksiListState createState() {
@@ -122,17 +127,34 @@ class TransaksiListState extends State<TransaksiList> {
   @override
   void initState() {
     tanggal.text = ""; //set the initial value of text field
+    tanggal_update.text = "";
+
     super.initState();
+
     tableRow = new TransaksiTableData(
       context: context,
       contentData: contents_transaksi,
       seeDetail: (){
         setState(() {
-          // navigator
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 3, bukuBesarIndex: 0, client: widget.client)));
         });
       },
       editForm: (){
         showForm();
+      },
+      tetapSimpan: (){
+        setState(() {
+          Navigator.pop(context);
+        });
+      },
+      hapus: (){
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
+        });
       },
       changeCaseToUpdate: (){
         setState(() {
@@ -270,7 +292,9 @@ class TransaksiListState extends State<TransaksiList> {
                       ButtonBack(
                         onPressed: () {
                           setState(() {
-                            Navigator.pop(context);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
                           });
                         },
                       )
@@ -529,122 +553,125 @@ class TransaksiListState extends State<TransaksiList> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Tanggal",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Tanggal",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Akun Debit",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Akun Debit",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 40),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Saldo (Rp.)",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 40),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Saldo (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Akun Kredit",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Akun Kredit",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Saldo (Rp.)",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Saldo (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Action",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Action",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          ),
-                        ],
-                        source: tableRow,
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
-                        horizontalMargin: 0,
-                        columnSpacing: 0,
+                                )
+                            ),
+                          ],
+                          source: tableRow,
+                          rowsPerPage: 10,
+                          showCheckboxColumn: false,
+                          horizontalMargin: 0,
+                          columnSpacing: 0,
+                        ),
                       )
                     ],
                   ),
@@ -826,6 +853,8 @@ class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
 class TransaksiTableData extends DataTableSource {
   Function seeDetail;
   Function editForm;
+  Function tetapSimpan;
+  Function hapus;
   BuildContext context;
   final List<Transaksi> _contentData;
   Function changeCaseToUpdate;
@@ -835,6 +864,8 @@ class TransaksiTableData extends DataTableSource {
     required this.context,
     required this.seeDetail,
     required this.editForm,
+    required this.tetapSimpan,
+    required this.hapus,
     required this.changeCaseToUpdate,
   })
   : _contentData = contentData, assert(contentData != null);
@@ -872,7 +903,7 @@ class TransaksiTableData extends DataTableSource {
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(right: 20),
                   child: Text(
-                    "${_content.transaksi_debit}",
+                    "${_content.transaksi_debit} untuk nama akun",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -886,7 +917,7 @@ class TransaksiTableData extends DataTableSource {
                 child: Container(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Halo2",
+                    "${_content.transaksi_debit} untuk saldo",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -901,7 +932,7 @@ class TransaksiTableData extends DataTableSource {
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(left: 40, right: 20),
                   child: Text(
-                    "Halo3",
+                    "${_content.transaksi_kredit} untuk nama akun",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -916,7 +947,7 @@ class TransaksiTableData extends DataTableSource {
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(right: 20),
                   child: Text(
-                    "Halo4",
+                    "${_content.transaksi_kredit} untuk saldo",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -961,7 +992,24 @@ class TransaksiTableData extends DataTableSource {
                             padding: EdgeInsets.all(20),
                           ),
                           onPressed: () {
-                            editForm();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog2Button(
+                                  content: "Hapus Transaksi",
+                                  content_detail: "Anda yakin ingin menghapus data ini?",
+                                  path_image: 'assets/images/hapus_coa.png',
+                                  button1: "Tetap Simpan",
+                                  button2: "Ya, Hapus",
+                                  onPressed1: () {
+                                    tetapSimpan();
+                                  },
+                                  onPressed2: () {
+                                    hapus();
+                                  },
+                                );
+                              }
+                            );
                           },
                           child: Icon(Icons.delete),
                         ),

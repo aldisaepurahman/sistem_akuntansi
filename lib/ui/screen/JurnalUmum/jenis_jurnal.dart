@@ -4,6 +4,7 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
@@ -49,6 +50,18 @@ class JenisJurnalState extends State<JenisJurnal> {
       },
       editForm: () {
         showForm();
+      },
+      tetapSimpan: (){
+        setState(() {
+          Navigator.pop(context);
+        });
+      },
+      hapus: (){
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
+        });
       },
       context: context,
       changeCaseToUpdate: (){
@@ -122,7 +135,9 @@ class JenisJurnalState extends State<JenisJurnal> {
                         ButtonBack(
                           onPressed: (){
                             setState(() {
-                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                  SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
                             });
                           },
                         )
@@ -247,21 +262,24 @@ class JenisJurnalState extends State<JenisJurnal> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Jenis Jurnal"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: tableRow,
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Text("No."),
+                            ),
+                            DataColumn(
+                              label: Text("Jenis Jurnal"),
+                            ),
+                            DataColumn(
+                              label: Text("Action"),
+                            ),
+                          ],
+                          source: tableRow,
+                          rowsPerPage: 10,
+                          showCheckboxColumn: false,
+                        ),
                       )
                     ],
                   ),
@@ -276,6 +294,8 @@ class JenisJurnalState extends State<JenisJurnal> {
 class JenisJurnalTableData extends DataTableSource {
   Function seeDetail;
   Function editForm;
+  Function tetapSimpan;
+  Function hapus;
   BuildContext context;
   final List<Jenis_jurnal> _contentData;
   Function changeCaseToUpdate;
@@ -285,6 +305,8 @@ class JenisJurnalTableData extends DataTableSource {
     required this.context,
     required this.seeDetail,
     required this.editForm,
+    required this.tetapSimpan,
+    required this.hapus,
     required this.changeCaseToUpdate,
   })
       : _contentData = contentData, assert(contentData != null);
@@ -365,7 +387,25 @@ class JenisJurnalTableData extends DataTableSource {
                             padding: EdgeInsets.all(20),
                           ),
                           onPressed: () {
-                            editForm();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog2Button(
+                                  content: "Hapus Jenis Jurnal",
+                                  content_detail:
+                                  "Anda yakin ingin menghapus data ini?",
+                                  path_image: 'assets/images/hapus_coa.png',
+                                  button1: "Tetap Simpan",
+                                  button2: "Ya, Hapus",
+                                  onPressed1: () {
+                                    tetapSimpan();
+                                  },
+                                  onPressed2: () {
+                                    hapus();
+                                  }
+                                );
+                              }
+                            );
                           },
                           child: Icon(Icons.delete),
                         ),

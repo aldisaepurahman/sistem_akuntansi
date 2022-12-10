@@ -120,83 +120,86 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                     ],
                   ),
                   SizedBox(height: 25),
-                  PaginatedDataTable(
-                    columnSpacing: 0,
-                    horizontalMargin: 0,
-                    columns: <DataColumn>[
-                      DataColumn(
-                        label: Expanded(
-                          child: Container(
-                            color: Color(int.parse(greyHeaderColor)),
-                            height: double.infinity,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "No.",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Inter",
-                              ),
-                            ),
-                          )
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Container(
-                            color: Color(int.parse(greyHeaderColor)),
-                            height: double.infinity,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Bulan",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Inter",
-                              ),
-                            ),
-                          )
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Container(
-                            color: Color(int.parse(greyHeaderColor)),
-                            height: double.infinity,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Tahun",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Inter",
-                              ),
-                            ),
-                          )
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                            child: Container(
-                              color: Color(int.parse(greyHeaderColor)),
-                              height: double.infinity,
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Action",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Inter",
+                  Container(
+                    width: double.infinity,
+                    child: PaginatedDataTable(
+                      columnSpacing: 0,
+                      horizontalMargin: 0,
+                      columns: <DataColumn>[
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
                                 ),
-                              ),
-                            )
+                              )
+                          ),
                         ),
-                      ),
-                    ],
-                    source: tableRow,
-                    rowsPerPage: 10,
-                    showCheckboxColumn: false,
-                  ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Bulan",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Tahun",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: Color(int.parse(greyHeaderColor)),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Action",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                      ],
+                      source: tableRow,
+                      rowsPerPage: 10,
+                      showCheckboxColumn: false,
+                    ),
+                  )
                 ],
               ),
             )
