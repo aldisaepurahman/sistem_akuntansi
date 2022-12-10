@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:sistem_akuntansi/ui/components/pdf_styles.dart';
+import 'package:sistem_akuntansi/ui/screen/LabaRugi/labarugi_pdf.dart';
 
 class FileSaveHelper {
   static const MethodChannel _platformCall = MethodChannel('launchFile');
@@ -257,33 +258,45 @@ int total_saldo(PdfGrid grid, int i) {
 
 //==================================================================
 
-void laba_rugi_pendapatan(PdfGrid grid) {
-  grid.columns.add(count: 4);
-
-  PdfGridRow row = grid.rows.add();
-  row.cells[0].value = "Pendapatan";
-}
-
-void laba_rugi_beban(PdfGrid grid) {
-  PdfGridRow row = grid.rows.add();
-  row.cells[0].value = "Beban Usaha";
-}
-
 void add_data_labarugi(PdfGrid grid, String nama_akun, int debit, int kredit) {
-  grid.columns.add(count: 4);
-
   PdfGridRow row = grid.rows.add();
   row.cells[0].value = nama_akun;
+  labarugi_coa_style(row.cells[0]);
 
-  if (debit > 0) {
+  if (debit > 0 || debit < 0) {
     row.cells[1].value = debit.toString();
   } else {
-    row.cells[1].value = "";
+    row.cells[1].value = 0.toString();
   }
 
-  if (kredit > 0) {
+  if (kredit > 0 || kredit < 0) {
     row.cells[2].value = kredit.toString();
   } else {
-    row.cells[2].value = "";
+    row.cells[2].value = 0.toString();
   }
+}
+
+int laba_rugi_hitung_saldo(PdfGrid grid, String nama_kolom, var jumlah) {
+  int debit = 0, kredit = 0;
+
+  PdfGridRow row = grid.rows.add();
+  row.cells[0].value = nama_kolom;
+  labarugi_header_style(row.cells[0]);
+
+  for (int j = 0; j < grid.rows.count - 1; j++) {
+    final String value = grid.rows[j].cells[1].value as String;
+    final String value2 = grid.rows[j].cells[2].value as String;
+    debit += int.parse(value);
+    kredit += int.parse(value2);
+  }
+
+  jumlah = kredit - debit;
+
+  if (jumlah > 0 || jumlah < 0) {
+    row.cells[3].value = jumlah.toString();
+  } else {
+    row.cells[3].value = 0.toString();
+  }
+
+  return jumlah;
 }
