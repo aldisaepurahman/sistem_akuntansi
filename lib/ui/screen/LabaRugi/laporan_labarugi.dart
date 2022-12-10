@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/screen/LabaRugi/labarugi_pdf.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
@@ -36,8 +36,12 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex:0, bukuBesarIndex: 1, client: widget.client)));
+              builder: (context) => SideNavigationBar(
+                  index: 3,
+                  coaIndex: 0,
+                  jurnalUmumIndex: 0,
+                  bukuBesarIndex: 1,
+                  client: widget.client)));
         });
       },
       context: context,
@@ -127,7 +131,7 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                           ButtonNoIcon(
                               bg_color: kuning,
                               text_color: hitam,
-                              onPressed: () {},
+                              onPressed: labarugi_pdf,
                               content: "Cetak Laporan")
                         ],
                       ),

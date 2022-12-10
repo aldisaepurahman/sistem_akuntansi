@@ -4,6 +4,7 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/screen/NeracaLajur/neraca_pdf.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
@@ -36,8 +37,12 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+              builder: (context) => SideNavigationBar(
+                  index: 3,
+                  coaIndex: 0,
+                  jurnalUmumIndex: 0,
+                  bukuBesarIndex: 1,
+                  client: widget.client)));
         });
       },
       context: context,
@@ -127,7 +132,7 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
                           ButtonNoIcon(
                               bg_color: kuning,
                               text_color: hitam,
-                              onPressed: () {},
+                              onPressed: neraca_pdf,
                               content: "Cetak Neraca Lajur")
                         ],
                       ),
