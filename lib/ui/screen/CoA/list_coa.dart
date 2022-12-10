@@ -7,6 +7,7 @@ import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
@@ -49,8 +50,8 @@ class ListCOAState extends State<ListCOA> {
   void initState() {
     super.initState();
     tableRow = new RowTableCOA(
-      contentData: const <VLookup>[],
-      seeDetail: () {
+      contentData: const <Akun>[],
+      seeDetail: (int index) {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
@@ -67,11 +68,11 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
-            body: BlocProvider(
-              create: (_) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+            body: BlocProvider<VLookupBloc>(
+              create: (BuildContext context) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
               child: ListView(
                 children: [
-                  Container(
+                  /*Container(
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -85,7 +86,7 @@ class ListCOAState extends State<ListCOA> {
                           },
                         )
                       ],
-                    )),
+                    )),*/
                 Container(
                   margin: EdgeInsets.only(top: 25, left: 25),
                   child: const Text(
@@ -172,6 +173,9 @@ class ListCOAState extends State<ListCOA> {
                                       border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(8))),
+                                  onChanged: (value) {
+                                    VLookupBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunSearched(keyword: value));
+                                  },
                                 ),
                               ),
                               SizedBox(width: 20),
@@ -181,6 +185,7 @@ class ListCOAState extends State<ListCOA> {
                                     setState(() {
                                       if (newValue != null) {
                                         total_row = int.parse(newValue);
+                                        _selectedEntries = newValue;
                                       }
                                     });
                                   },
@@ -197,7 +202,7 @@ class ListCOAState extends State<ListCOA> {
                           builder: (context, state) {
                             switch (state.status) {
                               case SystemStatus.failure:
-                                return const Center(child: Text("Failed to fetch data"));
+                                return Center(child: Text(state.error));
                               case SystemStatus.success:
                                 if (state.list_coa.isEmpty) {
                                   return const Center(child: Text("No Data"));
@@ -224,13 +229,11 @@ class ListCOAState extends State<ListCOA> {
                                     ),
                                   ],
                                   source: RowTableCOA(
-                                    contentData: state.list_coa,
-                                    seeDetail: () {
-                                      setState(() {
-                                        Navigator.of(context).push(MaterialPageRoute(
-                                            builder: (context) =>
-                                                SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
-                                      });
+                                    contentData: state.list_coa.where((coa) => coa.keterangan_akun != "Header").toList(),
+                                    seeDetail: (int index) {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client, params: state.list_coa[index])));
                                     },
                                     context: context,
                                   ),
@@ -243,53 +246,6 @@ class ListCOAState extends State<ListCOA> {
                             }
                           },
                       )
-                      /*PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Bulan"),
-                          ),
-                          DataColumn(
-                            label: Text("Tahun"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: BlocBuilder<VLookupBloc, VLookupState>(
-                          builder: (context, state) {
-                            switch (state.status) {
-                              case SystemStatus.failure:
-                                return const Center(child: Text("Failed to fetch data"));
-                              case SystemStatus.success:
-                                if (state.list_coa.isEmpty) {
-                                  return const Center(child: Text("No Data"));
-                                }
-                                return ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      RowTable(
-                                        contentData: state.list_coa,
-                                        seeDetail: (){
-                                          setState(() {
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-                                          });
-                                        },
-                                        context: context
-                                      );
-                                    },
-                                );
-                              case SystemStatus.loading:
-                                return const Center(child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
-                      )*/
                     ],
                   ),
                 )

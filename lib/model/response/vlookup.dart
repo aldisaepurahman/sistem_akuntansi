@@ -5,37 +5,37 @@ class VLookup extends Equatable {
   final String kode;
   final int id_saldo;
   final int saldo;
-  final int bulan;
+  final String bulan;
   final int tahun;
-  // final String keterangan;
+  final String keterangan;
   final int indentasi;
 
   const VLookup({
-    required this.nama_akun,
-    required this.kode,
-    required this.id_saldo,
-    required this.saldo,
-    required this.bulan,
-    required this.tahun,
-    // required this.keterangan,
-    required this.indentasi
+    this.nama_akun = "",
+    this.kode = "",
+    this.id_saldo = 0,
+    this.saldo = 0,
+    this.bulan = "",
+    this.tahun = 0,
+    this.keterangan = "",
+    this.indentasi = 0
   });
 
   factory VLookup.fromJson(Map<String, dynamic> json) {
     return VLookup(
         nama_akun: json['nama_akun'],
-        kode: json['kode'],
+        kode: json['kode_akun'],
         id_saldo: json['id_saldo'],
         saldo: json['saldo'],
         bulan: json['bulan'],
         tahun: json['tahun'],
-        // keterangan: json['keterangan'],
+        keterangan: json['keterangan_akun'],
         indentasi: json['indentasi']);
   }
 
   @override
   List<Object> get props => [nama_akun, kode, saldo, bulan, tahun,
-    // keterangan,
+    keterangan,
     indentasi];
 
 }

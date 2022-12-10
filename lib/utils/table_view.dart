@@ -1,7 +1,7 @@
 enum TableViewType {
   pengguna,
   coa,
-  saldo_coa,
+  coa_saldo,
   jenis_jurnal,
   transaksi,
   transaksi_debit_kredit,

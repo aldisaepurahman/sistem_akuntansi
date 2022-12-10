@@ -1,11 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:supabase/supabase.dart';
 
 class InsertCOA extends StatefulWidget {
-  const InsertCOA({Key? key}) : super(key: key);
+  const InsertCOA({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   InsertCOAState createState() {
@@ -14,6 +24,28 @@ class InsertCOA extends StatefulWidget {
 }
 
 class InsertCOAState extends State<InsertCOA> {
+  final namaAkunController = TextEditingController();
+  final kodeController = TextEditingController();
+  final keteranganController = TextEditingController();
+  final indentasiController = TextEditingController();
+  final saldoController = TextEditingController();
+
+  Map<int, String> listbulan =
+    {
+      1: "Januari",
+      2: "Februari",
+      3: "Maret",
+      4: "April",
+      5: "Mei",
+      6: "Juni",
+      7: "Juli",
+      8: "Agustus",
+      9: "September",
+      10: "Oktober",
+      11: "November",
+      12: "Desember"
+    };
+
   @override
   void dispose() {}
 
@@ -82,6 +114,7 @@ class InsertCOAState extends State<InsertCOA> {
                       Container(
                         margin: EdgeInsets.only(top: 10, bottom: 20),
                         child: TextField(
+                          controller: namaAkunController,
                           decoration: InputDecoration(
                               hintText: 'Masukkan nama akun...',
                               contentPadding: const EdgeInsets.all(8),
@@ -102,10 +135,11 @@ class InsertCOAState extends State<InsertCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
+                                    controller: kodeController,
                                     decoration: InputDecoration(
                                         hintText: 'Masukkan kode...',
                                         contentPadding: const EdgeInsets.all(8),
@@ -126,10 +160,11 @@ class InsertCOAState extends State<InsertCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
+                                    controller: keteranganController,
                                     decoration: InputDecoration(
                                         hintText: 'Masukkan keterangan...',
                                         contentPadding: const EdgeInsets.all(8),
@@ -150,10 +185,12 @@ class InsertCOAState extends State<InsertCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
+                                    controller: indentasiController,
+                                    keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                         hintText: 'Masukkan indentasi...',
                                         contentPadding: const EdgeInsets.all(8),
@@ -180,6 +217,8 @@ class InsertCOAState extends State<InsertCOA> {
                       Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 20),
                         child: TextField(
+                          controller: saldoController,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               labelText: 'Rp',
                               hintText: 'Masukkan saldo awal...',
@@ -196,11 +235,57 @@ class InsertCOAState extends State<InsertCOA> {
                               backgroundColor: Color.fromARGB(255, 255, 204, 0),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            showDialog(
+                            var nama_akun = namaAkunController.text;
+                            var kode_akun = kodeController.text;
+                            var keterangan = keteranganController.text;
+                            var indentasi = indentasiController.text;
+                            var saldo = indentasiController.text;
+                            var bulan = listbulan[DateTime.now().month];
+                            var tahun = DateTime.now().year;
+
+                            if (nama_akun.isNotEmpty && kode_akun.isNotEmpty && keterangan.isNotEmpty && indentasi.isNotEmpty) {
+                              AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(
+                                AkunInserted(
+                                    akun: Akun(
+                                      kode_akun: kode_akun,
+                                      nama_akun: nama_akun,
+                                      keterangan_akun: keterangan,
+                                      indentasi: int.parse(indentasi)
+                                    ),
+                                    saldo: Saldo(
+                                      kode_akun: kode_akun,
+                                      saldo: int.parse(saldo),
+                                      bulan: bulan!!,
+                                      tahun: tahun
+                                    )
+                                )
+                              );
+
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    Future.delayed(Duration(seconds: 2), () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                    });
+                                    return DialogNoButton(
+                                        content: "Berhasil Ditambahkan!",
+                                        content_detail:
+                                        "Chart of Account baru berhasil ditambahkan",
+                                        path_image:
+                                        'assets/images/tambah_coa.png');
+                                  });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Pastikan seluruh kolom terisi, kecuali kolom saldo awal"))
+                              );
+                            }
+                            /*showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   Future.delayed(Duration(seconds: 1), () {
-                                    Navigator.of(context).pop(true);
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
                                   });
                                   return DialogNoButton(
                                       content: "Berhasil Ditambahkan!",
@@ -208,7 +293,7 @@ class InsertCOAState extends State<InsertCOA> {
                                           "Chart of Account baru berhasil ditambahkan",
                                       path_image:
                                           'assets/images/tambah_coa.png');
-                                });
+                                });*/
                           },
                           child: const Text(
                             "Simpan",
