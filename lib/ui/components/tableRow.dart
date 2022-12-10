@@ -4,10 +4,14 @@ import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
 import 'package:sistem_akuntansi/utils/Buku_besar.dart';
 import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
+import 'package:sistem_akuntansi/utils/V_LabaRugi.dart';
 
 class BukuBesarTableData extends DataTableSource {
   BuildContext context;
-  BukuBesarTableData({required List<Buku_besar> contentData, required this.context}) : _contentData = contentData, assert(contentData != null);
+  BukuBesarTableData(
+      {required List<Buku_besar> contentData, required this.context})
+      : _contentData = contentData,
+        assert(contentData != null);
   final List<Buku_besar> _contentData;
 
   @override
@@ -21,8 +25,7 @@ class BukuBesarTableData extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: <DataCell>[
-        DataCell(
-          SizedBox(
+        DataCell(SizedBox(
             width: MediaQuery.of(context).size.width / 10 - 50,
             child: Container(
               alignment: Alignment.center,
@@ -32,11 +35,8 @@ class BukuBesarTableData extends DataTableSource {
                   fontFamily: "Inter",
                 ),
               ),
-            )
-          )
-        ),
-        DataCell(
-          SizedBox(
+            ))),
+        DataCell(SizedBox(
             width: MediaQuery.of(context).size.width / 3 - 50,
             child: Container(
               alignment: Alignment.centerLeft,
@@ -46,25 +46,20 @@ class BukuBesarTableData extends DataTableSource {
                   fontFamily: "Inter",
                 ),
               ),
-            )
-          )
-        ),
-        DataCell(
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 10 - 50,
-            child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                "${_content.no_bukti}",
-                style: TextStyle(
-                  fontFamily: "Inter",
-                ),
+            ))),
+        DataCell(SizedBox(
+          width: MediaQuery.of(context).size.width / 10 - 50,
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "${_content.no_bukti}",
+              style: TextStyle(
+                fontFamily: "Inter",
               ),
             ),
-          )
-        ),
-        DataCell(
-          SizedBox(
+          ),
+        )),
+        DataCell(SizedBox(
             width: MediaQuery.of(context).size.width / 10 - 50,
             child: Container(
               alignment: Alignment.center,
@@ -74,11 +69,8 @@ class BukuBesarTableData extends DataTableSource {
                   fontFamily: "Inter",
                 ),
               ),
-            )
-          )
-        ),
-        DataCell(
-          SizedBox(
+            ))),
+        DataCell(SizedBox(
             width: MediaQuery.of(context).size.width / 8 - 50,
             child: Container(
               padding: EdgeInsets.only(right: 20),
@@ -89,9 +81,7 @@ class BukuBesarTableData extends DataTableSource {
                   fontFamily: "Inter",
                 ),
               ),
-            )
-          )
-        ),
+            ))),
       ],
     );
   }
@@ -119,34 +109,31 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(20),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 255, 204, 0),
-            padding: EdgeInsets.all(20)
-        ),
-        onPressed: onPressed,
-        child: Text(
-          textContent,
-          style: TextStyle(
-              fontFamily: "Inter",
-              color: Color.fromARGB(255, 50, 52, 55),
-              fontWeight: FontWeight.bold),
-        )
-      )
-    );
+        padding: EdgeInsets.all(20),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                padding: EdgeInsets.all(20)),
+            onPressed: onPressed,
+            child: Text(
+              textContent,
+              style: TextStyle(
+                  fontFamily: "Inter",
+                  color: Color.fromARGB(255, 50, 52, 55),
+                  fontWeight: FontWeight.bold),
+            )));
   }
 }
 
 class BulanTahunTableData extends DataTableSource {
   Function seeDetail;
   BuildContext context;
-  BulanTahunTableData({
-    required List<V_bulan_jurnal> contentData, 
-    required this.seeDetail, 
-    required this.context}) 
-    : _contentData = contentData, 
-    assert(contentData != null);
+  BulanTahunTableData(
+      {required List<V_bulan_jurnal> contentData,
+      required this.seeDetail,
+      required this.context})
+      : _contentData = contentData,
+        assert(contentData != null);
   final List<V_bulan_jurnal> _contentData;
 
   @override
@@ -160,48 +147,41 @@ class BulanTahunTableData extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: <DataCell>[
-        DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "${index+1}",
-                  style: TextStyle(
-                    fontFamily: "Inter",
-                  ),
-                ),
-              )
-            )
-        ),
-        DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "${_content.bulan}",
-                  style: TextStyle(
-                    fontFamily: "Inter",
-                  ),
+        DataCell(SizedBox(
+            width: MediaQuery.of(context).size.width / 5 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${index + 1}",
+                style: TextStyle(
+                  fontFamily: "Inter",
                 ),
               ),
-            )
-        ),
-        DataCell(
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 5 - 50,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "${_content.tahun}",
-                  style: TextStyle(
-                    fontFamily: "Inter",
-                  ),
-                ),
+            ))),
+        DataCell(SizedBox(
+          width: MediaQuery.of(context).size.width / 5 - 50,
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "${_content.bulan}",
+              style: TextStyle(
+                fontFamily: "Inter",
               ),
-            )
-        ),
+            ),
+          ),
+        )),
+        DataCell(SizedBox(
+          width: MediaQuery.of(context).size.width / 5 - 50,
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "${_content.tahun}",
+              style: TextStyle(
+                fontFamily: "Inter",
+              ),
+            ),
+          ),
+        )),
         DataCell(
           ElevatedButton(
             style: ElevatedButton.styleFrom(
