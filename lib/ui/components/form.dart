@@ -96,15 +96,24 @@ class DropdownFilter extends StatelessWidget {
 
 class TextForm extends StatelessWidget {
   final String hintText;
+  final TextEditingController textController;
 
-  const TextForm({super.key, required this.hintText});
+  const TextForm({
+    super.key,
+    required this.hintText,
+    required this.textController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10, bottom: 20),
       child: TextField(
-        style: TextStyle(fontSize: 13),
+        controller: textController,
+        style: TextStyle(
+          fontSize: 13,
+          fontFamily: 'Inter',
+        ),
         decoration: InputDecoration(
           hintText: hintText,
           focusedBorder: OutlineInputBorder(
@@ -115,7 +124,7 @@ class TextForm extends StatelessWidget {
             borderSide: BorderSide(color: abu_tua),
             borderRadius: BorderRadius.circular(8),
           ),
-          contentPadding: const EdgeInsets.all(3),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 25),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: abu_transparan)

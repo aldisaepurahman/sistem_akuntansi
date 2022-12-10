@@ -5,10 +5,11 @@ import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/edit_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesar.dart';
-import 'package:sistem_akuntansi/ui/screen/BukuBesar/list_bukubesarperbulan.dart';
+import 'package:sistem_akuntansi/ui/screen/BukuBesar/bukubesar_perakun.dart';
 import 'package:sistem_akuntansi/ui/screen/JurnalUmum/detail_transaksi.dart';
 import 'package:sistem_akuntansi/ui/screen/JurnalUmum/jurnal_umum.dart';
 import 'package:sistem_akuntansi/ui/screen/JurnalUmum/transaksi.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalUmum/jenis_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SideNavigationBar extends StatefulWidget{
@@ -44,38 +45,42 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getCoaPage(){
     if (selectedCoaIndex == 1) {
-      return InsertCOA(client: widget.client);
+      return InsertCOA(client: widget.client); // insert CoA
     }
     else if (selectedCoaIndex == 2) {
-      return DetailCOA(client: widget.client);
+      return DetailCOA(client: widget.client); // detail CoA
     }
     else if (selectedCoaIndex == 3) {
-      return EditCOA(client: widget.client);
+      return EditCOA(client: widget.client); // edit CoA
     }
-    return ListCOA(client: widget.client);
+    return ListCOA(client: widget.client); // list CoA
   }
 
   Widget getJurnalUmum() {
     if (selectedJurnalUmumIndex == 1) {
-      return TransaksiList();
+      return JenisJurnal(client: widget.client); // tabel jenis jurnal
     }
     else if (selectedJurnalUmumIndex == 2) {
-      return DetailTransaksi();
+      return TransaksiList(); // tabel daftar transaksi
     }
-    return JurnalUmumList(client: widget.client);
+    // else if (selectedJurnalUmumIndex == 3) {
+    //   return DetailTransaksi(); // detail transaksi
+    // }
+    return JurnalUmumList(client: widget.client); // tabel bulan tahun jurnal
   }
 
   Widget getBukuBesarPage(){
     if (selectedBukuBesarIndex == 1) {
-      return ListBukuBesarPerBulan();
+      return BukuBesarPerAkun(); // tabel buku besar per akun
     }
-    return ListBukuBesar(client: widget.client);
+    return ListBukuBesar(client: widget.client); // tabel bulan tahun buku besar
   }
   
   @override
   void initState() {
     selectedIndex = widget.index;
     selectedCoaIndex = widget.coaIndex;
+    selectedJurnalUmumIndex = widget.jurnalUmumIndex;
     selectedBukuBesarIndex = widget.bukuBesarIndex;
 
     _mainContents = [

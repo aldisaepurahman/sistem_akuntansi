@@ -18,7 +18,13 @@ class TransaksiList extends StatefulWidget {
 class TransaksiListState extends State<TransaksiList> {
   @override
   void dispose() {
-    input.dispose();
+    tanggal.dispose();
+    nama_transaksi.dispose();
+    no_bukti.dispose();
+    akun_debit.dispose();
+    akun_kredit.dispose();
+    jumlah_debit.dispose();
+    jumlah_kredit.dispose();
     super.dispose();
   }
 
@@ -41,7 +47,7 @@ class TransaksiListState extends State<TransaksiList> {
 
   @override
   void initState() {
-    input.text = ""; //set the initial value of text field
+    tanggal.text = ""; //set the initial value of text field
     super.initState();
   }
 
@@ -86,7 +92,31 @@ class TransaksiListState extends State<TransaksiList> {
     "JURNAL GAJI"
   ];
 
-  final TextEditingController input = TextEditingController();
+  List<String> namaAkunList = ['Beban Kesekretariatan', 'Beban ART', 'Uang Tunai (Bendahara)', 'Rekening Giro Bank NISP'];
+
+  final TextEditingController tanggal = TextEditingController();
+  final TextEditingController nama_transaksi = TextEditingController();
+  final TextEditingController no_bukti = TextEditingController();
+  final TextEditingController akun_debit = TextEditingController();
+  final TextEditingController akun_kredit = TextEditingController();
+  final TextEditingController jumlah_debit = TextEditingController();
+  final TextEditingController jumlah_kredit = TextEditingController();
+
+  void getAkunDebitText(String? newValue) {
+    setState(() {
+      if(newValue != null) {
+        akun_debit.text = newValue;
+      }
+    });
+  }
+
+  void getAkunKreditText(String? newValue) {
+    setState(() {
+      if(newValue != null) {
+        akun_kredit.text = newValue;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +210,7 @@ class TransaksiListState extends State<TransaksiList> {
                                 size: 18,
                                 color: hitam),
                           ),
-                          Row(
+                          Row( // BARIS PERTAMA FORM
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -189,7 +219,7 @@ class TransaksiListState extends State<TransaksiList> {
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10, bottom: 20),
                                   child: TextField(
-                                    controller: input,
+                                    controller: tanggal,
                                     style: TextStyle(fontSize: 13),
                                     readOnly: true,
                                     onTap: () async {
@@ -204,7 +234,7 @@ class TransaksiListState extends State<TransaksiList> {
                                             DateFormat('yyyy-MM-dd')
                                                 .format(date);
                                         setState(() {
-                                          input.text = formattedDate;
+                                          tanggal.text = formattedDate;
                                         });
                                       }
                                     },
@@ -223,8 +253,12 @@ class TransaksiListState extends State<TransaksiList> {
                                 width: 10,
                               ),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.25,
-                                child: TextForm(hintText: "Masukkan nama transaksi")),
+                                width: MediaQuery.of(context).size.width * 0.20,
+                                child: TextForm(
+                                  hintText: "Masukkan nama transaksi",
+                                  textController: nama_transaksi,
+                                )
+                              ),
                               SizedBox(
                                 width: 10,
                               ),
@@ -237,26 +271,35 @@ class TransaksiListState extends State<TransaksiList> {
                                     });
                                   },
                                   content: _selectedJurnalInsert,
-                                  items: jurnal)),
+                                  items: jurnal,
+                                )
+                              ),
                               SizedBox(
                                 width: 10,
                               ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.15,
-                                child: TextForm(hintText: "Masukkan no bukti")),
+                                child: TextForm(
+                                  hintText: "Masukkan no. bukti",
+                                  textController: no_bukti,
+                                )
+                              ),
                             ]
                           ),
-                          Row(
+                          Row( // BARIS KEDUA FORM
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.45,
+                              SizedBox( // BAGIAN DEBIT
+                                width: MediaQuery.of(context).size.width * 0.40,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      border: Border(
-                                          right: BorderSide(
-                                              color: abu_transparan))),
+                                    border: Border(
+                                      right: BorderSide(
+                                        color: abu_transparan
+                                      )
+                                    )
+                                  ),
                                   child: Column(
                                     children: [
                                       Container(
@@ -264,73 +307,98 @@ class TransaksiListState extends State<TransaksiList> {
                                         child: HeaderText(
                                             content: "Debit",
                                             size: 16,
-                                            color: hitam),
+                                            color: hitam
+                                        ),
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2,
-                                            child: TextForm(hintText: "Jumlah"),
+                                            width: MediaQuery.of(context).size.width * 0.25,
+                                            child: DropdownSearchButton(
+                                              isNeedChangeColor: false,
+                                              notFoundText: 'Akun tidak ditemukan',
+                                              hintText: 'Pilih akun',
+                                              controller: akun_debit,
+                                              onChange: getAkunDebitText,
+                                              items: namaAkunList,
+                                            ),
                                           ),
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2,
-                                            child: ButtonAdd(onPressed: () {
-                                              setState(() {});
-                                            }),
-                                          )
+                                            width: 10,
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width * 0.1,
+                                            child: TextForm(
+                                              hintText: "Jumlah",
+                                              textController: jumlah_debit,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          ButtonAdd(onPressed: () {
+                                            setState(() {
+                                              //
+                                            });
+                                          }),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
                                         ],
                                       )
                                     ],
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.45,
+                              SizedBox( // BAGIAN KREDIT
+                                width: MediaQuery.of(context).size.width * 0.40 + 5,
                                 child: Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          right: BorderSide(
-                                              color: abu_transparan))),
+                                  margin: EdgeInsets.only(left: 15),
                                   child: Column(
                                     children: [
                                       Container(
                                         margin: EdgeInsets.only(bottom: 5),
                                         child: HeaderText(
-                                            content: "Kredit",
-                                            size: 16,
-                                            color: hitam),
+                                          content: "Kredit",
+                                          size: 16,
+                                          color: hitam
+                                        ),
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2,
-                                            child: TextForm(hintText: "Jumlah"),
+                                            width: MediaQuery.of(context).size.width * 0.25,
+                                            child: DropdownSearchButton(
+                                              isNeedChangeColor: false,
+                                              notFoundText: 'Akun tidak ditemukan',
+                                              hintText: 'Pilih akun',
+                                              controller: akun_kredit,
+                                              onChange: getAkunKreditText,
+                                              items: namaAkunList,
+                                            ),
                                           ),
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2,
-                                            child: ButtonAdd(onPressed: () {
-                                              setState(() {});
-                                            }),
-                                          )
+                                            width: 10,
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width * 0.1,
+                                            child: TextForm(
+                                              hintText: "Jumlah",
+                                              textController: jumlah_kredit,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          ButtonAdd(onPressed: () {
+                                            setState(() {
+                                            //
+                                            });
+                                          }),
                                         ],
                                       )
                                     ],

@@ -7,16 +7,16 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/Buku_besar.dart';
 
-class ListBukuBesarPerBulan extends StatefulWidget {
-  ListBukuBesarPerBulan({Key? key}) : super(key: key);
+class BukuBesarPerAkun extends StatefulWidget {
+  BukuBesarPerAkun({Key? key}) : super(key: key);
 
   @override
-  ListBukuBesarPerBulanState createState() {
-    return ListBukuBesarPerBulanState();
+  BukuBesarPerAkunState createState() {
+    return BukuBesarPerAkunState();
   }
 }
 
-class ListBukuBesarPerBulanState extends State<ListBukuBesarPerBulan> {
+class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
   var tableRow;
   final textAkunController = TextEditingController(text: '');
   String hintText = 'Cari akun';
