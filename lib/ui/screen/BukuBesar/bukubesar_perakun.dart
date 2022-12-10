@@ -200,19 +200,19 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                           columns: <DataColumn>[
                             DataColumn(
                               label: Expanded(
-                                  child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Tanggal",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
+                                child: Container(
+                                  color: Color(int.parse(greyHeaderColor)),
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Tanggal",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Inter",
                                     ),
-                                  )
+                                  ),
+                                )
                               ),
                             ),
                             DataColumn(
