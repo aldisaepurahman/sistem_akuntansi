@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditCOA extends StatefulWidget {
-  final SupabaseClient client;
+  const EditCOA({required this.client, required this.akun, required this.akun_saldo, Key? key}) : super(key: key);
 
-  const EditCOA({required this.client, Key? key}) : super(key: key);
+  final SupabaseClient client;
+  final Akun akun;
+  final Saldo akun_saldo;
 
   @override
   EditCOAState createState() {
@@ -16,6 +23,7 @@ class EditCOA extends StatefulWidget {
 }
 
 class EditCOAState extends State<EditCOA> {
+
   void _navigateToDetailCoa(BuildContext context){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) =>
@@ -32,6 +40,48 @@ class EditCOAState extends State<EditCOA> {
         )
       )
     );
+  }
+  
+  late TextEditingController namaAkunController;
+  late TextEditingController kodeController;
+  late TextEditingController keteranganController;
+  late TextEditingController indentasiController;
+  late TextEditingController saldoController;
+
+  Map<int, String> listbulan =
+  {
+    1: "Januari",
+    2: "Februari",
+    3: "Maret",
+    4: "April",
+    5: "Mei",
+    6: "Juni",
+    7: "Juli",
+    8: "Agustus",
+    9: "September",
+    10: "Oktober",
+    11: "November",
+    12: "Desember"
+  };
+
+  @override
+  void dispose() {
+    super.dispose();
+    namaAkunController.dispose();
+    kodeController.dispose();
+    keteranganController.dispose();
+    indentasiController.dispose();
+    saldoController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    namaAkunController = TextEditingController(text: widget.akun.nama_akun);
+    kodeController = TextEditingController(text: widget.akun.kode_akun);
+    keteranganController = TextEditingController(text: widget.akun.keterangan_akun);
+    indentasiController = TextEditingController(text: widget.akun.indentasi.toString());
+    saldoController = TextEditingController(text: (widget.akun_saldo.id_saldo > 0) ? widget.akun_saldo.saldo.toString() : "0");
   }
 
   @override
@@ -50,7 +100,31 @@ class EditCOAState extends State<EditCOA> {
                       children: [
                         ButtonBack(
                           onPressed: () {
-                            _navigateToDetailCoa(context);
+                            setState(() {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog2Button(
+                                        content: "Batalkan Perubahan",
+                                        content_detail:
+                                        "Anda yakin ingin membatalkan perubahan ini?",
+                                        path_image:
+                                        'assets/images/berhasil_hapus_coa.png',
+                                        button1: "Tetap Simpan",
+                                        button2: "Ya, Hapus",
+                                        onPressed1: () {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        onPressed2: () {
+                                          setState(() {
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                          });
+                                        });
+                                  });
+                            });
                           },
                         )
                       ],
@@ -97,6 +171,7 @@ class EditCOAState extends State<EditCOA> {
                       Container(
                         margin: EdgeInsets.only(top: 10, bottom: 20),
                         child: TextField(
+                          controller: namaAkunController,
                           decoration: InputDecoration(
                               hintText: 'Masukkan nama akun...',
                               contentPadding: const EdgeInsets.all(8),
@@ -117,11 +192,15 @@ class EditCOAState extends State<EditCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
+                                    readOnly: true,
+                                    controller: kodeController,
                                     decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.black12,
                                         hintText: 'Masukkan kode...',
                                         contentPadding: const EdgeInsets.all(8),
                                         border: OutlineInputBorder(
@@ -141,10 +220,11 @@ class EditCOAState extends State<EditCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
+                                    controller: keteranganController,
                                     decoration: InputDecoration(
                                         hintText: 'Masukkan keterangan...',
                                         contentPadding: const EdgeInsets.all(8),
@@ -165,10 +245,11 @@ class EditCOAState extends State<EditCOA> {
                                       fontSize: 14,
                                       color: Color.fromARGB(255, 50, 52, 55))),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: TextField(
+                                    controller: indentasiController,
                                     decoration: InputDecoration(
                                         hintText: 'Masukkan indentasi...',
                                         contentPadding: const EdgeInsets.all(8),
@@ -195,6 +276,7 @@ class EditCOAState extends State<EditCOA> {
                       Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 20),
                         child: TextField(
+                          controller: saldoController,
                           decoration: InputDecoration(
                               labelText: 'Rp',
                               hintText: 'Masukkan saldo awal...',
@@ -211,19 +293,53 @@ class EditCOAState extends State<EditCOA> {
                               backgroundColor: Color.fromARGB(255, 255, 204, 0),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  Future.delayed(Duration(seconds: 1), () {
-                                    Navigator.of(context).pop(true);
+                            var nama_akun = namaAkunController.text;
+                            var kode_akun = kodeController.text;
+                            var keterangan = keteranganController.text;
+                            var indentasi = indentasiController.text;
+                            var saldo = saldoController.text;
+                            var bulan = (widget.akun_saldo.bulan.isNotEmpty) ? widget.akun_saldo.bulan : listbulan[DateTime.now().month];
+                            var tahun = (widget.akun_saldo.tahun > 0) ? widget.akun_saldo.tahun : DateTime.now().year;
+
+                            if (nama_akun.isNotEmpty && kode_akun.isNotEmpty && keterangan.isNotEmpty && indentasi.isNotEmpty) {
+                              AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(
+                                  AkunUpdated(
+                                      akun: Akun(
+                                          kode_akun: kode_akun,
+                                          nama_akun: nama_akun,
+                                          keterangan_akun: keterangan,
+                                          indentasi: int.parse(indentasi)
+                                      ),
+                                      saldo: Saldo(
+                                          kode_akun: kode_akun,
+                                          saldo: int.parse(saldo),
+                                          bulan: bulan!!,
+                                          tahun: tahun
+                                      ),
+                                    kode_akun: widget.akun.kode_akun,
+                                    id_saldo: widget.akun_saldo.id_saldo
+                                  )
+                              );
+
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    Future.delayed(Duration(seconds: 2), () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                    });
+                                    return DialogNoButton(
+                                        content: "Berhasil Diedit!",
+                                        content_detail:
+                                        "Chart of Account berhasil diedit",
+                                        path_image:
+                                        'assets/images/tambah_coa.png');
                                   });
-                                  return DialogNoButton(
-                                      content: "Berhasil Diedit!",
-                                      content_detail:
-                                          "Chart of Account berhasil diedit",
-                                      path_image:
-                                          'assets/images/tambah_coa.png');
-                                });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Pastikan seluruh kolom terisi, kecuali kolom saldo awal"))
+                              );
+                            }
                           },
                           child: Text(
                             "Simpan",

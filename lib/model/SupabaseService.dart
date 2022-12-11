@@ -1,3 +1,5 @@
+import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
@@ -9,21 +11,63 @@ class SupabaseService {
 
   final SupabaseClient _supabaseClient;
 
-  Future<List<VLookup>> getAllCOA(
+  Future<ServiceStatus> getAllCOA(
       String table_name, Map<String, String> keyword) async {
     try {
       final response = (keyword.isEmpty)
-          ? await _supabaseClient.from(table_name).select().execute()
+          ? await _supabaseClient.from(table_name).select()
           : await _supabaseClient
               .from(table_name)
               .select()
-              .like(keyword.keys.first, keyword.values.first)
-              .execute();
+              .like(keyword.keys.first, "%${keyword.values.first}%");
 
-      final data = response.data as List<Map<String, dynamic>>;
-      return data.map((e) => VLookup.fromJson(e)).toList();
-    } catch (error, stackTrace) {
-      Error.throwWithStackTrace(error, stackTrace);
+      if (response == null) {
+        return ServiceStatus(datastore: List<Akun>.from([]), message: response.toString());
+      }
+
+      return ServiceStatus(datastore: List<Akun>.from(response.map((e) => Akun.fromJson(e)).toList()));
+    } on PostgrestException catch (error) {
+      return ServiceStatus(datastore: List<Akun>.from([]), message: error.message);
+    } on NoSuchMethodError catch (error) {
+      return ServiceStatus(datastore: List<Akun>.from([]), message: error.stackTrace.toString());
+    }
+  }
+
+  Future<ServiceStatus> getDetailCOA(
+      String table_name, Map<String, String> keyword) async {
+    Map<int, String> listbulan =
+    {
+      1: "Januari",
+      2: "Februari",
+      3: "Maret",
+      4: "April",
+      5: "Mei",
+      6: "Juni",
+      7: "Juli",
+      8: "Agustus",
+      9: "September",
+      10: "Oktober",
+      11: "November",
+      12: "Desember"
+    };
+
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq(keyword.keys.first, keyword.values.first)
+          .eq("bulan", listbulan[DateTime.now().month])
+          .eq("tahun", DateTime.now().year).single();
+
+      if (response == null) {
+        return ServiceStatus(datastore: const VLookup(), message: response.toString());
+      }
+
+      return ServiceStatus(datastore: VLookup.fromJson(response));
+    } on PostgrestException catch (error) {
+      return ServiceStatus(datastore: const VLookup());
+    } on NoSuchMethodError catch (error) {
+      return ServiceStatus(datastore: const VLookup(), message: error.stackTrace.toString());
     }
   }
 
@@ -113,7 +157,7 @@ class SupabaseService {
   Future<void> insert(
       String table_name, Map<String, dynamic> data_insert) async {
     try {
-      await _supabaseClient.from(table_name).insert(data_insert).execute();
+      await _supabaseClient.from(table_name).insert(data_insert);
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(error, stackTrace);
     }
@@ -125,8 +169,7 @@ class SupabaseService {
       await _supabaseClient
           .from(table_name)
           .update(data_update)
-          .eq(equivalent.keys.first, equivalent.values.first)
-          .execute();
+          .eq(equivalent.keys.first, equivalent.values.first);
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(error, stackTrace);
     }
