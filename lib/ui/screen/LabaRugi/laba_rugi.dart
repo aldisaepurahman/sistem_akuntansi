@@ -146,25 +146,28 @@ class LabaRugiListState extends State<LabaRugiList> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Bulan"),
-                          ),
-                          DataColumn(
-                            label: Text("Tahun"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: tableRow,
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
-                      )
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Text("No."),
+                            ),
+                            DataColumn(
+                              label: Text("Bulan"),
+                            ),
+                            DataColumn(
+                              label: Text("Tahun"),
+                            ),
+                            DataColumn(
+                              label: Text("Action"),
+                            ),
+                          ],
+                          source: tableRow,
+                          rowsPerPage: 10,
+                          showCheckboxColumn: false,
+                        ),
+                      ),
                     ],
                   ),
                 )

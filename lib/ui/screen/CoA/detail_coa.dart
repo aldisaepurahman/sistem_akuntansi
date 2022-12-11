@@ -46,7 +46,9 @@ class DetailCOAState extends State<DetailCOA> {
                         ButtonBack(
                           onPressed: (){
                             setState(() {
-                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    SideNavigationBar(index: 1, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
                             });
                           },
                         )

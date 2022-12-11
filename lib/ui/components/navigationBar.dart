@@ -61,17 +61,17 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
       return JenisJurnal(client: widget.client); // tabel jenis jurnal
     }
     else if (selectedJurnalUmumIndex == 2) {
-      return TransaksiList(); // tabel daftar transaksi
+      return TransaksiList(client: widget.client); // tabel daftar transaksi
     }
-    // else if (selectedJurnalUmumIndex == 3) {
-    //   return DetailTransaksi(); // detail transaksi
-    // }
+    else if (selectedJurnalUmumIndex == 3) {
+      return DetailTransaksi(client: widget.client); // detail transaksi
+    }
     return JurnalUmumList(client: widget.client); // tabel bulan tahun jurnal
   }
 
   Widget getBukuBesarPage(){
     if (selectedBukuBesarIndex == 1) {
-      return BukuBesarPerAkun(); // tabel buku besar per akun
+      return BukuBesarPerAkun(client: widget.client); // tabel buku besar per akun
     }
     return ListBukuBesar(client: widget.client); // tabel bulan tahun buku besar
   }

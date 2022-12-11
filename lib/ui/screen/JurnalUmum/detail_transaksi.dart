@@ -3,12 +3,15 @@ import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 
 class DetailTransaksi extends StatefulWidget {
-  const DetailTransaksi({Key? key}) : super(key: key);
+  final SupabaseClient client;
+
+  const DetailTransaksi({required this.client, Key? key}) : super(key: key);
 
   @override
   DetailTransaksiState createState() {
@@ -56,7 +59,9 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                         ButtonBack(
                           onPressed: () {
                             setState(() {
-                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
                             });
                           },
                         )
@@ -115,24 +120,27 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                             ),
                           ],
                         ),
-                        PaginatedDataTable(
-                          rowsPerPage: total_row,
-                          dataRowHeight: 150,
-                          columns: const [
-                            DataColumn(
-                              label: HeaderTable(content: "Nama Akun"),
-                            ),
-                            DataColumn(
-                              label: HeaderTable(content: "Saldo"),
-                            ),
-                            DataColumn(
-                              label: HeaderTable(content: "Nama Akun"),
-                            ),
-                            DataColumn(
-                              label: HeaderTable(content: "Saldo"),
-                            ),
-                          ],
-                          source: tableRow,
+                        Container(
+                          width: double.infinity,
+                          child: PaginatedDataTable(
+                            rowsPerPage: total_row,
+                            dataRowHeight: 150,
+                            columns: const [
+                              DataColumn(
+                                label: HeaderTable(content: "Nama Akun"),
+                              ),
+                              DataColumn(
+                                label: HeaderTable(content: "Saldo"),
+                              ),
+                              DataColumn(
+                                label: HeaderTable(content: "Nama Akun"),
+                              ),
+                              DataColumn(
+                                label: HeaderTable(content: "Saldo"),
+                              ),
+                            ],
+                            source: tableRow,
+                          ),
                         ),
                         Container(
                             margin: EdgeInsets.only(top: 40, bottom: 20),
@@ -141,7 +149,11 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                                 bg_color: kuning,
                                 text_color: hitam,
                                 onPressed: () {
-                                  setState(() {});
+                                  setState(() {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                        SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
+                                  });
                                 },
                                 content: "Edit")),
                         Container(
@@ -151,7 +163,29 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                                 bg_color: background2,
                                 text_color: merah,
                                 onPressed: () {
-                                  setState(() {});
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Dialog2Button(
+                                            content: "Hapus Transaksi",
+                                            content_detail:
+                                            "Anda yakin ingin menghapus data ini?",
+                                            path_image: 'assets/images/hapus_coa.png',
+                                            button1: "Tetap Simpan",
+                                            button2: "Ya, Hapus",
+                                            onPressed1: () {
+                                              setState(() {
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            onPressed2: () {
+                                              setState(() {
+                                                Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
+                                              });
+                                            });
+                                      });
                                 },
                                 content: "Hapus"))
                       ],

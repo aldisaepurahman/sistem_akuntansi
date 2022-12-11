@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
+import 'package:sistem_akuntansi/utils/Transaksi.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 
 class TransaksiList extends StatefulWidget {
-  const TransaksiList({Key? key}) : super(key: key);
+  final SupabaseClient client;
+
+  const TransaksiList({required this.client, Key? key}) : super(key: key);
 
   @override
   TransaksiListState createState() {
@@ -16,49 +22,8 @@ class TransaksiList extends StatefulWidget {
 }
 
 class TransaksiListState extends State<TransaksiList> {
-  @override
-  void dispose() {
-    tanggal.dispose();
-    nama_transaksi.dispose();
-    no_bukti.dispose();
-    akun_debit.dispose();
-    akun_kredit.dispose();
-    jumlah_debit.dispose();
-    jumlah_kredit.dispose();
-    super.dispose();
-  }
-
-  bool show = false;
-  bool disable_button = false;
-
-  void showForm() {
-    setState(() {
-      show = true;
-      disable_button = true;
-    });
-  }
-
-  void disableForm() {
-    setState(() {
-      show = false;
-      disable_button = false;
-    });
-  }
-
-  @override
-  void initState() {
-    tanggal.text = ""; //set the initial value of text field
-    super.initState();
-  }
-
-  //Inisialisasi untuk Dropdown
-  String _selectedMonthFilter = 'Januari';
-  String _selectedYearFilter = '2022';
-
-  String _selectedMonthInsert = 'Januari';
-  String _selectedYearInsert = '2022';
-
   String _selectedJurnalInsert = "JURNAL PENGELUARAN KAS";
+  String _selectedJurnalUpdate = "JURNAL PENERIMAAN KAS"; // read dari database
   String _selectedJurnalFilter = "JURNAL PENGELUARAN KAS";
 
   List<String> month = [
@@ -94,29 +59,221 @@ class TransaksiListState extends State<TransaksiList> {
 
   List<String> namaAkunList = ['Beban Kesekretariatan', 'Beban ART', 'Uang Tunai (Bendahara)', 'Rekening Giro Bank NISP'];
 
+  bool show = false;
+  bool disable_button = false;
+  int _case = 1; // 1: insert. 2: update.
+
   final TextEditingController tanggal = TextEditingController();
   final TextEditingController nama_transaksi = TextEditingController();
   final TextEditingController no_bukti = TextEditingController();
-  final TextEditingController akun_debit = TextEditingController();
-  final TextEditingController akun_kredit = TextEditingController();
-  final TextEditingController jumlah_debit = TextEditingController();
-  final TextEditingController jumlah_kredit = TextEditingController();
 
-  void getAkunDebitText(String? newValue) {
+  final TextEditingController tanggal_update = TextEditingController();
+  final TextEditingController nama_transaksi_update = TextEditingController();
+  final TextEditingController no_bukti_update = TextEditingController();
+
+  void showForm() {
     setState(() {
-      if(newValue != null) {
-        akun_debit.text = newValue;
+      show = true;
+      disable_button = true;
+
+      if(_case == 1) {
+        tanggal.text = "";
+        nama_transaksi.text = "";
+        no_bukti.text = "";
+      }
+      else {
+        tanggal_update.text = "";
+        nama_transaksi_update.text = "";
+        no_bukti_update.text = "";
+        _case = 1; // set lagi ke state awal, yaitu insert
       }
     });
   }
 
-  void getAkunKreditText(String? newValue) {
+  void disableForm() {
     setState(() {
-      if(newValue != null) {
-        akun_kredit.text = newValue;
-      }
+      show = false;
+      disable_button = false;
+
+      akunDebitList = [];
+      jumlahDebitList = [];
+      dynamicDebitList = [];
+      akunKreditList = [];
+      jumlahKreditList = [];
+      dynamicKreditList = [];
+
+      tanggal.text = "";
+      nama_transaksi.text = "";
+      no_bukti.text = "";
+      tanggal_update.text = "";
+      nama_transaksi_update.text = "";
+      no_bukti_update.text = "";
     });
   }
+
+  @override
+  void dispose() {
+    tanggal.dispose();
+    nama_transaksi.dispose();
+    no_bukti.dispose();
+
+    tanggal_update.dispose();
+    nama_transaksi_update.dispose();
+    no_bukti_update.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    tanggal.text = ""; //set the initial value of text field
+    tanggal_update.text = "";
+
+    super.initState();
+
+    tableRow = new TransaksiTableData(
+      context: context,
+      contentData: contents_transaksi,
+      seeDetail: (){
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 3, bukuBesarIndex: 0, client: widget.client)));
+        });
+      },
+      editForm: (){
+        showForm();
+      },
+      tetapSimpan: (){
+        setState(() {
+          Navigator.pop(context);
+        });
+      },
+      hapus: (){
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
+        });
+      },
+      changeCaseToUpdate: (){
+        setState(() {
+          _case = 2;
+        });
+      },
+    );
+  }
+
+  // cara lama yg ga bisa
+  // List<Widget> dynamicDebitList = [];
+  // Widget akunDebitInput(){
+  //   return SizedBox( // BAGIAN DEBIT
+  //     width: MediaQuery.of(context).size.width * 0.40,
+  //     child: Container(
+  //         decoration: BoxDecoration(
+  //             border: Border(
+  //                 right: BorderSide(
+  //                     color: abu_transparan
+  //                 )
+  //             )
+  //         ),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           mainAxisSize: MainAxisSize.max,
+  //           children: [
+  //             SizedBox(
+  //               width: MediaQuery.of(context).size.width * 0.25,
+  //               child: DropdownSearchButton(
+  //                 isNeedChangeColor: false,
+  //                 notFoundText: 'Akun tidak ditemukan',
+  //                 hintText: 'Pilih akun',
+  //                 controller: akun_debit,
+  //                 onChange: getAkunDebitText,
+  //                 items: namaAkunList,
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               width: 10,
+  //             ),
+  //             SizedBox(
+  //               width: MediaQuery.of(context).size.width * 0.1,
+  //               child: TextForm(
+  //                 hintText: "Jumlah",
+  //                 textController: jumlah_debit,
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               width: 10,
+  //             ),
+  //             ButtonAdd(
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     dynamicDebitList.add(akunDebitInput());
+  //                   });
+  //                 }),
+  //             SizedBox(
+  //               width: 10,
+  //             ),
+  //           ],
+  //         )
+  //     ),
+  //   );
+  // }
+
+  List<DynamicDebitWidget> dynamicDebitList = [];
+  List<String> akunDebitList = [];
+  List<String> jumlahDebitList = [];
+
+  List<DynamicKreditWidget> dynamicKreditList = [];
+  List<String> akunKreditList = [];
+  List<String> jumlahKreditList = [];
+
+  addDynamicDebit(){
+    if(akunDebitList.length != 0){
+      akunDebitList = [];
+      jumlahDebitList = [];
+      dynamicDebitList = [];
+    }
+    setState(() {});
+    if (dynamicDebitList.length >= 10) {
+      return;
+    }
+    dynamicDebitList.add(
+      DynamicDebitWidget(
+        namaAkunList: namaAkunList,
+        formCase: _case,
+      )
+    );
+  }
+
+  addDynamicKredit(){
+    if(akunKreditList.length != 0){
+      akunKreditList = [];
+      jumlahKreditList = [];
+      dynamicKreditList = [];
+    }
+    setState(() {});
+    if (dynamicKreditList.length >= 10) {
+      return;
+    }
+    dynamicKreditList.add(
+      DynamicKreditWidget(
+        namaAkunList: namaAkunList,
+        formCase: _case,
+      )
+    );
+  }
+
+  submitData() {
+    // akunDebitList = [];
+    // jumlahDebitList = [];
+    // dynamicDebitList.forEach((widget) => akunDebitList.add(widget.akunDebitList.text));
+    // dynamicDebitList.forEach((widget) => jumlahDebitList.add(widget.jumlahDebitList.text));
+    // setState(() {});
+    // sendData();
+  }
+
+  var tableRow;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +292,9 @@ class TransaksiListState extends State<TransaksiList> {
                       ButtonBack(
                         onPressed: () {
                           setState(() {
-                            Navigator.pop(context);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
                           });
                         },
                       )
@@ -162,7 +321,7 @@ class TransaksiListState extends State<TransaksiList> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: kuning,
                             padding: const EdgeInsets.all(18)),
-                        onPressed: disable_button ? null : showForm,
+                        onPressed: (disable_button ? null : showForm),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -206,7 +365,7 @@ class TransaksiListState extends State<TransaksiList> {
                           Container(
                             margin: EdgeInsets.only(bottom: 15),
                             child: HeaderText(
-                                content: "Tambah Transaksi",
+                                content: (_case == 1 ? "Tambah Transaksi" : "Ubah Transaksi"),
                                 size: 18,
                                 color: hitam),
                           ),
@@ -219,22 +378,28 @@ class TransaksiListState extends State<TransaksiList> {
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10, bottom: 20),
                                   child: TextField(
-                                    controller: tanggal,
+                                    controller: (_case == 1 ? tanggal : tanggal_update),
                                     style: TextStyle(fontSize: 13),
                                     readOnly: true,
                                     onTap: () async {
                                       DateTime? date = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(1900),
-                                          lastDate: DateTime(2100));
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2100)
+                                      );
 
                                       if (date != null) {
                                         String formattedDate =
                                             DateFormat('yyyy-MM-dd')
                                                 .format(date);
                                         setState(() {
-                                          tanggal.text = formattedDate;
+                                          if(_case == 1) {
+                                            tanggal.text = formattedDate;
+                                          }
+                                          else {
+                                            tanggal_update.text = formattedDate;
+                                          }
                                         });
                                       }
                                     },
@@ -256,7 +421,7 @@ class TransaksiListState extends State<TransaksiList> {
                                 width: MediaQuery.of(context).size.width * 0.20,
                                 child: TextForm(
                                   hintText: "Masukkan nama transaksi",
-                                  textController: nama_transaksi,
+                                  textController: (_case == 1 ? nama_transaksi : nama_transaksi_update),
                                 )
                               ),
                               SizedBox(
@@ -267,10 +432,15 @@ class TransaksiListState extends State<TransaksiList> {
                                 child: DropdownForm(
                                   onChanged: (String? newValue) {
                                     setState(() {
-                                      _selectedJurnalInsert = newValue!;
+                                      if (_case == 1) {
+                                        _selectedJurnalInsert = newValue!;
+                                      }
+                                      else {
+                                        _selectedJurnalUpdate = newValue!;
+                                      }
                                     });
                                   },
-                                  content: _selectedJurnalInsert,
+                                  content: (_case == 1 ? _selectedJurnalInsert : _selectedJurnalUpdate),
                                   items: jurnal,
                                 )
                               ),
@@ -281,26 +451,19 @@ class TransaksiListState extends State<TransaksiList> {
                                 width: MediaQuery.of(context).size.width * 0.15,
                                 child: TextForm(
                                   hintText: "Masukkan no. bukti",
-                                  textController: no_bukti,
+                                  textController: (_case == 1 ? no_bukti : no_bukti_update),
                                 )
                               ),
                             ]
                           ),
-                          Row( // BARIS KEDUA FORM
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox( // BAGIAN DEBIT
-                                width: MediaQuery.of(context).size.width * 0.40,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      right: BorderSide(
-                                        color: abu_transparan
-                                      )
-                                    )
-                                  ),
-                                  child: Column(
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
                                       Container(
                                         margin: EdgeInsets.only(bottom: 5),
@@ -310,161 +473,561 @@ class TransaksiListState extends State<TransaksiList> {
                                             color: hitam
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.25,
-                                            child: DropdownSearchButton(
-                                              isNeedChangeColor: false,
-                                              notFoundText: 'Akun tidak ditemukan',
-                                              hintText: 'Pilih akun',
-                                              controller: akun_debit,
-                                              onChange: getAkunDebitText,
-                                              items: namaAkunList,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.1,
-                                            child: TextForm(
-                                              hintText: "Jumlah",
-                                              textController: jumlah_debit,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          ButtonAdd(onPressed: () {
-                                            setState(() {
-                                              //
-                                            });
-                                          }),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox( // BAGIAN KREDIT
-                                width: MediaQuery.of(context).size.width * 0.40 + 5,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 15),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 5),
-                                        child: HeaderText(
-                                          content: "Kredit",
-                                          size: 16,
-                                          color: hitam
-                                        ),
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.25,
-                                            child: DropdownSearchButton(
-                                              isNeedChangeColor: false,
-                                              notFoundText: 'Akun tidak ditemukan',
-                                              hintText: 'Pilih akun',
-                                              controller: akun_kredit,
-                                              onChange: getAkunKreditText,
-                                              items: namaAkunList,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.1,
-                                            child: TextForm(
-                                              hintText: "Jumlah",
-                                              textController: jumlah_kredit,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          ButtonAdd(onPressed: () {
-                                            setState(() {
-                                            //
-                                            });
-                                          }),
-                                        ],
+                                      ButtonAdd(
+                                        onPressed: (){
+                                          setState(() {
+                                            addDynamicDebit();
+                                          });
+                                        }
                                       )
                                     ],
                                   ),
-                                ),
+                                  // iterasi dlm sini
+                                  for (var i in dynamicDebitList) i,
+                                ],
                               ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 25),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(),
+                                          child: HeaderText(
+                                              content: "Kredit",
+                                              size: 16,
+                                              color: hitam
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ButtonAdd(
+                                            onPressed: (){
+                                              setState(() {
+                                                addDynamicKredit();
+                                              });
+                                            }
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  // iterasi dlm sini
+                                  for (var i in dynamicKreditList) i,
+                                ],
+                              )
                             ],
                           ),
+                          SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               ButtonNoIcon(
-                                  bg_color: background2,
-                                  text_color: merah,
-                                  onPressed: disableForm,
-                                  content: "Batal"),
+                                bg_color: background2,
+                                text_color: merah,
+                                onPressed: disableForm,
+                                content: "Batal"
+                              ),
                               SizedBox(width: 20),
                               ButtonNoIcon(
-                                  bg_color: kuning,
-                                  text_color: hitam,
-                                  onPressed: () {
-                                    setState(() {});
-                                  },
-                                  content: "Simpan")
+                                bg_color: kuning,
+                                text_color: hitam,
+                                onPressed: submitData,
+                                content: "Simpan"
+                              )
                             ],
                           )
                         ],
                       ),
-                    )),
-
-                // Container(
-                //   margin: EdgeInsets.all(25),
-                //   padding: EdgeInsets.all(25),
-                //   color: background2,
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       DataTable(
-                //         border: TableBorder(
-                //             bottom: BorderSide(
-                //                 color: Color.fromARGB(50, 117, 117, 117),
-                //                 width: 1)),
-                //         columns: [
-                //           TableRow(
-                //               decoration: BoxDecoration(
-                //                   color: Color.fromARGB(255, 245, 245, 245)),
-                //               children: [
-                //                 HeaderTable(content: "No"),
-                //                 HeaderTable(content: "Bulan"),
-                //                 HeaderTable(content: "Tahun"),
-                //                 HeaderTable(content: "Aksi")
-                //               ]),
-                //           TableRow(children: [
-                //             RowContent(content: "1"),
-                //             RowContent(content: kode_akun),
-                //             RowContent(content: nama_akun),
-                //             RowContent(content: keterangan),
-                //             RowContent(content: kode_reference),
-                //             ActionButton()
-                //           ])
-                //         ],
-                //       )
-                //     ],
-                //   ),
-                // )
+                    )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
+                  padding: EdgeInsets.all(25),
+                  color: background2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Tanggal",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Akun Debit",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 40),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Saldo (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Akun Kredit",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Saldo (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            DataColumn(
+                                label: Expanded(
+                                  child: Container(
+                                    color: Color(int.parse(greyHeaderColor)),
+                                    padding: EdgeInsets.only(right: 20),
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Action",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                          ],
+                          source: tableRow,
+                          rowsPerPage: 10,
+                          showCheckboxColumn: false,
+                          horizontalMargin: 0,
+                          columnSpacing: 0,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ],
-            )));
+            )
+        )
+    );
   }
+}
+
+class DynamicDebitWidget extends StatefulWidget {
+  final List<String> namaAkunList;
+  final int formCase;
+
+  DynamicDebitWidget({
+    required this.namaAkunList,
+    required this.formCase,
+  });
+
+  @override
+  DynamicDebitWidgetState createState() => DynamicDebitWidgetState();
+}
+
+class DynamicDebitWidgetState extends State<DynamicDebitWidget> {
+  TextEditingController akunDebitText = new TextEditingController();
+  TextEditingController jumlahDebitText = new TextEditingController();
+
+  TextEditingController akunDebitUpdateText = new TextEditingController();
+  TextEditingController jumlahDebitUpdateText = new TextEditingController();
+
+  @override
+  void dispose() {
+    akunDebitText.dispose();
+    jumlahDebitText.dispose();
+    akunDebitUpdateText.dispose();
+    jumlahDebitUpdateText.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox( // BAGIAN DEBIT
+      width: MediaQuery.of(context).size.width * 0.40,
+      child: Container(
+          decoration: BoxDecoration(
+              border: Border(
+                  right: BorderSide(
+                      color: abu_transparan
+                  )
+              )
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.25,
+                child: DropdownSearchButton(
+                  isNeedChangeColor: false,
+                  notFoundText: 'Akun tidak ditemukan',
+                  hintText: 'Pilih akun',
+                  controller: (widget.formCase == 1 ? akunDebitText : akunDebitUpdateText),
+                  onChange: (String? newValue){
+                    setState(() {
+                      if(newValue != null) {
+                        if (widget.formCase == 1) {
+                          akunDebitText.text = newValue;
+                        }
+                        else {
+                          akunDebitUpdateText.text = newValue;
+                        }
+                      }
+                    });
+                  },
+                  items: widget.namaAkunList,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: TextForm(
+                  hintText: "Jumlah",
+                  textController: (widget.formCase == 1 ? jumlahDebitText : jumlahDebitUpdateText),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          )
+      ),
+    );
+  }
+}
+
+class DynamicKreditWidget extends StatefulWidget {
+  final List<String> namaAkunList;
+  final int formCase;
+
+  DynamicKreditWidget({
+    required this.namaAkunList,
+    required this.formCase,
+  });
+
+  @override
+  DynamicKreditWidgetState createState() => DynamicKreditWidgetState();
+}
+
+class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
+  TextEditingController akunKreditText = new TextEditingController();
+  TextEditingController jumlahKreditText = new TextEditingController();
+
+  TextEditingController akunKreditUpdateText = new TextEditingController();
+  TextEditingController jumlahKreditUpdateText = new TextEditingController();
+
+  @override
+  void dispose() {
+    akunKreditText.dispose();
+    jumlahKreditText.dispose();
+    akunKreditUpdateText.dispose();
+    jumlahKreditUpdateText.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox( // BAGIAN DEBIT
+      width: MediaQuery.of(context).size.width * 0.40,
+      child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.25,
+                child: DropdownSearchButton(
+                  isNeedChangeColor: false,
+                  notFoundText: 'Akun tidak ditemukan',
+                  hintText: 'Pilih akun',
+                  controller: (widget.formCase == 1 ? akunKreditText : akunKreditUpdateText),
+                  onChange: (String? newValue){
+                    setState(() {
+                      if(newValue != null) {
+                        if (widget.formCase == 1) {
+                          akunKreditText.text = newValue;
+                        }
+                        else {
+                          akunKreditUpdateText.text = newValue;
+                        }
+                      }
+                    });
+                  },
+                  items: widget.namaAkunList,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: TextForm(
+                  hintText: "Jumlah",
+                  textController: (widget.formCase == 1 ? jumlahKreditText : jumlahKreditUpdateText),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          )
+      ),
+    );
+  }
+}
+
+class TransaksiTableData extends DataTableSource {
+  Function seeDetail;
+  Function editForm;
+  Function tetapSimpan;
+  Function hapus;
+  BuildContext context;
+  final List<Transaksi> _contentData;
+  Function changeCaseToUpdate;
+
+  TransaksiTableData({
+    required List<Transaksi> contentData,
+    required this.context,
+    required this.seeDetail,
+    required this.editForm,
+    required this.tetapSimpan,
+    required this.hapus,
+    required this.changeCaseToUpdate,
+  })
+  : _contentData = contentData, assert(contentData != null);
+
+  @override
+  DataRow? getRow(int index) {
+    assert(index >= 0);
+    if (index >= _contentData.length) {
+      return null;
+    }
+    final _content = _contentData[index];
+
+    return DataRow.byIndex(
+      index: index,
+      cells: <DataCell>[
+        DataCell(
+          SizedBox(
+              width: MediaQuery.of(context).size.width * 0.1 - 50,
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(right: 20),
+                child: Text(
+                  "${_content.tanggal}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              )
+          ),
+        ),
+        DataCell(
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.2 - 50,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(right: 20),
+                  child: Text(
+                    "${_content.transaksi_debit} untuk nama akun",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                )
+            )
+        ),
+        DataCell(
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.1 - 50,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "${_content.transaksi_debit} untuk saldo",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                )
+            )
+        ),
+        DataCell(
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.2 - 50,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 40, right: 20),
+                  child: Text(
+                    "${_content.transaksi_kredit} untuk nama akun",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                )
+            )
+        ),
+        DataCell(
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.1 - 50,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20),
+                  child: Text(
+                    "${_content.transaksi_kredit} untuk saldo",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                )
+            )
+        ),
+        DataCell(
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.2 - 50,
+                child: Container(
+                    padding: EdgeInsets.only(right: 20),
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                            padding: EdgeInsets.all(20),
+                          ),
+                          onPressed: () {
+                            seeDetail();
+                          },
+                          child: Icon(Icons.remove_red_eye),
+                        ),
+                        SizedBox(width: 10,),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                            padding: EdgeInsets.all(20),
+                          ),
+                          onPressed: () {
+                            editForm();
+                            changeCaseToUpdate();
+                          },
+                          child: Icon(Icons.edit),
+                        ),
+                        SizedBox(width: 10,),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                            padding: EdgeInsets.all(20),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog2Button(
+                                  content: "Hapus Transaksi",
+                                  content_detail: "Anda yakin ingin menghapus data ini?",
+                                  path_image: 'assets/images/hapus_coa.png',
+                                  button1: "Tetap Simpan",
+                                  button2: "Ya, Hapus",
+                                  onPressed1: () {
+                                    tetapSimpan();
+                                  },
+                                  onPressed2: () {
+                                    hapus();
+                                  },
+                                );
+                              }
+                            );
+                          },
+                          child: Icon(Icons.delete),
+                        ),
+                      ],
+                    )
+                )
+            )
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => _contentData.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
