@@ -20,6 +20,42 @@ class EditAmortisasiPendapatan extends StatefulWidget {
 }
 
 class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
+  void _navigateToDetailPendapatan(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 4,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToPendapatan(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 3,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void dispose() {}
 
@@ -88,7 +124,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: TextForm(
                                     hintText: "Masukkan keterangan...",
                                     textController: keterangan)),
@@ -96,7 +132,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                               width: 10,
                             ),
                             SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: TextForm(
                                     hintText: "Masukkan total harga...",
                                     textController: total_harga)),
@@ -104,7 +140,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                               width: 10,
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.30,
+                              width: MediaQuery.of(context).size.width * 0.25,
                               child: DropdownForm(
                                   onChanged: (String? newValue) {
                                     setState(() {
@@ -124,7 +160,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: TextForm(
                                     hintText: "Masukkan jumlah mahasiswa...",
                                     textController: jumlah_mahasiswa)),
@@ -132,7 +168,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                               width: 10,
                             ),
                             SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: Container(
                                     margin: EdgeInsets.only(bottom: 3),
                                     child: DropdownSearchButton(
@@ -171,17 +207,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                                           },
                                           onPressed2: () {
                                             setState(() {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SideNavigationBar(
-                                                              index: 1,
-                                                              coaIndex: 2,
-                                                              jurnalUmumIndex:
-                                                                  0,
-                                                              bukuBesarIndex: 0,
-                                                              client: widget
-                                                                  .client)));
+                                              _navigateToPendapatan(context);
                                             });
                                           });
                                     });

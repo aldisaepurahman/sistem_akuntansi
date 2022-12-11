@@ -33,6 +33,60 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
 
   var tableRow;
 
+  void _navigateToDetailAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 1,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToPendapatan(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 3,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToTambahAkun(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 6,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,13 +95,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
       contentData: content,
       seeDetail: () {
         setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SideNavigationBar(
-                  index: 3,
-                  coaIndex: 0,
-                  jurnalUmumIndex: 0,
-                  bukuBesarIndex: 1,
-                  client: widget.client)));
+          _navigateToDetailAset(context);
         });
       },
       context: context,
@@ -101,7 +149,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
             backgroundColor: background,
             body: ListView(
               children: [
-                Container(
+                /*Container(
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -115,7 +163,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                           },
                         )
                       ],
-                    )),
+                    )),*/
                 Container(
                     margin: EdgeInsets.only(top: 25, left: 25),
                     child: HeaderText(
@@ -157,6 +205,80 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                   ],
                                 ),
                               ],
+                            )),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: kuning,
+                                padding: const EdgeInsets.all(18)),
+                            onPressed: () {
+                              setState(() {
+                                _navigateToPendapatan(context);
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Icon(
+                                      Icons.list_alt_rounded,
+                                      size: 13,
+                                      color: hitam,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Amortisasi Pendapatan",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        color: hitam,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: kuning,
+                                padding: const EdgeInsets.all(18)),
+                            onPressed: () {
+                              setState(() {
+                                _navigateToTambahAkun(context);
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Icon(
+                                      Icons.list_alt_rounded,
+                                      size: 13,
+                                      color: hitam,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Akun Amortisasi",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        color: hitam,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ))
                       ],
                     )),
@@ -182,7 +304,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                               children: [
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.2,
                                     child: TextForm(
                                         hintText: "Masukkan keterangan...",
                                         textController: keterangan)),
@@ -191,7 +313,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 ),
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.2,
                                     child: TextForm(
                                         hintText: "Masukkan masa guna...",
                                         textController: masa_guna)),
@@ -200,7 +322,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 ),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.30,
+                                      MediaQuery.of(context).size.width * 0.2,
                                   child: TextForm(
                                       hintText: "Masukkan nilai perolehan...",
                                       textController: nilai_perolehan,
@@ -216,7 +338,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                               children: [
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.2,
                                     child: TextForm(
                                       hintText:
                                           "Masukkan penyusutan tahun lalu...",
@@ -229,7 +351,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 ),
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.2,
                                     child: DropdownSearchButton(
                                         controller: akun,
                                         hintText: "Masukkan Akun Amortisasi...",
@@ -242,7 +364,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 ),
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.2,
                                     child: Container(
                                         margin: EdgeInsets.only(bottom: 3),
                                         child: TextField(

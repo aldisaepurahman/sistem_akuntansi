@@ -21,6 +21,42 @@ class EditAmortisasiAset extends StatefulWidget {
 }
 
 class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
+  void _navigateToDetailAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 1,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 0,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void dispose() {}
 
@@ -225,17 +261,7 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                                           },
                                           onPressed2: () {
                                             setState(() {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SideNavigationBar(
-                                                              index: 1,
-                                                              coaIndex: 2,
-                                                              jurnalUmumIndex:
-                                                                  0,
-                                                              bukuBesarIndex: 0,
-                                                              client: widget
-                                                                  .client)));
+                                              _navigateToAset(context);
                                             });
                                           });
                                     });

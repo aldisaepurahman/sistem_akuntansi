@@ -73,8 +73,8 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
 
   void showForm() {
     setState(() {
-      show = true;
-      disable_button = true;
+      /*show = true;
+      disable_button = true;*/
     });
   }
 

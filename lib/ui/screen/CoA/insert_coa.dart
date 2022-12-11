@@ -153,7 +153,6 @@ class InsertCOAState extends State<InsertCOA> {
                                 borderRadius: BorderRadius.circular(8))),
                       ),
                     ),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,

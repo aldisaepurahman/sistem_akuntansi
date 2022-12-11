@@ -22,6 +22,42 @@ class AmortisasiPendapatanList extends StatefulWidget {
 }
 
 class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
+  void _navigateToAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 0,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+  
+  void _navigateToDetailPendapatan(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 4,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void dispose() {}
 
@@ -37,13 +73,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
       contentData: content,
       seeDetail: () {
         setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SideNavigationBar(
-                  index: 3,
-                  coaIndex: 0,
-                  jurnalUmumIndex: 0,
-                  bukuBesarIndex: 1,
-                  client: widget.client)));
+          _navigateToDetailPendapatan(context);
         });
       },
       context: context,
@@ -71,13 +101,14 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
   TextEditingController akun = TextEditingController();
 
   String _selectedSemesterFilter = 'Ganjil';
-  String _selectedAkunFilter = '2022';
+  String _selectedAkunFilter = 'Beban Kesekretariatan';
   String _selectedEntryFilter = '5';
 
   String _selectedSemesterInsert = 'Ganjil';
-  String _selectedAkunInsert = '2022';
+  String _selectedAkunInsert = 'Beban Kesekretariatan';
 
   List<String> semester = ['Ganjil', 'Genap'];
+  List<String> semester_filter = ['Ganjil', 'Genap'];
   List<String> namaAkunList = [
     'Beban Kesekretariatan',
     'Beban ART',
@@ -85,6 +116,12 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
     'Rekening Giro Bank NISP'
   ];
   List<String> entry = ['5', '10', '25', '50', '100'];
+  List<String> namaAkunListFilter = [
+    'Beban Kesekretariatan',
+    'Beban ART',
+    'Uang Tunai (Bendahara)',
+    'Rekening Giro Bank NISP'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +140,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                         ButtonBack(
                           onPressed: () {
                             setState(() {
-                              Navigator.pop(context);
+                              _navigateToAset(context);
                             });
                           },
                         )
@@ -177,7 +214,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               children: [
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.25,
                                     child: TextForm(
                                         hintText: "Masukkan keterangan...",
                                         textController: keterangan)),
@@ -186,7 +223,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                 ),
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.25,
                                     child: TextForm(
                                         hintText: "Masukkan total harga...",
                                         textController: total_harga,
@@ -196,7 +233,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                 ),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.30,
+                                      MediaQuery.of(context).size.width * 0.25,
                                   child: DropdownForm(
                                       onChanged: (String? newValue) {
                                         setState(() {
@@ -217,7 +254,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               children: [
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.25,
                                     child: TextForm(
                                         hintText:
                                             "Masukkan jumlah mahasiswa...",
@@ -227,7 +264,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                 ),
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
-                                        0.30,
+                                        0.25,
                                     child: DropdownSearchButton(
                                         controller: akun,
                                         hintText: "Masukkan Akun Amortisasi...",
@@ -294,9 +331,9 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               });
                             },
                             content: _selectedSemesterFilter,
-                            items: semester,
+                            items: semester_filter,
                           ),
-                          SizedBox(width: 20),
+                          /*SizedBox(width: 20),
                           DropdownFilter(
                             onChanged: (String? newValue) {
                               setState(() {
@@ -306,8 +343,8 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               });
                             },
                             content: _selectedAkunFilter,
-                            items: namaAkunList,
-                          ),
+                            items: namaAkunListFilter,
+                          ),*/
                           SizedBox(width: 20),
                           DropdownFilter(
                             onChanged: (String? newValue) {

@@ -19,6 +19,42 @@ class DetailAmortisasiAset extends StatefulWidget {
 }
 
 class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
+  void _navigateToAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 0,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToEditAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 2,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void dispose() {}
 
@@ -50,13 +86,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                         ButtonBack(
                           onPressed: () {
                             setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SideNavigationBar(
-                                      index: 1,
-                                      coaIndex: 0,
-                                      jurnalUmumIndex: 0,
-                                      bukuBesarIndex: 0,
-                                      client: widget.client)));
+                              Navigator.pop(context);
                             });
                           },
                         )
@@ -181,13 +211,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
                             setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SideNavigationBar(
-                                      index: 1,
-                                      coaIndex: 3,
-                                      jurnalUmumIndex: 0,
-                                      bukuBesarIndex: 0,
-                                      client: widget.client)));
+                              _navigateToEditAset(context);
                             });
                           },
                           child: const Text(
@@ -226,16 +250,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                                       },
                                       onPressed2: () {
                                         setState(() {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SideNavigationBar(
-                                                          index: 1,
-                                                          coaIndex: 0,
-                                                          jurnalUmumIndex: 0,
-                                                          bukuBesarIndex: 0,
-                                                          client:
-                                                              widget.client)));
+                                          _navigateToAset(context);
                                         });
                                       });
                                 });

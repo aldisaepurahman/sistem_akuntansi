@@ -20,6 +20,42 @@ class DetailAmortisasiPendapatan extends StatefulWidget {
 
 class DetailAmortisasiPendapatanState
     extends State<DetailAmortisasiPendapatan> {
+  void _navigateToEditPendapatan(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 5,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToPendapatan(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 3,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void dispose() {}
 
@@ -50,13 +86,7 @@ class DetailAmortisasiPendapatanState
                         ButtonBack(
                           onPressed: () {
                             setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SideNavigationBar(
-                                      index: 1,
-                                      coaIndex: 0,
-                                      jurnalUmumIndex: 0,
-                                      bukuBesarIndex: 0,
-                                      client: widget.client)));
+                              _navigateToPendapatan(context);
                             });
                           },
                         )
@@ -179,13 +209,7 @@ class DetailAmortisasiPendapatanState
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
                             setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SideNavigationBar(
-                                      index: 1,
-                                      coaIndex: 3,
-                                      jurnalUmumIndex: 0,
-                                      bukuBesarIndex: 0,
-                                      client: widget.client)));
+                              _navigateToEditPendapatan(context);
                             });
                           },
                           child: const Text(
@@ -224,16 +248,7 @@ class DetailAmortisasiPendapatanState
                                       },
                                       onPressed2: () {
                                         setState(() {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SideNavigationBar(
-                                                          index: 1,
-                                                          coaIndex: 0,
-                                                          jurnalUmumIndex: 0,
-                                                          bukuBesarIndex: 0,
-                                                          client:
-                                                              widget.client)));
+                                          _navigateToPendapatan(context);
                                         });
                                       });
                                 });

@@ -12,6 +12,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class TambahAkunAmortisasiList extends StatefulWidget {
+
   const TambahAkunAmortisasiList({required this.client, Key? key})
       : super(key: key);
 
@@ -24,6 +25,24 @@ class TambahAkunAmortisasiList extends StatefulWidget {
 }
 
 class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
+  void _navigateToAset(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 0,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
   @override
   void dispose() {}
 
@@ -33,6 +52,8 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
   var tableRow;
 
   TextEditingController akun = TextEditingController();
+
+  String _selectedAmorType = "Aset";
 
   String _selectedEntryFilter = '5';
   List<String> entry = ['5', '10', '25', '50', '100'];
@@ -73,6 +94,11 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
     'Rekening Giro Bank NISP'
   ];
 
+  List<String> amortisasi_untuk = [
+    "Aset",
+    "Pendapatan"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -89,7 +115,7 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
                       ButtonBack(
                         onPressed: () {
                           setState(() {
-                            Navigator.pop(context);
+                            _navigateToAset(context);
                           });
                         },
                       )
@@ -168,7 +194,23 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
                                       notFoundText: 'Akun tidak ditemukan',
                                       items: namaAkunList,
                                       onChange: (String? new_value) {},
-                                      isNeedChangeColor: false)),
+                                      isNeedChangeColor: false)
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: DropdownForm(
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedAmorType = newValue!;
+                                      });
+                                    },
+                                    content: _selectedAmorType,
+                                items: amortisasi_untuk,
+                                )
+                              )
                             ],
                           ),
                           SizedBox(height: 30),

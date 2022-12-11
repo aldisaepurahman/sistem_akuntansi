@@ -107,7 +107,7 @@ class DetailCOAState extends State<DetailCOA> {
                           },*/
                             onPressed: () {
                               setState(() {
-                                Navigator.pop(context);
+                                _navigateToListCoa(context);
                               });
                             },
                           )
@@ -213,61 +213,6 @@ class DetailCOAState extends State<DetailCOA> {
                               style: TextStyle(
                                 fontFamily: "Inter",
                                 color: Color.fromARGB(255, 50, 52, 55),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DetailText(
-                                    header: "Nama Akun", content: nama_akun),
-                                DetailText(
-                                    header: "Indentasi", content: indentasi),
-                                DetailText(
-                                    header: "Saldo Awal Baru",
-                                    content: saldo_awal_baru)
-                              ],
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 40, bottom: 20),
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 255, 255, 255),
-                                padding: EdgeInsets.all(20)),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog2Button(
-                                        content: "Hapus Chart of Account",
-                                        content_detail:
-                                            "Anda yakin ingin menghapus data ini?",
-                                        path_image:
-                                            'assets/images/hapus_coa.png',
-                                        button1: "Tetap Simpan",
-                                        button2: "Ya, Hapus",
-                                        onPressed1: () {
-                                          setState(() {
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        onPressed2: () {
-                                          AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunDeleted(kode_akun: widget.akun.kode_akun));
-                                          Future.delayed(Duration(seconds: 2), () {
-                                            _navigateToListCoa(context);
-                                          });
-                                        });
-                                  });
-                            },
-                            child: const Text(
-                              "Hapus",
-                              style: TextStyle(
-                                fontFamily: "Inter",
-                                color: Color.fromARGB(255, 245, 0, 0),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
