@@ -47,7 +47,7 @@ class ListCOAState extends State<ListCOA> {
 
   List<String> row = ['5', '10', '25', '50', '100'];
 
-  void _navigateToDetailCoa(BuildContext context) {
+  void _navigateToDetailCoa(BuildContext context, Map<String, dynamic> params) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SideNavigationBar(
@@ -60,6 +60,7 @@ class ListCOAState extends State<ListCOA> {
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
           client: widget.client,
+          params: params
         )
       )
     );
@@ -77,7 +78,7 @@ class ListCOAState extends State<ListCOA> {
           labaRugiIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
-          client: widget.client,
+          client: widget.client
         )
       )
     );
@@ -87,9 +88,9 @@ class ListCOAState extends State<ListCOA> {
   void initState() {
     super.initState();
     tableRow = new RowTableCOA(
-      contentData: contents,
-      seeDetail: () {
-        _navigateToDetailCoa(context);
+      contentData: const <Akun>[],
+      seeDetail: (int index) {
+        _navigateToDetailCoa(context, {"akun": ""});
       },
       context: context,
     );
@@ -260,9 +261,7 @@ class ListCOAState extends State<ListCOA> {
                                   source: RowTableCOA(
                                     contentData: data_akun,
                                     seeDetail: (int index) {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client, params: {"akun": data_akun[index]})));
+                                      _navigateToDetailCoa(context, {"akun": data_akun[index]});
                                     },
                                     context: context,
                                   ),

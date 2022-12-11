@@ -104,8 +104,7 @@ class InsertCOAState extends State<InsertCOA> {
                                         },
                                         onPressed2: () {
                                           setState(() {
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                            _navigateToListCoa(context);
                                           });
                                         });
                                   });
@@ -287,8 +286,7 @@ class InsertCOAState extends State<InsertCOA> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     Future.delayed(Duration(seconds: 2), () {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                      _navigateToListCoa(context);
                                     });
                                     return DialogNoButton(
                                         content: "Berhasil Ditambahkan!",
@@ -311,7 +309,7 @@ class InsertCOAState extends State<InsertCOA> {
                               fontWeight: FontWeight.bold,
                             ),
                           )
-                        ],
+                        )
                       ),
                       Container(
                         margin: EdgeInsets.only(bottom: 25),
@@ -340,8 +338,7 @@ class InsertCOAState extends State<InsertCOA> {
                                       },
                                       onPressed2: () {
                                         setState(() {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                          _navigateToListCoa(context);
                                         });
                                       });
                                 });
@@ -354,110 +351,11 @@ class InsertCOAState extends State<InsertCOA> {
                               fontWeight: FontWeight.bold,
                             ),
                           )
-                        ],
+                        )
                       )
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 25),
-                    child: Text(
-                      "Saldo Awal (Opsional)",
-                      style: TextStyle(
-                          fontFamily: "Inter",
-                          fontSize: 14,
-                          color: Color.fromARGB(255, 50, 52, 55)),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 20),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          labelText: 'Rp',
-                          hintText: 'Masukkan saldo awal...',
-                          contentPadding: const EdgeInsets.all(8),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8))),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 16, bottom: 25),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                          padding: EdgeInsets.all(20)),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            Future.delayed(Duration(seconds: 1), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return DialogNoButton(
-                              content: "Berhasil Ditambahkan!",
-                              content_detail: "Chart of Account baru berhasil ditambahkan",
-                              path_image: 'assets/images/tambah_coa.png'
-                            );
-                          }
-                        );
-                      },
-                      child: const Text(
-                        "Simpan",
-                        style: TextStyle(
-                          fontFamily: "Inter",
-                          color: Color.fromARGB(255, 50, 52, 55),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 25),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Color.fromARGB(255, 255, 255, 255),
-                          padding: EdgeInsets.all(20)),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog2Button(
-                              content: "Batalkan Perubahan",
-                              content_detail:
-                                  "Anda yakin ingin membatalkan perubahan ini?",
-                              path_image:
-                                  'assets/images/berhasil_hapus_coa.png',
-                              button1: "Tetap Simpan",
-                              button2: "Ya, Hapus",
-                              onPressed1: () {
-                                setState(() {
-                                  Navigator.pop(context);
-                                });
-                              },
-                              onPressed2: () {
-                                _navigateToListCoa(context);
-                              });
-                          }
-                        );
-                      },
-                      child: const Text(
-                        "Batalkan",
-                        style: TextStyle(
-                          fontFamily: "Inter",
-                          color: Color.fromARGB(255, 245, 0, 0),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
         )
-      )
     );
   }
 }

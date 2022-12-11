@@ -45,7 +45,7 @@ class SideNavigationBar extends StatefulWidget{
         required this.labaRugiIndex,
         required this.amortisasiIndex,
         required this.jurnalPenyesuaianIndex,
-        required this.client
+        required this.client,
         this.params
       })
       : super(key: key);
@@ -78,10 +78,10 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
       return InsertCOA(client: widget.client); // insert CoA
     }
     else if (selectedCoaIndex == 2) {
-      return DetailCOA(client: widget.client); // detail CoA
+      return DetailCOA(client: widget.client, akun: widget.params?["akun"] as Akun); // detail CoA
     }
     else if (selectedCoaIndex == 3) {
-      return EditCOA(client: widget.client); // edit CoA
+      return EditCOA(client: widget.client, akun: widget.params?["akun"] as Akun, akun_saldo: widget.params?["akun_saldo"] as Saldo,); // edit CoA
     }
     return ListCOA(client: widget.client); // list CoA
   }
@@ -204,7 +204,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
                       leading: Row(
                         children: [
                           Image.asset(
-                            "images/logo_stikes.png",
+                            "assets/images/logo_stikes.png",
                             height: 50,
                           ),
                           isExtended == true ? SizedBox(
