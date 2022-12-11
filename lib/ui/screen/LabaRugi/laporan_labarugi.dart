@@ -41,6 +41,42 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
 
   int total_debit_beban = LaporanLabaRugi.hitung_jumlah(beban, 'debit');
   int total_kredit_beban = LaporanLabaRugi.hitung_jumlah(beban, 'kredit');
+  var tableRow;
+
+  @override
+  void initState() {
+    super.initState();
+    tableRow = new BulanTahunTableData(
+      contentData: contents,
+      seeDetail: () {
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+              SideNavigationBar(
+                index: 5,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                neracaLajurIndex: 0,
+                labaRugiIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client,
+              )
+            )
+          );
+        });
+      },
+      context: context,
+    );
+  }
+
+  void showForm() {
+    setState(() {
+      show = true;
+      disable_button = true;
+    });
+  }
 
   List<DataRow> _createRows(List<Map> item) {
     return item

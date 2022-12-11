@@ -55,6 +55,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^20.3.60
   month_picker_dialog: ^0.2.3
   month_picker_dialog_2: ^0.5.8
+  flutter_svg: ^1.1.6
+  sidebarx: ^0.14.0
 
 dev_dependencies:
   build_runner: ^2.2.0
@@ -85,7 +87,16 @@ flutter:
     - assets/images/berhasil_hapus_coa.png
     - assets/images/hapus_coa.png
     - assets/images/tambah_coa.png
-    - assets/images/logo_stikes.jpg
+    - assets/images/logo_stikes.png
+    - assets/images/bg_login.png
+    - assets/icons/CardReceive.svg
+    - assets/icons/CardSend.png
+    - assets/icons/CardSend.svg
+    - assets/icons/DirectInbox.svg
+    - assets/icons/DirectSend.svg
+    - assets/icons/EmptyWallet.svg
+    - assets/icons/Eye.svg
+    - assets/icons/eyeslash.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

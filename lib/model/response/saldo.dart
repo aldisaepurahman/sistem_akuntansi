@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class Saldo extends Equatable {
-  final int id_saldo;
-  final int saldo;
-  final String bulan;
-  final int tahun;
-  final String kode_akun;
+  int id_saldo;
+  int saldo;
+  String bulan;
+  int tahun;
+  String kode_akun;
 
-  const Saldo({
+  Saldo({
     this.id_saldo = 0,
     required this.saldo,
     required this.bulan,

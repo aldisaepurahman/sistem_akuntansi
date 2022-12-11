@@ -29,8 +29,13 @@ class AkunBloc extends Bloc<Event, AkunState> {
   Future<void> _updateData(AkunUpdated event, Emitter<AkunState> emit) async {
     try {
       emit(state.copyWith(status: SystemStatus.loading));
-      await service.update(TableViewType.coa.name, event.akun.toJson(), {"kode_akun": event.akun.kode_akun});
-      await service.update(TableViewType.coa_saldo.name, event.saldo.toJson(), {"id_saldo": event.saldo.id_saldo});
+      await service.update(TableViewType.coa.name, event.akun.toJson(),
+          {"kode_akun": event.kode_akun});
+      (event.id_saldo > 0)
+          ? await service.update(TableViewType.coa_saldo.name,
+              event.saldo.toJson(), {"id_saldo": event.id_saldo})
+          : await service.insert(
+              TableViewType.coa_saldo.name, event.saldo.toJson());
       emit(state.copyWith(status: SystemStatus.success));
     } catch (_) {
       emit(state.copyWith(status: SystemStatus.failure));
@@ -40,8 +45,10 @@ class AkunBloc extends Bloc<Event, AkunState> {
   Future<void> _deleteData(AkunDeleted event, Emitter<AkunState> emit) async {
     try {
       emit(state.copyWith(status: SystemStatus.loading));
-      await service.delete(TableViewType.coa.name, {"kode_akun": event.kode_akun});
-      await service.delete(TableViewType.coa_saldo.name, {"kode_akun": event.kode_akun});
+      await service
+          .delete(TableViewType.coa_saldo.name, {"kode_akun": event.kode_akun});
+      await service
+          .delete(TableViewType.coa.name, {"kode_akun": event.kode_akun});
       emit(state.copyWith(status: SystemStatus.success));
     } catch (_) {
       emit(state.copyWith(status: SystemStatus.failure));

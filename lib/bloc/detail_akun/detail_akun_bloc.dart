@@ -4,10 +4,11 @@ import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/detail_akun/detail_akun_state.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/utils/table_view.dart';
 
 class DetailAkunBloc extends Bloc<Event, DetailAkunState> {
-  DetailAkunBloc({required this.service}) : super(const DetailAkunState()) {
+  DetailAkunBloc({required this.service}) : super(DetailAkunState(datastate: VLookup())) {
     on<AkunDetailed>(_getDetail);
   }
 
@@ -23,13 +24,13 @@ class DetailAkunBloc extends Bloc<Event, DetailAkunState> {
             status: (list_coa.message.isEmpty)
                 ? SystemStatus.success
                 : SystemStatus.failure,
-            datastate: list_coa.datastore,
+            datastate: list_coa.datastore as VLookup,
             error: (list_coa.message.isNotEmpty)
-                ? list_coa.message
+                ? "awa"
                 : "tidak ada"));
       }).catchError((error) {
         emit(state.copyWith(
-            status: SystemStatus.failure, error: error.toString()));
+            status: SystemStatus.failure));
       });
 
     } catch (error) {

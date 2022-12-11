@@ -35,19 +35,38 @@ class SupabaseService {
 
   Future<ServiceStatus> getDetailCOA(
       String table_name, Map<String, String> keyword) async {
+
+    Map<int, String> listbulan =
+    {
+      1: "Januari",
+      2: "Februari",
+      3: "Maret",
+      4: "April",
+      5: "Mei",
+      6: "Juni",
+      7: "Juli",
+      8: "Agustus",
+      9: "September",
+      10: "Oktober",
+      11: "November",
+      12: "Desember"
+    };
+
     try {
       final response = await _supabaseClient
           .from(table_name)
           .select()
-          .eq(keyword.keys.first, keyword.values.first);
+          .eq(keyword.keys.first, keyword.values.first)
+          .eq("bulan", listbulan[DateTime.now().month])
+          .eq("tahun", DateTime.now().year).single();
 
       if (response == null) {
         return ServiceStatus(datastore: const VLookup(), message: response.toString());
       }
 
-      return ServiceStatus(datastore: response.map((e) => VLookup.fromJson(e)));
+      return ServiceStatus(datastore: VLookup.fromJson(response));
     } on PostgrestException catch (error) {
-      return ServiceStatus(datastore: const VLookup(), message: error.message);
+      return ServiceStatus(datastore: const VLookup());
     } on NoSuchMethodError catch (error) {
       return ServiceStatus(datastore: const VLookup(), message: error.stackTrace.toString());
     }
@@ -151,8 +170,7 @@ class SupabaseService {
       await _supabaseClient
           .from(table_name)
           .update(data_update)
-          .eq(equivalent.keys.first, equivalent.values.first)
-          .execute();
+          .eq(equivalent.keys.first, equivalent.values.first);
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(error, stackTrace);
     }

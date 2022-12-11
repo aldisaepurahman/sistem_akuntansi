@@ -6,12 +6,12 @@ import 'package:sistem_akuntansi/model/response/vlookup.dart';
 class DetailAkunState extends DataState {
   const DetailAkunState({
     this.status = SystemStatus.loading,
-    this.datastate = 0,
+    required this.datastate,
     this.error = ""
   }) : super(status: status, datastate: datastate, error: error);
 
   final SystemStatus status;
-  final dynamic datastate;
+  final VLookup datastate;
   final String error;
 
   DetailAkunState copyWith({

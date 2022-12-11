@@ -38,12 +38,20 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SideNavigationBar(
-                  index: 3,
-                  coaIndex: 0,
-                  jurnalUmumIndex: 0,
-                  bukuBesarIndex: 1,
-                  client: widget.client)));
+            builder: (context) =>
+              SideNavigationBar(
+                index: 4,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                neracaLajurIndex: 0,
+                labaRugiIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client,
+              )
+            )
+          );
         });
       },
       context: context,

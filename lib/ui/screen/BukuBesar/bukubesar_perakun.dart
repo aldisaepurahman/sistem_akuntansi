@@ -49,6 +49,24 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
     super.dispose();
   }
 
+  void _navigateToListBukuBesar(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 3,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,11 +83,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                     children: [
                       ButtonBack(
                         onPressed: (){
-                          setState(() {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                          });
+                          _navigateToListBukuBesar(context);
                         },
                       )
                     ],
@@ -157,7 +171,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                     items: items,
                     onChange: getAkunText,
                     isNeedChangeColor: (textAkunController.text != '' ? true : false),
-                    colorWhenChanged: Color(int.parse(yellowTextColor)),
+                    colorWhenChanged: yellowTextColor,
                   ),
                 ),
                 Visibility(
@@ -208,7 +222,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                               DataColumn(
                                 label: Expanded(
                                     child: Container(
-                                      color: Color(int.parse(greyHeaderColor)),
+                                      color: greyHeaderColor,
                                       height: double.infinity,
                                       alignment: Alignment.center,
                                       child: Text(
@@ -225,7 +239,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                               DataColumn(
                                 label: Expanded(
                                     child: Container(
-                                      color: Color(int.parse(greyHeaderColor)),
+                                      color: greyHeaderColor,
                                       height: double.infinity,
                                       alignment: Alignment.center,
                                       child: Text(
@@ -242,7 +256,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                               DataColumn(
                                   label: Expanded(
                                       child: Container(
-                                        color: Color(int.parse(greyHeaderColor)),
+                                        color: greyHeaderColor,
                                         height: double.infinity,
                                         alignment: Alignment.center,
                                         child: Text(
@@ -259,7 +273,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                               DataColumn(
                                   label: Expanded(
                                       child: Container(
-                                        color: Color(int.parse(greyHeaderColor)),
+                                        color: greyHeaderColor,
                                         height: double.infinity,
                                         alignment: Alignment.center,
                                         child: Text(
@@ -276,7 +290,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                               DataColumn(
                                   label: Expanded(
                                       child: Container(
-                                        color: Color(int.parse(greyHeaderColor)),
+                                        color: greyHeaderColor,
                                         height: double.infinity,
                                         alignment: Alignment.center,
                                         child: Text(

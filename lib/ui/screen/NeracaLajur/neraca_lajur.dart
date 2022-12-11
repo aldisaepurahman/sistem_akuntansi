@@ -29,21 +29,31 @@ class NeracaLajurListState extends State<NeracaLajurList> {
 
   var tableRow;
 
+  void _navigateToLaporanNeracaLajur(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 4,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 1,
+          labaRugiIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SideNavigationBar(
-                  index: 3,
-                  coaIndex: 0,
-                  jurnalUmumIndex: 0,
-                  bukuBesarIndex: 1,
-                  client: widget.client)));
-        });
+        _navigateToLaporanNeracaLajur(context);
       },
       context: context,
     );
@@ -94,21 +104,6 @@ class NeracaLajurListState extends State<NeracaLajurList> {
             backgroundColor: background,
             body: ListView(
               children: [
-                Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                        )
-                      ],
-                    )),
                 Container(
                     margin: EdgeInsets.only(top: 25, left: 25),
                     child: HeaderText(
@@ -177,6 +172,8 @@ class NeracaLajurListState extends State<NeracaLajurList> {
                   ),
                 )
               ],
-            )));
+            )
+        )
+    );
   }
 }

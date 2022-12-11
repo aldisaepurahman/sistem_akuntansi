@@ -25,17 +25,31 @@ class JurnalUmumListState extends State<JurnalUmumList> {
 
   var tableRow;
 
+  void _navigateToJenisJurnal(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 1,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
-        });
+        _navigateToJenisJurnal(context);
       },
       context: context,
     );

@@ -245,7 +245,7 @@ class RowTableCOA extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
+          width: MediaQuery.of(context).size.width * 0.1 - 50,
           child: Text("${index + 1}"),
         )),
         DataCell(SizedBox(
@@ -323,38 +323,64 @@ class RowTableDetail extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 7 - 50,
+          width: MediaQuery.of(context).size.width * 0.2 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (int i = 0; i < totalDebit; i++)
-                Text("${_contentDataDebit[i].akun}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataDebit[i].akun}")
+                  ],
+                )
             ],
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 3 - 50,
+          width: MediaQuery.of(context).size.width * 0.1 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               for (int i = 0; i < totalDebit; i++)
-                Text("Rp${_contentDataDebit[i].saldo}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataDebit[i].saldo}")
+                  ],
+                )
             ],
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 7 - 50,
+          width: MediaQuery.of(context).size.width * 0.2 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (int i = 0; i < totalKredit; i++)
-                Text("${_contentDataKredit[i].akun}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataKredit[i].akun}")
+                  ],
+                )
             ],
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 3 - 50,
+          width: MediaQuery.of(context).size.width * 0.1 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               for (int i = 0; i < totalKredit; i++)
-                Text("Rp${_contentDataKredit[i].saldo}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataKredit[i].saldo}")
+                  ],
+                )
             ],
           ),
         )),

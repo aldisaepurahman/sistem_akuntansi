@@ -111,6 +111,60 @@ class TransaksiListState extends State<TransaksiList> {
     });
   }
 
+  void _navigateToDaftarTransaksi(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 2,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
+  void _navigateToDetailTransaksi(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) =>
+        SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 3,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 0,
+          labaRugiIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
+  void _navigateToJenisJurnal(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 1,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   void dispose() {
     tanggal.dispose();
@@ -135,11 +189,7 @@ class TransaksiListState extends State<TransaksiList> {
       context: context,
       contentData: contents_transaksi,
       seeDetail: (){
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 3, bukuBesarIndex: 0, client: widget.client)));
-        });
+        _navigateToDetailTransaksi(context);
       },
       editForm: (){
         showForm();
@@ -150,11 +200,7 @@ class TransaksiListState extends State<TransaksiList> {
         });
       },
       hapus: (){
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-        });
+        _navigateToDaftarTransaksi(context);
       },
       changeCaseToUpdate: (){
         setState(() {
@@ -163,62 +209,6 @@ class TransaksiListState extends State<TransaksiList> {
       },
     );
   }
-
-  // cara lama yg ga bisa
-  // List<Widget> dynamicDebitList = [];
-  // Widget akunDebitInput(){
-  //   return SizedBox( // BAGIAN DEBIT
-  //     width: MediaQuery.of(context).size.width * 0.40,
-  //     child: Container(
-  //         decoration: BoxDecoration(
-  //             border: Border(
-  //                 right: BorderSide(
-  //                     color: abu_transparan
-  //                 )
-  //             )
-  //         ),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           mainAxisSize: MainAxisSize.max,
-  //           children: [
-  //             SizedBox(
-  //               width: MediaQuery.of(context).size.width * 0.25,
-  //               child: DropdownSearchButton(
-  //                 isNeedChangeColor: false,
-  //                 notFoundText: 'Akun tidak ditemukan',
-  //                 hintText: 'Pilih akun',
-  //                 controller: akun_debit,
-  //                 onChange: getAkunDebitText,
-  //                 items: namaAkunList,
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               width: 10,
-  //             ),
-  //             SizedBox(
-  //               width: MediaQuery.of(context).size.width * 0.1,
-  //               child: TextForm(
-  //                 hintText: "Jumlah",
-  //                 textController: jumlah_debit,
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               width: 10,
-  //             ),
-  //             ButtonAdd(
-  //                 onPressed: () {
-  //                   setState(() {
-  //                     dynamicDebitList.add(akunDebitInput());
-  //                   });
-  //                 }),
-  //             SizedBox(
-  //               width: 10,
-  //             ),
-  //           ],
-  //         )
-  //     ),
-  //   );
-  // }
 
   List<DynamicDebitWidget> dynamicDebitList = [];
   List<String> akunDebitList = [];
@@ -291,11 +281,7 @@ class TransaksiListState extends State<TransaksiList> {
                     children: [
                       ButtonBack(
                         onPressed: () {
-                          setState(() {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
-                          });
+                          _navigateToJenisJurnal(context);
                         },
                       )
                     ],
@@ -537,7 +523,21 @@ class TransaksiListState extends State<TransaksiList> {
                               ButtonNoIcon(
                                 bg_color: kuning,
                                 text_color: hitam,
-                                onPressed: submitData,
+                                onPressed: (){
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        Future.delayed(Duration(seconds: 1), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return DialogNoButton(
+                                            content: (_case == 1 ? "Berhasil Ditambahkan!" : "Berhasil Diubah!"),
+                                            content_detail: (_case == 1 ? "Transaksi baru berhasil ditambahkan" : "Transaksi berhasil diubah"),
+                                            path_image: 'assets/images/tambah_coa.png'
+                                        );
+                                      }
+                                  );
+                                },
                                 content: "Simpan"
                               )
                             ],
@@ -560,7 +560,7 @@ class TransaksiListState extends State<TransaksiList> {
                             DataColumn(
                                 label: Expanded(
                                   child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
+                                    color: greyHeaderColor,
                                     padding: EdgeInsets.only(right: 20),
                                     height: double.infinity,
                                     alignment: Alignment.center,
@@ -578,7 +578,7 @@ class TransaksiListState extends State<TransaksiList> {
                             DataColumn(
                                 label: Expanded(
                                   child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
+                                    color: greyHeaderColor,
                                     padding: EdgeInsets.only(right: 20),
                                     height: double.infinity,
                                     alignment: Alignment.center,
@@ -596,7 +596,7 @@ class TransaksiListState extends State<TransaksiList> {
                             DataColumn(
                                 label: Expanded(
                                   child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
+                                    color: greyHeaderColor,
                                     padding: EdgeInsets.only(right: 40),
                                     height: double.infinity,
                                     alignment: Alignment.center,
@@ -614,7 +614,7 @@ class TransaksiListState extends State<TransaksiList> {
                             DataColumn(
                                 label: Expanded(
                                   child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
+                                    color: greyHeaderColor,
                                     padding: EdgeInsets.only(right: 20),
                                     height: double.infinity,
                                     alignment: Alignment.center,
@@ -632,7 +632,7 @@ class TransaksiListState extends State<TransaksiList> {
                             DataColumn(
                                 label: Expanded(
                                   child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
+                                    color: greyHeaderColor,
                                     padding: EdgeInsets.only(right: 20),
                                     height: double.infinity,
                                     alignment: Alignment.center,
@@ -650,7 +650,7 @@ class TransaksiListState extends State<TransaksiList> {
                             DataColumn(
                                 label: Expanded(
                                   child: Container(
-                                    color: Color(int.parse(greyHeaderColor)),
+                                    color: greyHeaderColor,
                                     padding: EdgeInsets.only(right: 20),
                                     height: double.infinity,
                                     alignment: Alignment.center,
