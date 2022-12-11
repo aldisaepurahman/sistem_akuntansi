@@ -6,13 +6,12 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class LaporanNeracaLajur extends StatefulWidget {
-  const LaporanNeracaLajur({required this.client, Key? key}) : super(key: key);
-
   final SupabaseClient client;
+
+  const LaporanNeracaLajur({required this.client, Key? key}) : super(key: key);
 
   @override
   LaporanNeracaLajurState createState() {
@@ -32,13 +31,25 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTableMonth(
+    tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+            builder: (context) =>
+              SideNavigationBar(
+                index: 4,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                neracaLajurIndex: 0,
+                labaRugiIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client,
+              )
+            )
+          );
         });
       },
       context: context,
@@ -128,7 +139,9 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
                           ButtonNoIcon(
                               bg_color: kuning,
                               text_color: hitam,
-                              onPressed: () {},
+                              onPressed: () {
+                              //
+                              },
                               content: "Cetak Neraca Lajur")
                         ],
                       ),

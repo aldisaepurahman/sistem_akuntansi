@@ -6,11 +6,11 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class JurnalPenyesuaianList extends StatefulWidget {
-  const JurnalPenyesuaianList({required this.client, Key? key}) : super(key: key);
+  const JurnalPenyesuaianList({required this.client, Key? key})
+  : super(key: key);
 
   final SupabaseClient client;
 
@@ -29,16 +29,38 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
 
   var tableRow;
 
+  void _navigateToEditCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+            index: 7,
+            coaIndex: 3,
+            jurnalUmumIndex: 0,
+            bukuBesarIndex: 0,
+            labaRugiIndex: 0,
+            neracaLajurIndex: 0,
+            amortisasiIndex: 0,
+            jurnalPenyesuaianIndex: 1,
+            client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTableMonth(
+    tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
         setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => SideNavigationBar(
+          //         index: 3,
+          //         coaIndex: 0,
+          //         jurnalUmumIndex: 0,
+          //         bukuBesarIndex: 1,
+          //         client: widget.client)));
         });
       },
       context: context,
@@ -91,140 +113,14 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
             body: ListView(
               children: [
                 Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                        )
-                      ],
-                    )),
-                Container(
-                    margin: EdgeInsets.only(top: 25, left: 25),
-                    child: HeaderText(
-                        content: "Jurnal Penyesuaian", size: 32, color: hitam)),
-                Container(
-                    width: 30,
-                    margin: EdgeInsets.only(left: 25, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: kuning,
-                                padding: const EdgeInsets.all(18)),
-                            onPressed: showForm,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 13,
-                                      color: hitam,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Tambah Jurnal",
-                                      style: TextStyle(
-                                        fontFamily: "Inter",
-                                        color: hitam,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ))
-                      ],
-                    )),
-                Visibility(
-                    visible: show,
-                    child: Container(
-                      margin: EdgeInsets.all(25),
-                      padding: EdgeInsets.all(25),
-                      color: background2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: HeaderText(
-                                content: "Tambah Jurnal Penyesuaian",
-                                size: 18,
-                                color: hitam),
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.25,
-                                  child: DropdownForm(
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _selectedMonthInsert = newValue!;
-                                        });
-                                      },
-                                      content: _selectedMonthInsert,
-                                      items: month,
-                                      label: "--Pilih Bulan--"),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.25,
-                                    child: DropdownForm(
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            _selectedYearInsert = newValue!;
-                                          });
-                                        },
-                                        content: _selectedYearInsert,
-                                        items: year,
-                                        label: "--Pilih Tahun--")),
-                              ]),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ButtonNoIcon(
-                                  bg_color: background2,
-                                  text_color: merah,
-                                  onPressed: disableForm,
-                                  content: "Batal"),
-                              SizedBox(width: 20),
-                              ButtonNoIcon(
-                                  bg_color: kuning,
-                                  text_color: hitam,
-                                  onPressed: () {
-                                    setState(() {});
-                                  },
-                                  content: "Simpan")
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
+                  margin: EdgeInsets.only(top: 25, left: 25),
+                  child: HeaderText(
+                      content: "Jurnal Penyesuaian", size: 32, color: hitam
+                  )
+                ),
                 Container(
                   margin:
-                      EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
+                  EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
                   padding: EdgeInsets.all(25),
                   color: background2,
                   child: Column(

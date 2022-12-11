@@ -6,13 +6,12 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class LaporanLabaRugi extends StatefulWidget {
-  const LaporanLabaRugi({required this.client, Key? key}) : super(key: key);
-
   final SupabaseClient client;
+
+  const LaporanLabaRugi({required this.client, Key? key}) : super(key: key);
 
   @override
   LaporanLabaRugiState createState() {
@@ -32,13 +31,25 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTableMonth(
+    tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+            builder: (context) =>
+              SideNavigationBar(
+                index: 5,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                neracaLajurIndex: 0,
+                labaRugiIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client,
+              )
+            )
+          );
         });
       },
       context: context,

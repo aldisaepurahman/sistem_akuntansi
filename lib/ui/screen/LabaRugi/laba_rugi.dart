@@ -6,13 +6,12 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class LabaRugiList extends StatefulWidget {
-  const LabaRugiList({required this.client, Key? key}) : super(key: key);
-
   final SupabaseClient client;
+
+  const LabaRugiList({required this.client, Key? key}) : super(key: key);
 
   @override
   LabaRugiListState createState() {
@@ -29,17 +28,31 @@ class LabaRugiListState extends State<LabaRugiList> {
 
   var tableRow;
 
+  void _navigateToLaporanLabaRugi(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) =>
+        SideNavigationBar(
+          index: 5,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 0,
+          labaRugiIndex: 1,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    tableRow = new RowTableMonth(
+    tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
-        });
+        _navigateToLaporanLabaRugi(context);
       },
       context: context,
     );
@@ -91,21 +104,6 @@ class LabaRugiListState extends State<LabaRugiList> {
             body: ListView(
               children: [
                 Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                        )
-                      ],
-                    )),
-                Container(
                     margin: EdgeInsets.only(top: 25, left: 25),
                     child: HeaderText(
                         content: "Laba Rugi", size: 32, color: hitam)),
@@ -147,25 +145,28 @@ class LabaRugiListState extends State<LabaRugiList> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Bulan"),
-                          ),
-                          DataColumn(
-                            label: Text("Tahun"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: tableRow,
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
-                      )
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Text("No."),
+                            ),
+                            DataColumn(
+                              label: Text("Bulan"),
+                            ),
+                            DataColumn(
+                              label: Text("Tahun"),
+                            ),
+                            DataColumn(
+                              label: Text("Action"),
+                            ),
+                          ],
+                          source: tableRow,
+                          rowsPerPage: 10,
+                          showCheckboxColumn: false,
+                        ),
+                      ),
                     ],
                   ),
                 )

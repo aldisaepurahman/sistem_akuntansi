@@ -12,8 +12,9 @@ import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
+import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailCOA extends StatefulWidget {
@@ -30,6 +31,40 @@ class DetailCOA extends StatefulWidget {
 }
 
 class DetailCOAState extends State<DetailCOA> {
+  void _navigateToEditCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 1,
+          coaIndex: 3,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
+  void _navigateToListCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
   @override
   void dispose() {
     super.dispose();
@@ -63,6 +98,9 @@ class DetailCOAState extends State<DetailCOA> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ButtonBack(
+                          /*onPressed: () {
+                            _navigateToEditCoa(context);
+                          },*/
                             onPressed: () {
                               setState(() {
                                 Navigator.pop(context);

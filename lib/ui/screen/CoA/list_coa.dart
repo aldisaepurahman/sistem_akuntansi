@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +16,8 @@ import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListCOA extends StatefulWidget {
@@ -45,17 +47,49 @@ class ListCOAState extends State<ListCOA> {
 
   List<String> row = ['5', '10', '25', '50', '100'];
 
+  void _navigateToDetailCoa(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 2,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 0,
+          labaRugiIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
+  void _navigateToTambahCoa(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 1,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 0,
+          labaRugiIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     tableRow = new RowTableCOA(
-      contentData: const <Akun>[],
-      seeDetail: (int index) {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  SideNavigationBar(index: 3, coaIndex: 0, bukuBesarIndex: 1, client: widget.client)));
-        });
+      contentData: contents,
+      seeDetail: () {
+        _navigateToDetailCoa(context);
       },
       context: context,
     );
@@ -72,21 +106,6 @@ class ListCOAState extends State<ListCOA> {
               // create: (BuildContext context) => VLookupCubit(service: SupabaseService(supabaseClient: widget.client)),
               child: ListView(
                 children: [
-                  /*Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                        )
-                      ],
-                    )),*/
                 Container(
                   margin: EdgeInsets.only(top: 25, left: 25),
                   child: const Text(
@@ -118,10 +137,11 @@ class ListCOAState extends State<ListCOA> {
                                         Color.fromARGB(255, 255, 204, 0),
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
-                                  setState(() {
+                                  _navigateToTambahCoa(context);
+                                  /*setState(() {
                                     Navigator.of(context).push(MaterialPageRoute(
                                         builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0, client: widget.client)));
-                                  });
+                                  });*/
                                 },
                                 child: Row(
                                   mainAxisAlignment:
@@ -264,6 +284,7 @@ class ListCOAState extends State<ListCOA> {
               ],
             )
           )
-      ));
+      )
+    );
   }
 }

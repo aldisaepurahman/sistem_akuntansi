@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sistem_akuntansi/ui/screen/login.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +31,18 @@ class SiakBlocObserver extends BlocObserver {
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({required this.client, super.key});
 
   final SupabaseClient client;
 
   @override
   Widget build(BuildContext context) {
+    // return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: Supabase.instance.client));
+    return MaterialApp(home: Login(client: Supabase.instance.client));
+  /*@override
+  Widget build(BuildContext context) {
     return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, bukuBesarIndex: 0, client: client));
-    // return MaterialApp(home: SideNavigationBar(client: Supabase.instance.client));
+    // return MaterialApp(home: SideNavigationBar(client: Supabase.instance.client));*/
   }
 }

@@ -2,23 +2,110 @@ import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
+import 'package:sistem_akuntansi/utils/Buku_besar.dart';
 import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
 
-class RowContent extends StatelessWidget {
-  final content;
-
-  const RowContent({Key? key, required this.content}) : super(key: key);
+class BukuBesarTableData extends DataTableSource {
+  BuildContext context;
+  BukuBesarTableData({required List<Buku_besar> contentData, required this.context}) : _contentData = contentData, assert(contentData != null);
+  final List<Buku_besar> _contentData;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(20),
-        child: Text(content,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                fontFamily: "Inter", color: Color.fromARGB(255, 50, 52, 55))));
+  DataRow? getRow(int index) {
+    assert(index >= 0);
+    if (index >= _contentData.length) {
+      return null;
+    }
+    final _content = _contentData[index];
+
+    return DataRow.byIndex(
+      index: index,
+      cells: <DataCell>[
+        DataCell(
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 10 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${_content.tgl}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
+            )
+          )
+        ),
+        DataCell(
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3 - 50,
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "${_content.nama_transaksi}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
+            )
+          )
+        ),
+        DataCell(
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 10 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${_content.no_bukti}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
+            ),
+          )
+        ),
+        DataCell(
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 10 - 50,
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                "${_content.keterangan}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
+            )
+          )
+        ),
+        DataCell(
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 8 - 50,
+            child: Container(
+              padding: EdgeInsets.only(right: 20),
+              alignment: Alignment.centerRight,
+              child: Text(
+                "${_content.saldo}",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                ),
+              ),
+            )
+          )
+        ),
+      ],
+    );
   }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => _contentData.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
 
 class ActionButton extends StatelessWidget {
@@ -34,31 +121,34 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(20),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                padding: EdgeInsets.all(20)),
-            onPressed: onPressed,
-            child: Text(
-              textContent,
-              style: TextStyle(
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 50, 52, 55),
-                  fontWeight: FontWeight.bold),
-            )));
+      padding: EdgeInsets.all(20),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 255, 204, 0),
+            padding: EdgeInsets.all(20)
+        ),
+        onPressed: onPressed,
+        child: Text(
+          textContent,
+          style: TextStyle(
+              fontFamily: "Inter",
+              color: Color.fromARGB(255, 50, 52, 55),
+              fontWeight: FontWeight.bold),
+        )
+      )
+    );
   }
 }
 
-class RowTableMonth extends DataTableSource {
+class BulanTahunTableData extends DataTableSource {
   Function seeDetail;
   BuildContext context;
-  RowTableMonth(
-      {required List<V_bulan_jurnal> contentData,
-      required this.seeDetail,
-      required this.context})
-      : _contentData = contentData,
-        assert(contentData != null);
+  BulanTahunTableData({
+    required List<V_bulan_jurnal> contentData, 
+    required this.seeDetail, 
+    required this.context}) 
+    : _contentData = contentData, 
+    assert(contentData != null);
   final List<V_bulan_jurnal> _contentData;
 
   @override
@@ -72,18 +162,48 @@ class RowTableMonth extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: <DataCell>[
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 5 - 50,
-          child: Text("${index + 1}"),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 5 - 50,
-          child: Text("${_content.bulan}"),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 5 - 50,
-          child: Text("${_content.tahun}"),
-        )),
+        DataCell(
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5 - 50,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "${index+1}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              )
+            )
+        ),
+        DataCell(
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5 - 50,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "${_content.bulan}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              ),
+            )
+        ),
+        DataCell(
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5 - 50,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "${_content.tahun}",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                  ),
+                ),
+              ),
+            )
+        ),
         DataCell(
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -217,38 +337,64 @@ class RowTableDetail extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 7 - 50,
+          width: MediaQuery.of(context).size.width * 0.2 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (int i = 0; i < totalDebit; i++)
-                Text("${_contentDataDebit[i].akun}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataDebit[i].akun}")
+                  ],
+                )
             ],
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 3 - 50,
+          width: MediaQuery.of(context).size.width * 0.1 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               for (int i = 0; i < totalDebit; i++)
-                Text("Rp${_contentDataDebit[i].saldo}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataDebit[i].saldo}")
+                  ],
+                )
             ],
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 7 - 50,
+          width: MediaQuery.of(context).size.width * 0.2 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (int i = 0; i < totalKredit; i++)
-                Text("${_contentDataKredit[i].akun}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataKredit[i].akun}")
+                  ],
+                )
             ],
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 3 - 50,
+          width: MediaQuery.of(context).size.width * 0.1 - 50,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               for (int i = 0; i < totalKredit; i++)
-                Text("Rp${_contentDataKredit[i].saldo}")
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text("${_contentDataKredit[i].saldo}")
+                  ],
+                )
             ],
           ),
         )),

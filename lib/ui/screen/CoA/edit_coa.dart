@@ -23,6 +23,25 @@ class EditCOA extends StatefulWidget {
 }
 
 class EditCOAState extends State<EditCOA> {
+
+  void _navigateToDetailCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 1,
+          coaIndex: 2,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+  
   late TextEditingController namaAkunController;
   late TextEditingController kodeController;
   late TextEditingController keteranganController;
@@ -112,7 +131,7 @@ class EditCOAState extends State<EditCOA> {
                     )),
                 Container(
                   margin: EdgeInsets.only(top: 25, left: 25),
-                  child: const Text(
+                  child: Text(
                     "Edit Chart of Account",
                     style: TextStyle(
                         fontFamily: "Inter",
@@ -130,7 +149,7 @@ class EditCOAState extends State<EditCOA> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                          child: const Text(
+                          child: Text(
                         "Informasi CoA",
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -185,8 +204,8 @@ class EditCOAState extends State<EditCOA> {
                                         hintText: 'Masukkan kode...',
                                         contentPadding: const EdgeInsets.all(8),
                                         border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8))),
+                                          borderRadius:
+                                            BorderRadius.circular(8))),
                                   ),
                                 ),
                               )
@@ -322,7 +341,7 @@ class EditCOAState extends State<EditCOA> {
                               );
                             }
                           },
-                          child: const Text(
+                          child: Text(
                             "Simpan",
                             style: TextStyle(
                               fontFamily: "Inter",
@@ -342,30 +361,29 @@ class EditCOAState extends State<EditCOA> {
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
                             showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Dialog2Button(
-                                      content: "Batalkan Perubahan",
-                                      content_detail:
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog2Button(
+                                  content: "Batalkan Perubahan",
+                                  content_detail:
                                       "Anda yakin ingin membatalkan perubahan ini?",
-                                      path_image:
+                                  path_image:
                                       'assets/images/berhasil_hapus_coa.png',
-                                      button1: "Tetap Simpan",
-                                      button2: "Ya, Hapus",
-                                      onPressed1: () {
-                                        setState(() {
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      onPressed2: () {
-                                        setState(() {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                        });
-                                      });
-                                });
+                                  button1: "Tetap Simpan",
+                                  button2: "Ya, Hapus",
+                                  onPressed1: () {
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  onPressed2: () {
+                                    _navigateToDetailCoa(context);
+                                  }
+                                );
+                              }
+                            );
                           },
-                          child: const Text(
+                          child: Text(
                             "Batalkan",
                             style: TextStyle(
                               fontFamily: "Inter",
@@ -379,6 +397,8 @@ class EditCOAState extends State<EditCOA> {
                   ),
                 )
               ],
-            )));
+            )
+        )
+    );
   }
 }
