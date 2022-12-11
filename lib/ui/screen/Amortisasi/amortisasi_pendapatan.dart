@@ -333,7 +333,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                             content: _selectedSemesterFilter,
                             items: semester_filter,
                           ),
-                          /*SizedBox(width: 20),
+                          SizedBox(width: 20),
                           DropdownFilter(
                             onChanged: (String? newValue) {
                               setState(() {
@@ -344,7 +344,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                             },
                             content: _selectedAkunFilter,
                             items: namaAkunListFilter,
-                          ),*/
+                          ),
                           SizedBox(width: 20),
                           DropdownFilter(
                             onChanged: (String? newValue) {
