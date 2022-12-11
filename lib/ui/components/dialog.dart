@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
+import 'package:sistem_akuntansi/ui/components/form.dart';
+import 'package:sistem_akuntansi/ui/components/text_template.dart';
 
 class Dialog2Button extends StatelessWidget {
   final String content_detail;
@@ -101,9 +104,9 @@ class DialogNoButton extends StatelessWidget {
       backgroundColor: background2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        width: 120,
+        width: 150,
         padding: EdgeInsets.all(50),
-        height: 330,
+        height: 360,
         child: Column(
           children: [
             Center(
@@ -126,6 +129,68 @@ class DialogNoButton extends StatelessWidget {
               content_detail,
               style: TextStyle(fontSize: 13, fontFamily: "Inter"),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DialogPenyusutan extends StatelessWidget {
+  final String penyusutan;
+  final TextEditingController persentase;
+  final VoidCallback? onPressed;
+
+  const DialogPenyusutan(
+      {Key? key,
+      required this.penyusutan,
+      required this.persentase,
+      required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      elevation: 0,
+      backgroundColor: background2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Container(
+        width: 400,
+        padding: EdgeInsets.all(50),
+        height: 400,
+        child: Column(
+          children: [
+            HeaderText(content: "Form Penyusutan", size: 17, color: hitam),
+            SizedBox(height: 25),
+            RichText(
+              textAlign: TextAlign.justify,
+              text: TextSpan(
+                style:
+                    TextStyle(fontFamily: "Inner", fontSize: 15, color: hitam),
+                children: <TextSpan>[
+                  TextSpan(text: "Nilai Penyusutan dalam bulan ini sebesar"),
+                  TextSpan(
+                      text: " Rp" + penyusutan,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Inner",
+                          fontSize: 15,
+                          color: hitam)),
+                  TextSpan(
+                      text:
+                          ". Apakah Anda ingin menggunakan 100% nilai penyusutan ini? Jika tidak, masukkan persentase penggunaan nilai penyusutan yang baru.")
+                ],
+              ),
+            ),
+            SizedBox(height: 15),
+            TextForm(
+                hintText: "Masukkan persentase (dalam %)",
+                textController: persentase),
+            ButtonNoIcon(
+                bg_color: kuning,
+                text_color: hitam,
+                onPressed: onPressed,
+                content: "Simpan")
           ],
         ),
       ),

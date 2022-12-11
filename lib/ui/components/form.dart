@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:intl/intl.dart';
 import 'package:dropdown_text_search/dropdown_text_search.dart';
 
 class DropdownForm extends StatelessWidget {
@@ -36,7 +35,7 @@ class DropdownForm extends StatelessWidget {
           borderSide: BorderSide(color: abu_transparan),
           borderRadius: BorderRadius.circular(8),
         ),
-        contentPadding: EdgeInsets.all(5),
+        contentPadding: EdgeInsets.symmetric(horizontal: 25),
         filled: true,
         fillColor: background2,
       ),
@@ -71,25 +70,25 @@ class DropdownFilter extends StatelessWidget {
       decoration: ShapeDecoration(
         color: background2,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.0, style: BorderStyle.solid, color: abu_tua),
+          side:
+              BorderSide(width: 1.0, style: BorderStyle.solid, color: abu_tua),
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: DropdownButton(
-          value: content,
-          underline: SizedBox(),
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: items.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        )
-      ),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: DropdownButton(
+            value: content,
+            underline: SizedBox(),
+            icon: const Icon(Icons.keyboard_arrow_down),
+            items: items.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: onChanged,
+          )),
     );
   }
 }
@@ -97,12 +96,13 @@ class DropdownFilter extends StatelessWidget {
 class TextForm extends StatelessWidget {
   final String hintText;
   final TextEditingController textController;
+  String? label;
 
-  const TextForm({
-    super.key,
-    required this.hintText,
-    required this.textController,
-  });
+  TextForm(
+      {super.key,
+      required this.hintText,
+      required this.textController,
+      this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -115,21 +115,20 @@ class TextForm extends StatelessWidget {
           fontFamily: 'Inter',
         ),
         decoration: InputDecoration(
-          hintText: hintText,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: kuning),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: abu_tua),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 25),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: abu_transparan)
-          )
-        ),
+            labelText: label,
+            hintText: hintText,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kuning),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: abu_tua),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 25),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: abu_transparan))),
       ),
     );
   }
@@ -163,30 +162,28 @@ class DropdownSearchButton extends StatelessWidget {
       controller: controller,
       overlayHeight: 300,
       items: items,
-      filterFnc: (String a,String b){
+      filterFnc: (String a, String b) {
         return a.toLowerCase().startsWith(b.toLowerCase());
       },
       decorator: InputDecoration(
-        filled: isNeedChangeColor,
-        fillColor: colorWhenChanged,
-        hintStyle: TextStyle(
-          fontFamily: 'Inter',
-        ),
-        hintText: hintText,
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kuning),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: abu_tua),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 25),
-        border: OutlineInputBorder(
+          filled: isNeedChangeColor,
+          fillColor: colorWhenChanged,
+          hintStyle: TextStyle(
+            fontFamily: 'Inter',
+          ),
+          hintText: hintText,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kuning),
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: abu_transparan)
-        )
-      ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: abu_tua),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 25),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: abu_transparan))),
     );
   }
 }

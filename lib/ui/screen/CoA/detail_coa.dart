@@ -14,6 +14,7 @@ import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailCOA extends StatefulWidget {
@@ -215,10 +216,22 @@ class DetailCOAState extends State<DetailCOA> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DetailText(
+                                    header: "Nama Akun", content: nama_akun),
+                                DetailText(
+                                    header: "Indentasi", content: indentasi),
+                                DetailText(
+                                    header: "Saldo Awal Baru",
+                                    content: saldo_awal_baru)
+                              ],
+                            ),
+                          ],
                         ),
                         Container(
-                          margin: EdgeInsets.only(bottom: 25),
+                          margin: EdgeInsets.only(top: 40, bottom: 20),
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -248,6 +261,44 @@ class DetailCOAState extends State<DetailCOA> {
                                             _navigateToListCoa(context);
                                           });
                                         });
+                                  });
+                            },
+                            child: const Text(
+                              "Hapus",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                color: Color.fromARGB(255, 245, 0, 0),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 25),
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 255, 255),
+                                padding: EdgeInsets.all(20)),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog2Button(
+                                        content: "Hapus Chart of Account",
+                                        content_detail:
+                                            "Anda yakin ingin menghapus data ini?",
+                                        path_image:
+                                            'assets/images/hapus_coa.png',
+                                        button1: "Tetap Simpan",
+                                        button2: "Ya, Hapus",
+                                        onPressed1: () {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        onPressed2: () {});
                                   });
                             },
                             child: const Text(

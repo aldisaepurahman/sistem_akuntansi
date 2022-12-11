@@ -2,20 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
+import 'package:sistem_akuntansi/ui/screen/LabaRugi/labarugi_pdf.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
-class LaporanLabaRugi extends StatefulWidget {
-  final SupabaseClient client;
+import '../../../utils/V_LabaRugi.dart';
 
+class LaporanLabaRugi extends StatefulWidget {
   const LaporanLabaRugi({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   LaporanLabaRugiState createState() {
     return LaporanLabaRugiState();
+  }
+
+  static int hitung_jumlah(List<Map> data, String column) {
+    int total = 0;
+    data.forEach((item) {
+      total += item[column] as int;
+    });
+
+    return total;
   }
 }
 
@@ -23,9 +34,13 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
   @override
   void dispose() {}
 
-  bool show = false;
-  bool disable_button = false;
+  int total_debit_pendapatan =
+      LaporanLabaRugi.hitung_jumlah(pendapatan, 'debit');
+  int total_kredit_pendapatan =
+      LaporanLabaRugi.hitung_jumlah(pendapatan, 'kredit');
 
+  int total_debit_beban = LaporanLabaRugi.hitung_jumlah(beban, 'debit');
+  int total_kredit_beban = LaporanLabaRugi.hitung_jumlah(beban, 'kredit');
   var tableRow;
 
   @override
@@ -63,35 +78,61 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
     });
   }
 
-  void disableForm() {
-    setState(() {
-      show = false;
-      disable_button = false;
-    });
+  List<DataRow> _createRows(List<Map> item) {
+    return item
+        .map((item) => DataRow(cells: [
+              DataCell(SizedBox(
+                width: MediaQuery.of(context).size.width / 5 - 50,
+                child: Container(
+                  child: Text(
+                    item["nama_akun"],
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ),
+              )),
+              DataCell(SizedBox(
+                width: MediaQuery.of(context).size.width / 5 - 50,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    item["debit"].toString(),
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ),
+              )),
+              DataCell(SizedBox(
+                width: MediaQuery.of(context).size.width / 5 - 50,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    item["kredit"].toString(),
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ),
+              )),
+              DataCell(SizedBox(
+                width: MediaQuery.of(context).size.width / 5 - 50,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ),
+              ))
+            ]))
+        .toList();
   }
 
-  //Inisialisasi untuk Dropdown
-  String _selectedMonthFilter = 'Januari';
-  String _selectedYearFilter = '2022';
-
-  String _selectedMonthInsert = 'Januari';
-  String _selectedYearInsert = '2022';
-
-  List<String> month = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember'
-  ];
-  List<String> year = ['2021', '2022', '2023', '2024', '2025'];
+  String periode = "31 Maret 2022";
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +166,8 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                     child: HeaderText(
                         content: "Bulan Maret 2022", size: 18, color: hitam)),
                 Container(
-                  margin:
-                      EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
+                  margin: EdgeInsets.only(
+                      top: 25, bottom: 150, right: 25, left: 25),
                   padding: EdgeInsets.all(25),
                   color: background2,
                   child: Column(
@@ -139,30 +180,201 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                           ButtonNoIcon(
                               bg_color: kuning,
                               text_color: hitam,
-                              onPressed: () {},
+                              onPressed: labarugi_pdf,
                               content: "Cetak Laporan")
                         ],
                       ),
                       SizedBox(height: 25),
-                      // PaginatedDataTable(
-                      //   columns: <DataColumn>[
-                      //     DataColumn(
-                      //       label: Text("No."),
-                      //     ),
-                      //     DataColumn(
-                      //       label: Text("Bulan"),
-                      //     ),
-                      //     DataColumn(
-                      //       label: Text("Tahun"),
-                      //     ),
-                      //     DataColumn(
-                      //       label: Text("Action"),
-                      //     ),
-                      //   ],
-                      //   source: tableRow,
-                      //   rowsPerPage: 10,
-                      //   showCheckboxColumn: false,
-                      // )
+                      Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(top: 25),
+                          child: Text(
+                            "STIKes Santo Borromeus",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "Inner",
+                                fontSize: 15,
+                                color: hitam,
+                                fontWeight: FontWeight.bold),
+                          )),
+                      Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(top: 5),
+                          child: Text(
+                            "Laporan Laba Rugi",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "Inner",
+                                fontSize: 15,
+                                color: hitam,
+                                fontWeight: FontWeight.bold),
+                          )),
+                      Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(top: 5, bottom: 25),
+                          child: Text(
+                            "Periode " + periode,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "Inner",
+                                fontSize: 15,
+                                color: hitam),
+                          )),
+                      SizedBox(height: 30),
+                      Container(
+                        padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                        width: double.infinity,
+                        color: kuning,
+                        child: Text(
+                            "Laba : Rp" +
+                                ((total_kredit_pendapatan -
+                                            total_debit_pendapatan) +
+                                        (total_kredit_beban -
+                                            total_debit_beban))
+                                    .toString(),
+                            style: TextStyle(
+                                fontFamily: "Inner",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: hitam)),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: DataTable(
+                              columns: <DataColumn>[
+                                DataColumn(
+                                  label: Text("Pendapatan"),
+                                ),
+                                DataColumn(
+                                  label: Text(""),
+                                ),
+                                DataColumn(
+                                  label: Text(""),
+                                ),
+                                DataColumn(
+                                  label: Text(""),
+                                ),
+                              ],
+                              showCheckboxColumn: false,
+                              rows: _createRows(pendapatan),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text("Pendapatan Bersih",
+                                    style: TextStyle(
+                                        fontFamily: "Inner",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: hitam)),
+                                Text(
+                                    (total_kredit_pendapatan -
+                                            total_debit_pendapatan)
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontFamily: "Inner",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: hitam))
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            child: DataTable(
+                              columns: <DataColumn>[
+                                DataColumn(
+                                  label: Text("Beban Usaha"),
+                                ),
+                                DataColumn(
+                                  label: Text(""),
+                                ),
+                                DataColumn(
+                                  label: Text(""),
+                                ),
+                                DataColumn(
+                                  label: Text(""),
+                                ),
+                              ],
+                              showCheckboxColumn: false,
+                              rows: _createRows(beban),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text("Total Beban",
+                                    style: TextStyle(
+                                        fontFamily: "Inner",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: hitam)),
+                                Text(
+                                    (total_kredit_beban - total_debit_beban)
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontFamily: "Inner",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: hitam))
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text("Laba Bersih",
+                                    style: TextStyle(
+                                        fontFamily: "Inner",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: hitam)),
+                                Text(
+                                    ((total_kredit_pendapatan -
+                                                total_debit_pendapatan) +
+                                            (total_kredit_beban -
+                                                total_debit_beban))
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontFamily: "Inner",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: hitam))
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 )

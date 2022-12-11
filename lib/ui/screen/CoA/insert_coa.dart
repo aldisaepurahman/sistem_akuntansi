@@ -10,7 +10,7 @@ import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase/supabase.dart';
 
 class InsertCOA extends StatefulWidget {
   const InsertCOA({required this.client, Key? key}) : super(key: key);
@@ -129,18 +129,29 @@ class InsertCOAState extends State<InsertCOA> {
                       "Nama Akun",
                       style: TextStyle(
                           fontFamily: "Inter",
-                          fontSize: 14,
-                          color: Color.fromARGB(255, 50, 52, 55)),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Color.fromARGB(255, 255, 204, 0)),
+                    )),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25),
+                      child: Text(
+                        "Nama Akun",
+                        style: TextStyle(
+                            fontFamily: "Inter",
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 50, 52, 55)),
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 20),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: 'Masukkan nama akun...',
-                          contentPadding: const EdgeInsets.all(8),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8))),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 20),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: 'Masukkan nama akun...',
+                            contentPadding: const EdgeInsets.all(8),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8))),
+                      ),
                     ),
                   ),
                   Row(

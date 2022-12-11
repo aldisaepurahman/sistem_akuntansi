@@ -150,16 +150,31 @@ class ListCOAState extends State<ListCOA> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Icon(
-                                          Icons.add,
-                                          size: 13,
-                                          color:
-                                              Color.fromARGB(255, 50, 52, 55),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            const Icon(
+                                              Icons.add,
+                                              size: 13,
+                                              color: Color.fromARGB(
+                                                  255, 50, 52, 55),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "Tambah Chart of Account",
+                                              style: TextStyle(
+                                                fontFamily: "Inter",
+                                                color: Color.fromARGB(
+                                                    255, 50, 52, 55),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          ],
                                         ),
                                         Text(
                                           "Tambah Chart of Account",
@@ -171,9 +186,55 @@ class ListCOAState extends State<ListCOA> {
                                           ),
                                         )
                                       ],
+                                    )),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.19,
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                          fillColor: Color.fromARGB(
+                                              255, 117, 117, 117),
+                                          prefixIcon: Icon(Icons.search),
+                                          prefixIconColor: Color.fromARGB(
+                                              255, 117, 117, 117),
+                                          hintText: 'Cari Chart of Account',
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 10),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8))),
+                                      onChanged: (value) {
+                                        VLookupBloc(
+                                                service: SupabaseService(
+                                                    supabaseClient:
+                                                        widget.client))
+                                            .add(AkunSearched(keyword: value));
+                                      },
                                     ),
-                                  ],
-                                )),
+                                  ),
+                                  SizedBox(width: 20),
+                                  SizedBox(
+                                    child: DropdownFilter(
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          if (newValue != null) {
+                                            total_row = int.parse(newValue);
+                                            _selectedEntries = newValue;
+                                          }
+                                        });
+                                      },
+                                      content: _selectedEntries,
+                                      items: row,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -218,8 +279,20 @@ class ListCOAState extends State<ListCOA> {
                                   content: _selectedEntries,
                                   items: row,
                                 ),
-                              )
-                            ],
+                                DataColumn(
+                                  label: Text("Nama Akun"),
+                                ),
+                                DataColumn(
+                                  label: Text("Keterangan"),
+                                ),
+                                DataColumn(
+                                  label: Text("Indentasi"),
+                                ),
+                                DataColumn(
+                                  label: Text("Action"),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -286,4 +359,4 @@ class ListCOAState extends State<ListCOA> {
       )
     );
   }
-}
+}*/

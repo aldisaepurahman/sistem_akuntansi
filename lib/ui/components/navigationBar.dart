@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/saldo.dart';
@@ -22,7 +23,7 @@ import 'package:sistem_akuntansi/ui/screen/JurnalPenyesuaian/jurnal_penyesuaian.
 import 'package:sistem_akuntansi/ui/screen/dashboard.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SideNavigationBar extends StatefulWidget{
+class SideNavigationBar extends StatefulWidget {
   final int index;
   final int coaIndex;
   final int jurnalUmumIndex;
@@ -89,11 +90,9 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   Widget getJurnalUmum() {
     if (selectedJurnalUmumIndex == 1) {
       return JenisJurnal(client: widget.client); // tabel jenis jurnal
-    }
-    else if (selectedJurnalUmumIndex == 2) {
+    } else if (selectedJurnalUmumIndex == 2) {
       return TransaksiList(client: widget.client); // tabel daftar transaksi
-    }
-    else if (selectedJurnalUmumIndex == 3) {
+    } else if (selectedJurnalUmumIndex == 3) {
       return DetailTransaksi(client: widget.client); // detail transaksi
 /*      return InsertCOA(client: widget.client);
     }
@@ -106,9 +105,10 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     return JurnalUmumList(client: widget.client); // tabel bulan tahun jurnal
   }
 
-  Widget getBukuBesarPage(){
+  Widget getBukuBesarPage() {
     if (selectedBukuBesarIndex == 1) {
-      return BukuBesarPerAkun(client: widget.client); // tabel buku besar per akun
+      return BukuBesarPerAkun(
+          client: widget.client); // tabel buku besar per akun
     }
     return ListBukuBesar(client: widget.client); // tabel bulan tahun buku besar
   }
@@ -224,14 +224,14 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
                                   fontFamily: "Inter",
                                   fontSize: 10,
                                 ),
-                              ),
-                              Text(
-                                'STIKes Santo Borromeus',
-                                style: TextStyle(
-                                  color: kuning,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Inter",
-                                  fontSize: 14,
+                                Text(
+                                  'STIKes Santo Borromeus',
+                                  style: TextStyle(
+                                    color: kuning,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
                             ],
