@@ -6,7 +6,6 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/AmortisasiPendapatan.dart';
-import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
@@ -69,6 +68,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
   TextEditingController keterangan = TextEditingController();
   TextEditingController total_harga = TextEditingController();
   TextEditingController jumlah_mahasiswa = TextEditingController();
+  TextEditingController akun = TextEditingController();
 
   String _selectedSemesterFilter = 'Ganjil';
   String _selectedAkunFilter = '2022';
@@ -78,7 +78,12 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
   String _selectedAkunInsert = '2022';
 
   List<String> semester = ['Ganjil', 'Genap'];
-  List<String> akun = ['2021', '2022', '2023', '2024', '2025'];
+  List<String> namaAkunList = [
+    'Beban Kesekretariatan',
+    'Beban ART',
+    'Uang Tunai (Bendahara)',
+    'Rekening Giro Bank NISP'
+  ];
   List<String> entry = ['5', '10', '25', '50', '100'];
 
   @override
@@ -184,7 +189,8 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                         0.30,
                                     child: TextForm(
                                         hintText: "Masukkan total harga...",
-                                        textController: total_harga)),
+                                        textController: total_harga,
+                                        label: "Rp")),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -222,18 +228,13 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.30,
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 3),
-                                      child: DropdownForm(
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              _selectedAkunInsert = newValue!;
-                                            });
-                                          },
-                                          content: _selectedAkunInsert,
-                                          items: akun,
-                                          label: "Pilih Akun"),
-                                    ))
+                                    child: DropdownSearchButton(
+                                        controller: akun,
+                                        hintText: "Masukkan Akun Amortisasi...",
+                                        notFoundText: 'Akun tidak ditemukan',
+                                        items: namaAkunList,
+                                        onChange: (String? new_value) {},
+                                        isNeedChangeColor: false))
                               ]),
                           SizedBox(
                             height: 30,
@@ -305,7 +306,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               });
                             },
                             content: _selectedAkunFilter,
-                            items: akun,
+                            items: namaAkunList,
                           ),
                           SizedBox(width: 20),
                           DropdownFilter(

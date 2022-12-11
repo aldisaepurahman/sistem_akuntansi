@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
@@ -7,9 +6,10 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
-import 'package:sistem_akuntansi/utils/AmortisasiPendapatan.dart';
+import 'package:sistem_akuntansi/utils/AmortisasiAset.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 
 class AmortisasiAsetList extends StatefulWidget {
   const AmortisasiAsetList({required this.client, Key? key}) : super(key: key);
@@ -36,7 +36,8 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
   @override
   void initState() {
     super.initState();
-    tableRow = new AmortisasiPendapatanTable(
+    _saat_perolehan = DateTime.now();
+    tableRow = new AmortisasiAsetTable(
       contentData: content,
       seeDetail: () {
         setState(() {
@@ -74,16 +75,22 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
   TextEditingController akumulasi_penyusutan_tahun_lalu =
       TextEditingController();
   TextEditingController saat_perolehan = TextEditingController();
+  TextEditingController akun = TextEditingController();
 
-  String _selectedSemesterFilter = 'Ganjil';
-  String _selectedAkunFilter = '2022';
+  String _selectedAkunFilter = 'Beban Kesekretariatan';
+  String _selectedYearFilter = '2022';
   String _selectedEntryFilter = '5';
 
-  String _selectedSemesterInsert = 'Ganjil';
-  String _selectedAkunInsert = '2022';
+  String _selectedAkunInsert = 'Beban Kesekretariatan';
+  String _selectedYearInsert = '2022';
 
-  List<String> semester = ['Ganjil', 'Genap'];
-  List<String> akun = ['2021', '2022', '2023', '2024', '2025'];
+  List<String> namaAkunList = [
+    'Beban Kesekretariatan',
+    'Beban ART',
+    'Uang Tunai (Bendahara)',
+    'Rekening Giro Bank NISP'
+  ];
+  List<String> year = ['2021', '2022', '2023', '2024', '2025'];
   List<String> entry = ['5', '10', '25', '50', '100'];
 
   @override
@@ -196,7 +203,8 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                       MediaQuery.of(context).size.width * 0.30,
                                   child: TextForm(
                                       hintText: "Masukkan nilai perolehan...",
-                                      textController: nilai_perolehan),
+                                      textController: nilai_perolehan,
+                                      label: "Rp"),
                                 )
                               ]),
                           SizedBox(
@@ -210,28 +218,25 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                     width: MediaQuery.of(context).size.width *
                                         0.30,
                                     child: TextForm(
-                                        hintText:
-                                            "Masukkan penyusutan tahun lalu...",
-                                        textController:
-                                            akumulasi_penyusutan_tahun_lalu)),
+                                      hintText:
+                                          "Masukkan penyusutan tahun lalu...",
+                                      textController:
+                                          akumulasi_penyusutan_tahun_lalu,
+                                      label: "Rp",
+                                    )),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.30,
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 3),
-                                      child: DropdownForm(
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              _selectedAkunInsert = newValue!;
-                                            });
-                                          },
-                                          content: _selectedAkunInsert,
-                                          items: akun,
-                                          label: "Pilih Akun"),
-                                    )),
+                                    child: DropdownSearchButton(
+                                        controller: akun,
+                                        hintText: "Masukkan Akun Amortisasi...",
+                                        notFoundText: 'Akun tidak ditemukan',
+                                        items: namaAkunList,
+                                        onChange: (String? new_value) {},
+                                        isNeedChangeColor: false)),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -244,14 +249,27 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                           controller: saat_perolehan,
                                           style: TextStyle(fontSize: 13),
                                           readOnly: true,
-                                          onTap: () async {
-                                            _saat_perolehan =
-                                                await showMonthYearPicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(1900),
-                                              lastDate: DateTime(2022),
-                                            );
+                                          onTap: () {
+                                            showMonthPicker(
+                                                    unselectedMonthTextColor:
+                                                        hitam,
+                                                    headerColor: kuning,
+                                                    headerTextColor: hitam,
+                                                    selectedMonthBackgroundColor:
+                                                        kuning,
+                                                    selectedMonthTextColor:
+                                                        hitam,
+                                                    context: context,
+                                                    firstDate: DateTime(1900),
+                                                    lastDate: DateTime.now(),
+                                                    initialDate: DateTime.now())
+                                                .then((date) {
+                                              if (date != null) {
+                                                setState(() {
+                                                  _saat_perolehan = date;
+                                                });
+                                              }
+                                            });
 
                                             String formattedDate = DateFormat()
                                                 .add_yM()
@@ -297,7 +315,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                           return DialogNoButton(
                                               content: "Berhasil Ditambahkan!",
                                               content_detail:
-                                                  "Amortisasi Pendapatan baru berhasil ditambahkan",
+                                                  "Amortisasi Aset baru berhasil ditambahkan",
                                               path_image:
                                                   'assets/images/tambah_coa.png');
                                         });
@@ -324,12 +342,12 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 if (newValue != null) {
-                                  _selectedSemesterFilter = newValue;
+                                  _selectedYearFilter = newValue;
                                 }
                               });
                             },
-                            content: _selectedSemesterFilter,
-                            items: semester,
+                            content: _selectedYearFilter,
+                            items: year,
                           ),
                           SizedBox(width: 20),
                           DropdownFilter(
@@ -341,7 +359,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                               });
                             },
                             content: _selectedAkunFilter,
-                            items: akun,
+                            items: namaAkunList,
                           ),
                           SizedBox(width: 20),
                           DropdownFilter(
@@ -363,145 +381,52 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "No",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
+                            ),
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Keterangan",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "Keterangan",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
+                            ),
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Saat Perolehan",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "Saat Perolehan",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
+                            ),
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Masa Guna",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "Masa Guna",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
+                            ),
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Nilai Perolehan",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "Nilai Perolehan",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
+                            ),
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Penyusutan",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "Penyusutan",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
+                            ),
                             DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Akumulasi Tahun Lalu",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
+                              label: Text(
+                                "Action",
+                                textAlign: TextAlign.center,
                               ),
-                            )),
-                            DataColumn(
-                                label: Expanded(
-                              child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
-                                padding: EdgeInsets.only(right: 20),
-                                height: double.infinity,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Action",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Inter",
-                                  ),
-                                ),
-                              ),
-                            )),
+                            ),
                           ],
                           source: tableRow,
                           rowsPerPage: int.parse(_selectedEntryFilter),
                           showCheckboxColumn: false,
+                          dataRowHeight: 70,
                         ),
                       )
                     ],

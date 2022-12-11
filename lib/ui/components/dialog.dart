@@ -160,24 +160,32 @@ class DialogPenyusutan extends StatelessWidget {
         height: 400,
         child: Column(
           children: [
-            HeaderText(content: "Form Penyusutan", size: 16, color: hitam),
-            Text(
-              "Nilai Penyusutan dalam bulan ini sebesar Rp" +
-                  penyusutan +
-                  ". Apakah Anda ingin menggunakan 100% nilai penyusutan ini? Jika tidak, masukkan persentase penggunaan nilai penyusutan yang baru.",
+            HeaderText(content: "Form Penyusutan", size: 17, color: hitam),
+            SizedBox(height: 25),
+            RichText(
               textAlign: TextAlign.justify,
-              style: TextStyle(fontSize: 14, fontFamily: "Inter"),
+              text: TextSpan(
+                style:
+                    TextStyle(fontFamily: "Inner", fontSize: 15, color: hitam),
+                children: <TextSpan>[
+                  TextSpan(text: "Nilai Penyusutan dalam bulan ini sebesar"),
+                  TextSpan(
+                      text: " Rp" + penyusutan,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Inner",
+                          fontSize: 15,
+                          color: hitam)),
+                  TextSpan(
+                      text:
+                          ". Apakah Anda ingin menggunakan 100% nilai penyusutan ini? Jika tidak, masukkan persentase penggunaan nilai penyusutan yang baru.")
+                ],
+              ),
             ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                TextForm(
-                    hintText: "Masukkan persentase",
-                    textController: persentase),
-                Text(" %")
-              ],
-            ),
-            SizedBox(height: 5),
+            SizedBox(height: 15),
+            TextForm(
+                hintText: "Masukkan persentase (dalam %)",
+                textController: persentase),
             ButtonNoIcon(
                 bg_color: kuning,
                 text_color: hitam,

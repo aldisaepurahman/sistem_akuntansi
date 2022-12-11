@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:intl/intl.dart';
 import 'package:dropdown_text_search/dropdown_text_search.dart';
 
 class DropdownForm extends StatelessWidget {
@@ -97,12 +96,13 @@ class DropdownFilter extends StatelessWidget {
 class TextForm extends StatelessWidget {
   final String hintText;
   final TextEditingController textController;
+  String? label;
 
-  const TextForm({
-    super.key,
-    required this.hintText,
-    required this.textController,
-  });
+  TextForm(
+      {super.key,
+      required this.hintText,
+      required this.textController,
+      this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +115,7 @@ class TextForm extends StatelessWidget {
           fontFamily: 'Inter',
         ),
         decoration: InputDecoration(
+            labelText: label,
             hintText: hintText,
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: kuning),

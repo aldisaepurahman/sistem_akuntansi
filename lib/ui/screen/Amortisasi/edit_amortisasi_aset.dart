@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
@@ -6,44 +7,58 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 
-class EditAmortisasiPendapatan extends StatefulWidget {
-  const EditAmortisasiPendapatan({required this.client, Key? key})
-      : super(key: key);
+class EditAmortisasiAset extends StatefulWidget {
+  const EditAmortisasiAset({required this.client, Key? key}) : super(key: key);
 
   final SupabaseClient client;
 
   @override
-  EditAmortisasiPendapatanState createState() {
-    return EditAmortisasiPendapatanState();
+  EditAmortisasiAsetState createState() {
+    return EditAmortisasiAsetState();
   }
 }
 
-class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
+class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
   @override
   void dispose() {}
 
+  DateTime? _saat_perolehan;
   //Inisialisasi untuk Dropdown
   TextEditingController keterangan = TextEditingController();
-  TextEditingController total_harga = TextEditingController();
-  TextEditingController jumlah_mahasiswa = TextEditingController();
+  TextEditingController nilai_perolehan = TextEditingController();
+  TextEditingController masa_guna = TextEditingController();
+  TextEditingController akumulasi_penyusutan_tahun_lalu =
+      TextEditingController();
+  TextEditingController saat_perolehan = TextEditingController();
   TextEditingController akun = TextEditingController();
 
-  String _selectedSemesterInsert = 'Ganjil';
-  String _selectedAkunInsert = '2022';
+  String _selectedAkunFilter = 'Beban Kesekretariatan';
+  String _selectedYearFilter = '2022';
+  String _selectedEntryFilter = '5';
 
-  List<String> semester = ['Ganjil', 'Genap'];
+  String _selectedAkunInsert = 'Beban Kesekretariatan';
+  String _selectedYearInsert = '2022';
+
   List<String> namaAkunList = [
     'Beban Kesekretariatan',
     'Beban ART',
     'Uang Tunai (Bendahara)',
     'Rekening Giro Bank NISP'
   ];
+  List<String> year = ['2021', '2022', '2023', '2024', '2025'];
+  List<String> entry = ['5', '10', '25', '50', '100'];
+
+  void initState() {
+    super.initState();
+    _saat_perolehan = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Edit Amortisasi Pendapatan',
+        title: 'Edit Amortisasi Aset',
         home: Scaffold(
             backgroundColor: background,
             body: ListView(
@@ -66,9 +81,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                 Container(
                     margin: EdgeInsets.only(top: 25, left: 25),
                     child: HeaderText(
-                        content: "Amortisasi Pendapatan",
-                        size: 32,
-                        color: hitam)),
+                        content: "Amortisasi Aset", size: 32, color: hitam)),
                 Container(
                   margin: EdgeInsets.all(25),
                   padding: EdgeInsets.all(25),
@@ -79,7 +92,7 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                       Container(
                         margin: EdgeInsets.only(bottom: 20),
                         child: HeaderText(
-                            content: "Edit Amortisasi Pendapatan",
+                            content: "Edit Amortisasi Aset",
                             size: 18,
                             color: hitam),
                       ),
@@ -98,22 +111,17 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                             SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.30,
                                 child: TextForm(
-                                    hintText: "Masukkan total harga...",
-                                    textController: total_harga)),
+                                    hintText: "Masukkan masa guna...",
+                                    textController: masa_guna)),
                             SizedBox(
                               width: 10,
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.30,
-                              child: DropdownForm(
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _selectedSemesterInsert = newValue!;
-                                    });
-                                  },
-                                  content: _selectedSemesterInsert,
-                                  items: semester,
-                                  label: "Pilih Semester"),
+                              child: TextForm(
+                                  hintText: "Masukkan nilai perolehan...",
+                                  textController: nilai_perolehan,
+                                  label: "Rp"),
                             )
                           ]),
                       SizedBox(
@@ -126,8 +134,23 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                             SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.30,
                                 child: TextForm(
-                                    hintText: "Masukkan jumlah mahasiswa...",
-                                    textController: jumlah_mahasiswa)),
+                                  hintText: "Masukkan penyusutan tahun lalu...",
+                                  textController:
+                                      akumulasi_penyusutan_tahun_lalu,
+                                  label: "Rp",
+                                )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.30,
+                                child: DropdownSearchButton(
+                                    controller: akun,
+                                    hintText: "Masukkan Akun Amortisasi...",
+                                    notFoundText: 'Akun tidak ditemukan',
+                                    items: namaAkunList,
+                                    onChange: (String? new_value) {},
+                                    isNeedChangeColor: false)),
                             SizedBox(
                               width: 10,
                             ),
@@ -135,13 +158,44 @@ class EditAmortisasiPendapatanState extends State<EditAmortisasiPendapatan> {
                                 width: MediaQuery.of(context).size.width * 0.30,
                                 child: Container(
                                     margin: EdgeInsets.only(bottom: 3),
-                                    child: DropdownSearchButton(
-                                        controller: akun,
-                                        hintText: "Masukkan Akun Amortisasi...",
-                                        notFoundText: 'Akun tidak ditemukan',
-                                        items: namaAkunList,
-                                        onChange: (String? new_value) {},
-                                        isNeedChangeColor: false)))
+                                    child: TextField(
+                                      controller: saat_perolehan,
+                                      style: TextStyle(fontSize: 13),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        showMonthPicker(
+                                                unselectedMonthTextColor: hitam,
+                                                headerColor: kuning,
+                                                headerTextColor: hitam,
+                                                selectedMonthBackgroundColor:
+                                                    kuning,
+                                                selectedMonthTextColor: hitam,
+                                                context: context,
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime.now(),
+                                                initialDate: DateTime.now())
+                                            .then((date) {
+                                          if (date != null) {
+                                            setState(() {
+                                              _saat_perolehan = date;
+                                            });
+                                          }
+                                        });
+                                        String formattedDate = DateFormat()
+                                            .add_yM()
+                                            .format(_saat_perolehan!);
+                                        saat_perolehan.text = formattedDate;
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: "Masukkan saat perolehan",
+                                          prefixIcon:
+                                              Icon(Icons.calendar_today),
+                                          contentPadding:
+                                              const EdgeInsets.all(5),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8))),
+                                    )))
                           ]),
                       SizedBox(
                         height: 30,
