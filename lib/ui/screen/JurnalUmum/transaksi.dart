@@ -671,6 +671,7 @@ class TransaksiListState extends State<TransaksiList> {
                           showCheckboxColumn: false,
                           horizontalMargin: 0,
                           columnSpacing: 0,
+                          dataRowHeight: 150,
                         ),
                       )
                     ],
@@ -877,6 +878,8 @@ class TransaksiTableData extends DataTableSource {
       return null;
     }
     final _content = _contentData[index];
+    int totalDebit = _contentData[index].transaksi_debit.length;
+    int totalKredit = _contentData[index].transaksi_kredit.length;
 
     return DataRow.byIndex(
       index: index,
@@ -885,29 +888,45 @@ class TransaksiTableData extends DataTableSource {
           SizedBox(
               width: MediaQuery.of(context).size.width * 0.1 - 50,
               child: Container(
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
                 padding: EdgeInsets.only(right: 20),
-                child: Text(
-                  "${_content.tanggal}",
-                  style: TextStyle(
-                    fontFamily: "Inter",
-                  ),
-                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Text(
+                      "${_content.tanggal}",
+                      style: TextStyle(
+                        fontFamily: "Inter",
+                      ),
+                    ),
+                  ],
+                )
               )
           ),
         ),
         DataCell(
             SizedBox(
-                width: MediaQuery.of(context).size.width * 0.2 - 50,
+                width: MediaQuery.of(context).size.width * 0.5 - 50,
                 child: Container(
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(right: 20),
-                  child: Text(
-                    "${_content.transaksi_debit} untuk nama akun",
-                    style: TextStyle(
-                      fontFamily: "Inter",
-                    ),
-                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (int i = 0; i < totalDebit; i++)
+                        Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text(
+                              "${_content.transaksi_debit[i].akun}",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                              ),
+                            ),
+                          ],
+                        )
+                    ],
+                  )
                 )
             )
         ),
@@ -916,27 +935,48 @@ class TransaksiTableData extends DataTableSource {
                 width: MediaQuery.of(context).size.width * 0.1 - 50,
                 child: Container(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    "${_content.transaksi_debit} untuk saldo",
-                    style: TextStyle(
-                      fontFamily: "Inter",
-                    ),
-                  ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < totalDebit; i++)
+                        Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text(
+                              "${_content.transaksi_debit[i].saldo}",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                              ),
+                            ),
+                          ],
+                        )
+                    ],
+                  )
                 )
             )
         ),
         DataCell(
             SizedBox(
-                width: MediaQuery.of(context).size.width * 0.2 - 50,
+                width: MediaQuery.of(context).size.width * 0.5 - 50,
                 child: Container(
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.only(left: 40, right: 20),
-                  child: Text(
-                    "${_content.transaksi_kredit} untuk nama akun",
-                    style: TextStyle(
-                      fontFamily: "Inter",
-                    ),
-                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (int i = 0; i < totalKredit; i++)
+                        Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text(
+                              "${_content.transaksi_debit[i].akun}",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                              ),
+                            ),
+                          ],
+                        )
+                    ],
+                  )
                 )
             )
         ),
@@ -946,12 +986,22 @@ class TransaksiTableData extends DataTableSource {
                 child: Container(
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(right: 20),
-                  child: Text(
-                    "${_content.transaksi_kredit} untuk saldo",
-                    style: TextStyle(
-                      fontFamily: "Inter",
-                    ),
-                  ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < totalKredit; i++)
+                        Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text(
+                              "${_content.transaksi_kredit[i].saldo}",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                              ),
+                            ),
+                          ],
+                        )
+                    ],
+                  )
                 )
             )
         ),
@@ -960,59 +1010,65 @@ class TransaksiTableData extends DataTableSource {
                 width: MediaQuery.of(context).size.width * 0.2 - 50,
                 child: Container(
                     padding: EdgeInsets.only(right: 20),
-                    alignment: Alignment.center,
-                    child: Row(
+                    alignment: Alignment.topCenter,
+                    child: Column(
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                            padding: EdgeInsets.all(20),
-                          ),
-                          onPressed: () {
-                            seeDetail();
-                          },
-                          child: Icon(Icons.remove_red_eye),
-                        ),
-                        SizedBox(width: 10,),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                            padding: EdgeInsets.all(20),
-                          ),
-                          onPressed: () {
-                            editForm();
-                            changeCaseToUpdate();
-                          },
-                          child: Icon(Icons.edit),
-                        ),
-                        SizedBox(width: 10,),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                            padding: EdgeInsets.all(20),
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Dialog2Button(
-                                  content: "Hapus Transaksi",
-                                  content_detail: "Anda yakin ingin menghapus data ini?",
-                                  path_image: 'assets/images/hapus_coa.png',
-                                  button1: "Tetap Simpan",
-                                  button2: "Ya, Hapus",
-                                  onPressed1: () {
-                                    tetapSimpan();
-                                  },
-                                  onPressed2: () {
-                                    hapus();
-                                  },
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                                padding: EdgeInsets.all(20),
+                              ),
+                              onPressed: () {
+                                seeDetail();
+                              },
+                              child: Icon(Icons.remove_red_eye),
+                            ),
+                            SizedBox(width: 10,),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                                padding: EdgeInsets.all(20),
+                              ),
+                              onPressed: () {
+                                editForm();
+                                changeCaseToUpdate();
+                              },
+                              child: Icon(Icons.edit),
+                            ),
+                            SizedBox(width: 10,),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                                padding: EdgeInsets.all(20),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog2Button(
+                                        content: "Hapus Transaksi",
+                                        content_detail: "Anda yakin ingin menghapus data ini?",
+                                        path_image: 'assets/images/hapus_coa.png',
+                                        button1: "Tetap Simpan",
+                                        button2: "Ya, Hapus",
+                                        onPressed1: () {
+                                          tetapSimpan();
+                                        },
+                                        onPressed2: () {
+                                          hapus();
+                                        },
+                                      );
+                                    }
                                 );
-                              }
-                            );
-                          },
-                          child: Icon(Icons.delete),
-                        ),
+                              },
+                              child: Icon(Icons.delete),
+                            ),
+                          ],
+                        )
                       ],
                     )
                 )

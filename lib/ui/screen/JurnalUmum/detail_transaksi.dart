@@ -158,45 +158,64 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                           ),
                         ),
                         Container(
-                            margin: EdgeInsets.only(top: 40, bottom: 20),
-                            width: double.infinity,
-                            child: ButtonNoIcon(
-                                bg_color: kuning,
-                                text_color: hitam,
-                                onPressed: () {
-                                  _navigateToDaftarTransaksi(context);
-                                },
-                                content: "Edit"
-                            )
+                          margin: EdgeInsets.only(top: 40, bottom: 20),
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                                padding: EdgeInsets.all(20)),
+                            onPressed: () {
+                              _navigateToDaftarTransaksi(context);
+                            },
+                            child: const Text(
+                              "Edit",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                color: Color.fromARGB(255, 50, 52, 55),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                         Container(
-                            margin: EdgeInsets.only(bottom: 25),
-                            width: double.infinity,
-                            child: ButtonNoIcon(
-                                bg_color: background2,
-                                text_color: merah,
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Dialog2Button(
-                                            content: "Hapus Transaksi",
-                                            content_detail:
-                                            "Anda yakin ingin menghapus data ini?",
-                                            path_image: 'assets/images/hapus_coa.png',
-                                            button1: "Tetap Simpan",
-                                            button2: "Ya, Hapus",
-                                            onPressed1: () {
-                                              setState(() {
-                                                Navigator.pop(context);
-                                              });
-                                            },
-                                            onPressed2: () {
-                                              _navigateToDaftarTransaksi(context);
-                                            });
-                                      });
-                                },
-                                content: "Hapus"))
+                          margin: EdgeInsets.only(bottom: 25),
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                Color.fromARGB(255, 255, 255, 255),
+                                padding: EdgeInsets.all(20)),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog2Button(
+                                        content: "Hapus Transaksi",
+                                        content_detail:
+                                        "Anda yakin ingin menghapus data ini?",
+                                        path_image: 'assets/images/hapus_coa.png',
+                                        button1: "Tetap Simpan",
+                                        button2: "Ya, Hapus",
+                                        onPressed1: () {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        onPressed2: () {
+                                          _navigateToDaftarTransaksi(context);
+                                        });
+                                  });
+                            },
+                            child: const Text(
+                              "Hapus",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                color: Color.fromARGB(255, 245, 0, 0),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ))
               ],
