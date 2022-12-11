@@ -18,8 +18,23 @@ class InsertCOA extends StatefulWidget {
 }
 
 class InsertCOAState extends State<InsertCOA> {
-  @override
-  void dispose() {}
+  void _navigateToListCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +52,7 @@ class InsertCOAState extends State<InsertCOA> {
                   children: [
                     ButtonBack(
                       onPressed: () {
-                        setState(() {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                SideNavigationBar(index: 1, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                        });
+                        _navigateToListCoa(context);
                       },
                     )
                   ],
@@ -252,11 +263,7 @@ class InsertCOAState extends State<InsertCOA> {
                                 });
                               },
                               onPressed2: () {
-                                setState(() {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                      SideNavigationBar(index: 1, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                });
+                                _navigateToListCoa(context);
                               });
                           }
                         );

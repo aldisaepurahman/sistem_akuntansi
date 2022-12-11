@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sistem_akuntansi/ui/screen/login.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +16,7 @@ Future<void> main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: Supabase.instance.client));
+    // return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: Supabase.instance.client));
+    return MaterialApp(home: Login(client: Supabase.instance.client));
   }
 }

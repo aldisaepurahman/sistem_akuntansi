@@ -16,8 +16,23 @@ class EditCOA extends StatefulWidget {
 }
 
 class EditCOAState extends State<EditCOA> {
-  @override
-  void dispose() {}
+  void _navigateToDetailCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 1,
+          coaIndex: 2,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +50,7 @@ class EditCOAState extends State<EditCOA> {
                       children: [
                         ButtonBack(
                           onPressed: () {
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    SideNavigationBar(index: 1, coaIndex: 2, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                            });
+                            _navigateToDetailCoa(context);
                           },
                         )
                       ],
@@ -114,8 +125,8 @@ class EditCOAState extends State<EditCOA> {
                                         hintText: 'Masukkan kode...',
                                         contentPadding: const EdgeInsets.all(8),
                                         border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8))),
+                                          borderRadius:
+                                            BorderRadius.circular(8))),
                                   ),
                                 ),
                               )
@@ -250,11 +261,7 @@ class EditCOAState extends State<EditCOA> {
                                     });
                                   },
                                   onPressed2: () {
-                                    setState(() {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) =>
-                                          SideNavigationBar(index: 1, coaIndex: 2, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                    });
+                                    _navigateToDetailCoa(context);
                                   }
                                 );
                               }

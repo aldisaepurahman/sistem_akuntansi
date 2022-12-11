@@ -18,8 +18,41 @@ class DetailCOA extends StatefulWidget {
 }
 
 class DetailCOAState extends State<DetailCOA> {
-  @override
-  void dispose() {}
+  void _navigateToEditCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 1,
+          coaIndex: 3,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
+  void _navigateToListCoa(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
 
   String kode_akun = "1.1-1104-01-02-01-05-05";
   String nama_akun =
@@ -45,11 +78,7 @@ class DetailCOAState extends State<DetailCOA> {
                       children: [
                         ButtonBack(
                           onPressed: (){
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    SideNavigationBar(index: 1, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                            });
+                            _navigateToListCoa(context);
                           },
                         )
                       ],
@@ -106,7 +135,8 @@ class DetailCOAState extends State<DetailCOA> {
                                   header: "Indentasi", content: indentasi),
                               DetailText(
                                   header: "Saldo Awal Baru",
-                                  content: saldo_awal_baru)
+                                  content: saldo_awal_baru
+                              )
                             ],
                           ),
                         ],
@@ -119,11 +149,7 @@ class DetailCOAState extends State<DetailCOA> {
                               backgroundColor: Color.fromARGB(255, 255, 204, 0),
                               padding: EdgeInsets.all(20)),
                           onPressed: () {
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                  SideNavigationBar(index: 1, coaIndex: 3, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                            });
+                            _navigateToEditCoa(context);
                           },
                           child: const Text(
                             "Edit",
@@ -160,11 +186,7 @@ class DetailCOAState extends State<DetailCOA> {
                                         });
                                       },
                                       onPressed2: () {
-                                        setState(() {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                            builder: (context) =>
-                                              SideNavigationBar(index: 1, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                        });
+                                        _navigateToListCoa(context);
                                       });
                                 });
                           },

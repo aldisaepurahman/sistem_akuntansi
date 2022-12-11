@@ -45,17 +45,49 @@ class ListCOAState extends State<ListCOA> {
 
   List<String> row = ['5', '10', '25', '50', '100'];
 
+  void _navigateToDetailCoa(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 2,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 0,
+          labaRugiIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
+  void _navigateToTambahCoa(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 1,
+          coaIndex: 1,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          neracaLajurIndex: 0,
+          labaRugiIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client,
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     tableRow = new RowTableCOA(
       contentData: contents,
       seeDetail: () {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 1, coaIndex: 2, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
-        });
+        _navigateToDetailCoa(context);
       },
       context: context,
     );
@@ -107,10 +139,7 @@ class ListCOAState extends State<ListCOA> {
                                         Color.fromARGB(255, 255, 204, 0),
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
-                                  setState(() {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                  });
+                                  _navigateToTambahCoa(context);
                                 },
                                 child: Row(
                                   mainAxisAlignment:

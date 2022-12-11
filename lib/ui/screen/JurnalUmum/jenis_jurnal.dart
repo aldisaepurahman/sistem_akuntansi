@@ -29,6 +29,60 @@ class JenisJurnalState extends State<JenisJurnal> {
 
   var tableRow;
 
+  void _navigateToDaftarTransaksi(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) =>
+        SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 2,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
+  void _navigateToJenisJurnal(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+            index: 2,
+            coaIndex: 0,
+            jurnalUmumIndex: 1,
+            bukuBesarIndex: 0,
+            labaRugiIndex: 0,
+            neracaLajurIndex: 0,
+            amortisasiIndex: 0,
+            jurnalPenyesuaianIndex: 0,
+            client: widget.client
+        )
+      )
+    );
+  }
+
+  void _navigateToJurnalUmum(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   void dispose() {
     textInsert.dispose();
@@ -42,11 +96,7 @@ class JenisJurnalState extends State<JenisJurnal> {
     tableRow = new JenisJurnalTableData(
       contentData: contents,
       seeDetail: (){
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-        });
+        _navigateToDaftarTransaksi(context);
       },
       editForm: () {
         showForm();
@@ -57,11 +107,7 @@ class JenisJurnalState extends State<JenisJurnal> {
         });
       },
       hapus: (){
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 1, bukuBesarIndex: 0, client: widget.client)));
-        });
+        _navigateToJenisJurnal(context);
       },
       context: context,
       changeCaseToUpdate: (){
@@ -134,11 +180,7 @@ class JenisJurnalState extends State<JenisJurnal> {
                       children: [
                         ButtonBack(
                           onPressed: (){
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                  SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                            });
+                            _navigateToJurnalUmum(context);
                           },
                         )
                       ],
@@ -243,12 +285,25 @@ class JenisJurnalState extends State<JenisJurnal> {
                                 content: "Batal"),
                             SizedBox(width: 20),
                             ButtonNoIcon(
-                                bg_color: kuning,
-                                text_color: hitam,
-                                onPressed: () {
-                                  setState(() {});
-                                },
-                                content: "Simpan")
+                              bg_color: kuning,
+                              text_color: hitam,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      Future.delayed(Duration(seconds: 1), () {
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      return DialogNoButton(
+                                          content: (_case == 1 ? "Berhasil Ditambahkan!" : "Berhasil Diubah!"),
+                                          content_detail: (_case == 1 ? "Jenis jurnal baru berhasil ditambahkan" : "Jenis jurnal berhasil diubah"),
+                                          path_image: 'assets/images/tambah_coa.png'
+                                      );
+                                    }
+                                );
+                              },
+                              content: "Simpan"
+                            )
                           ],
                         )
                       ],

@@ -33,6 +33,24 @@ class DetailTransaksiState extends State<DetailTransaksi> {
 
   var tableRow;
 
+  void _navigateToDaftarTransaksi(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) =>
+        SideNavigationBar(
+          index: 2,
+          coaIndex: 0,
+          jurnalUmumIndex: 2,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,11 +76,7 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                       children: [
                         ButtonBack(
                           onPressed: () {
-                            setState(() {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-                            });
+                            _navigateToDaftarTransaksi(context);
                           },
                         )
                       ],
@@ -121,22 +135,23 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                           ],
                         ),
                         Container(
+                          margin: EdgeInsets.only(top: 25),
                           width: double.infinity,
                           child: PaginatedDataTable(
                             rowsPerPage: total_row,
                             dataRowHeight: 150,
                             columns: const [
                               DataColumn(
-                                label: HeaderTable(content: "Nama Akun"),
+                                label: HeaderTable(content: "Akun Debit"),
                               ),
                               DataColumn(
-                                label: HeaderTable(content: "Saldo"),
+                                label: HeaderTable(content: "Saldo (Rp.)"),
                               ),
                               DataColumn(
-                                label: HeaderTable(content: "Nama Akun"),
+                                label: HeaderTable(content: "Akun Kredit"),
                               ),
                               DataColumn(
-                                label: HeaderTable(content: "Saldo"),
+                                label: HeaderTable(content: "Saldo (Rp.)"),
                               ),
                             ],
                             source: tableRow,
@@ -149,13 +164,11 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                                 bg_color: kuning,
                                 text_color: hitam,
                                 onPressed: () {
-                                  setState(() {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                        SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-                                  });
+                                  _navigateToDaftarTransaksi(context);
                                 },
-                                content: "Edit")),
+                                content: "Edit"
+                            )
+                        ),
                         Container(
                             margin: EdgeInsets.only(bottom: 25),
                             width: double.infinity,
@@ -179,11 +192,7 @@ class DetailTransaksiState extends State<DetailTransaksi> {
                                               });
                                             },
                                             onPressed2: () {
-                                              setState(() {
-                                                Navigator.of(context).push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                    SideNavigationBar(index: 2, coaIndex: 0, jurnalUmumIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-                                              });
+                                              _navigateToDaftarTransaksi(context);
                                             });
                                       });
                                 },

@@ -47,17 +47,31 @@ class ListBukuBesarState extends State<ListBukuBesar> {
 
   var tableRow;
 
+  void _navigateToBukuBesarPerAkun(BuildContext context){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) =>
+        SideNavigationBar(
+          index: 3,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 1,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 0,
+          client: widget.client
+        )
+      )
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
-        });
+        _navigateToBukuBesarPerAkun(context);
       },
       context: context,
     );
@@ -129,7 +143,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                         DataColumn(
                           label: Expanded(
                               child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
+                                color: greyHeaderColor,
                                 height: double.infinity,
                                 alignment: Alignment.center,
                                 child: Text(
@@ -146,7 +160,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                         DataColumn(
                           label: Expanded(
                               child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
+                                color: greyHeaderColor,
                                 height: double.infinity,
                                 alignment: Alignment.center,
                                 child: Text(
@@ -163,7 +177,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                         DataColumn(
                           label: Expanded(
                               child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
+                                color: greyHeaderColor,
                                 height: double.infinity,
                                 alignment: Alignment.center,
                                 child: Text(
@@ -180,7 +194,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                         DataColumn(
                           label: Expanded(
                               child: Container(
-                                color: Color(int.parse(greyHeaderColor)),
+                                color: greyHeaderColor,
                                 height: double.infinity,
                                 alignment: Alignment.center,
                                 child: Text(

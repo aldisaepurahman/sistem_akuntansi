@@ -37,7 +37,19 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+              SideNavigationBar(
+                index: 4,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                neracaLajurIndex: 0,
+                labaRugiIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client,
+              )
+            )
+          );
         });
       },
       context: context,
@@ -127,7 +139,9 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
                           ButtonNoIcon(
                               bg_color: kuning,
                               text_color: hitam,
-                              onPressed: () {},
+                              onPressed: () {
+                              //
+                              },
                               content: "Cetak Neraca Lajur")
                         ],
                       ),

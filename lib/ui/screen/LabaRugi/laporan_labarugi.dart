@@ -37,7 +37,19 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex:0, bukuBesarIndex: 1, client: widget.client)));
+              SideNavigationBar(
+                index: 5,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                neracaLajurIndex: 0,
+                labaRugiIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client,
+              )
+            )
+          );
         });
       },
       context: context,
