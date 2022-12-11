@@ -3,12 +3,12 @@ import 'package:equatable/equatable.dart';
 class Saldo extends Equatable {
   final int id_saldo;
   final int saldo;
-  final int bulan;
+  final String bulan;
   final int tahun;
   final String kode_akun;
 
   const Saldo({
-    required this.id_saldo,
+    this.id_saldo = 0,
     required this.saldo,
     required this.bulan,
     required this.tahun,
@@ -26,10 +26,9 @@ class Saldo extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'id_saldo': this.id_saldo,
-      'saldo': this.saldo,
       'bulan': this.bulan,
       'tahun': this.tahun,
+      'saldo': this.saldo,
       'kode_akun': this.kode_akun,
     };
   }

@@ -7,12 +7,13 @@ import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/screen/NeracaLajur/neraca_pdf.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+
+import '../../components/navigationBar.dart';
 
 class LaporanNeracaLajur extends StatefulWidget {
-  final SupabaseClient client;
-
   const LaporanNeracaLajur({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   LaporanNeracaLajurState createState() {
@@ -47,6 +48,12 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
       },
       context: context,
     );
+
+    @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      throw UnimplementedError();
+    }
   }
 
   void showForm() {

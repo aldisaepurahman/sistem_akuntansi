@@ -11,9 +11,9 @@ import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import '../../../utils/V_LabaRugi.dart';
 
 class LaporanLabaRugi extends StatefulWidget {
-  final SupabaseClient client;
-
   const LaporanLabaRugi({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   LaporanLabaRugiState createState() {

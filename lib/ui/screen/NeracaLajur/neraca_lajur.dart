@@ -6,12 +6,13 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+
+import '../../components/navigationBar.dart';
 
 class NeracaLajurList extends StatefulWidget {
-  final SupabaseClient client;
-
   const NeracaLajurList({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   NeracaLajurListState createState() {
@@ -36,8 +37,12 @@ class NeracaLajurListState extends State<NeracaLajurList> {
       seeDetail: () {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-              SideNavigationBar(index: 3, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 1, client: widget.client)));
+              builder: (context) => SideNavigationBar(
+                  index: 3,
+                  coaIndex: 0,
+                  jurnalUmumIndex: 0,
+                  bukuBesarIndex: 1,
+                  client: widget.client)));
         });
       },
       context: context,

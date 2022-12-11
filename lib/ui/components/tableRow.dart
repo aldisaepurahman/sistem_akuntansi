@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_akuntansi/ui/components/color.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/utils/AmortisasiPendapatan.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
@@ -217,15 +218,15 @@ class BulanTahunTableData extends DataTableSource {
 }
 
 class RowTableCOA extends DataTableSource {
-  Function seeDetail;
+  Function(int) seeDetail;
   BuildContext context;
   RowTableCOA(
-      {required List<V_lookup> contentData,
+      {required List<Akun> contentData,
       required this.seeDetail,
       required this.context})
       : _contentData = contentData,
         assert(contentData != null);
-  final List<V_lookup> _contentData;
+  final List<Akun> _contentData;
 
   @override
   DataRow? getRow(int index) {
@@ -244,7 +245,7 @@ class RowTableCOA extends DataTableSource {
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width / 5.5 - 50,
-          child: Text("${_content.kode}"),
+          child: Text("${_content.kode_akun}"),
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.3 - 50,
@@ -252,7 +253,7 @@ class RowTableCOA extends DataTableSource {
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text("${_content.keterangan}"),
+          child: Text("${_content.keterangan_akun}"),
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.04 - 50,
@@ -266,7 +267,7 @@ class RowTableCOA extends DataTableSource {
               padding: EdgeInsets.all(20),
             ),
             onPressed: () {
-              seeDetail();
+              seeDetail(index);
             },
             child: const Text(
               "Lihat Detail",
