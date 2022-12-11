@@ -47,7 +47,9 @@ class InsertCOAState extends State<InsertCOA> {
     };
 
   @override
-  void dispose() {}
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,29 @@ class InsertCOAState extends State<InsertCOA> {
                         ButtonBack(
                           onPressed: () {
                             setState(() {
-                              Navigator.pop(context);
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog2Button(
+                                        content: "Batalkan Perubahan",
+                                        content_detail:
+                                        "Anda yakin ingin membatalkan perubahan ini?",
+                                        path_image:
+                                        'assets/images/berhasil_hapus_coa.png',
+                                        button1: "Tetap Simpan",
+                                        button2: "Ya, Hapus",
+                                        onPressed1: () {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        onPressed2: () {
+                                          setState(() {
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                          });
+                                        });
+                                  });
                             });
                           },
                         )
@@ -239,7 +263,7 @@ class InsertCOAState extends State<InsertCOA> {
                             var kode_akun = kodeController.text;
                             var keterangan = keteranganController.text;
                             var indentasi = indentasiController.text;
-                            var saldo = indentasiController.text;
+                            var saldo = saldoController.text;
                             var bulan = listbulan[DateTime.now().month];
                             var tahun = DateTime.now().year;
 
@@ -280,20 +304,6 @@ class InsertCOAState extends State<InsertCOA> {
                                   SnackBar(content: Text("Pastikan seluruh kolom terisi, kecuali kolom saldo awal"))
                               );
                             }
-                            /*showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  Future.delayed(Duration(seconds: 1), () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                  });
-                                  return DialogNoButton(
-                                      content: "Berhasil Ditambahkan!",
-                                      content_detail:
-                                          "Chart of Account baru berhasil ditambahkan",
-                                      path_image:
-                                          'assets/images/tambah_coa.png');
-                                });*/
                           },
                           child: const Text(
                             "Simpan",
@@ -330,7 +340,12 @@ class InsertCOAState extends State<InsertCOA> {
                                           Navigator.pop(context);
                                         });
                                       },
-                                      onPressed2: () {});
+                                      onPressed2: () {
+                                        setState(() {
+                                          Navigator.of(context).push(MaterialPageRoute(
+                                              builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                        });
+                                      });
                                 });
                           },
                           child: const Text(

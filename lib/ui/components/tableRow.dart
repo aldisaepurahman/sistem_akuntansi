@@ -139,7 +139,7 @@ class RowTableCOA extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
+          width: MediaQuery.of(context).size.width * 0.1 - 50,
           child: Text("${index + 1}"),
         )),
         DataCell(SizedBox(

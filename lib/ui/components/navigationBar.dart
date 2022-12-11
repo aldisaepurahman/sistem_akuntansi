@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/edit_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
@@ -15,7 +16,7 @@ class SideNavigationBar extends StatefulWidget{
   final int coaIndex;
   final int bukuBesarIndex;
   final SupabaseClient client;
-  final Object? params;
+  final Map<String, dynamic>? params;
 
   SideNavigationBar(
       {Key? key,
@@ -44,10 +45,10 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
       return InsertCOA(client: widget.client);
     }
     else if (selectedCoaIndex == 2) {
-      return DetailCOA(client: widget.client, akun: widget.params as Akun);
+      return DetailCOA(client: widget.client, akun: widget.params?['akun'] as Akun);
     }
     else if (selectedCoaIndex == 3) {
-      return EditCOA();
+      return EditCOA(client: widget.client, akun: widget.params?['akun'] as Akun, akun_saldo: widget.params?['akun_saldo'] as Saldo);
     }
     return ListCOA(client: widget.client);
   }

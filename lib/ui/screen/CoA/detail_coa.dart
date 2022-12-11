@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
+import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
+import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/detail_akun/detail_akun_bloc.dart';
+import 'package:sistem_akuntansi/bloc/detail_akun/detail_akun_state.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
@@ -12,7 +17,8 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailCOA extends StatefulWidget {
-  const DetailCOA({required this.client, required this.akun, Key? key}) : super(key: key);
+  const DetailCOA({required this.client, required this.akun, Key? key})
+      : super(key: key);
 
   final Akun akun;
   final SupabaseClient client;
@@ -25,7 +31,9 @@ class DetailCOA extends StatefulWidget {
 
 class DetailCOAState extends State<DetailCOA> {
   @override
-  void dispose() {}
+  void dispose() {
+    super.dispose();
+  }
 
   String kode_akun = "1.1-1104-01-02-01-05-05";
   String nama_akun =
@@ -34,6 +42,7 @@ class DetailCOAState extends State<DetailCOA> {
   String indentasi = "2";
   String saldo_awal = "-";
   String saldo_awal_baru = "Rp 29.702.072";
+  Saldo akun_saldo = Saldo(saldo: 0, bulan: "", tahun: 0, kode_akun: "");
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +51,9 @@ class DetailCOAState extends State<DetailCOA> {
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: BlocProvider<DetailAkunBloc>(
-              create: (BuildContext context) => DetailAkunBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunDetailed(kode: widget.akun.kode_akun)),
+              create: (BuildContext context) => DetailAkunBloc(
+                  service: SupabaseService(supabaseClient: widget.client))
+                ..add(AkunDetailed(kode: widget.akun.kode_akun)),
               child: ListView(
                 children: [
                   Container(
@@ -80,54 +91,86 @@ class DetailCOAState extends State<DetailCOA> {
                       children: [
                         Container(
                             child: const Text(
-                              "Detail CoA",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  color: Color.fromARGB(255, 255, 204, 0)),
-                            )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DetailText(header: "Kode", content: kode_akun),
-                                DetailText(
-                                    header: "Keterangan", content: keterangan),
-                                DetailText(
-                                    header: "Saldo Awal", content: saldo_awal)
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DetailText(
-                                    header: "Nama Akun", content: nama_akun),
-                                DetailText(
-                                    header: "Indentasi", content: indentasi),
-                                DetailText(
-                                    header: "Saldo Awal Baru",
-                                    content: saldo_awal_baru)
-                              ],
-                            ),
-                          ],
+                          "Detail CoA",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontFamily: "Inter",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              color: Color.fromARGB(255, 255, 204, 0)),
+                        )),
+                        BlocBuilder<DetailAkunBloc, DetailAkunState>(
+                          builder: (_, state) {
+                            switch (state.status) {
+                              case SystemStatus.loading:
+                                return const Center(child: CircularProgressIndicator());
+                              case SystemStatus.success:
+                                akun_saldo.id_saldo = state.datastate.id_saldo;
+                                akun_saldo.saldo = state.datastate.saldo;
+                                akun_saldo.kode_akun = state.datastate.kode;
+                                akun_saldo.bulan = state.datastate.bulan;
+                                akun_saldo.tahun = state.datastate.tahun;
+                                return Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        DetailText(
+                                            header: "Kode",
+                                            content: widget.akun.kode_akun),
+                                        DetailText(
+                                            header: "Keterangan",
+                                            content:
+                                                widget.akun.keterangan_akun),
+                                        DetailText(
+                                            header: "Saldo Awal Bulan ini",
+                                            content: (state.datastate.id_saldo > 0 && state.datastate.saldo > 0)
+                                                ? state.datastate.saldo.toString()
+                                                : "0 (tentukan saldo awal bulan ini)")
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        DetailText(
+                                            header: "Nama Akun",
+                                            content: widget.akun.nama_akun),
+                                        DetailText(
+                                            header: "Indentasi",
+                                            content: widget.akun.indentasi.toString()),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              case SystemStatus.failure:
+                                return Center(child: Text(state.error));
+                            }
+                          },
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 40, bottom: 20),
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                                backgroundColor:
+                                    Color.fromARGB(255, 255, 204, 0),
                                 padding: EdgeInsets.all(20)),
                             onPressed: () {
                               setState(() {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        SideNavigationBar(index: 1, coaIndex: 3, bukuBesarIndex: 0, client: widget.client)));
+                                    builder: (context) => SideNavigationBar(
+                                        index: 1,
+                                        coaIndex: 3,
+                                        bukuBesarIndex: 0,
+                                        client: widget.client,
+                                      params: {"akun": widget.akun, "akun_saldo": akun_saldo},
+                                    )));
                               });
                             },
                             child: const Text(
@@ -146,7 +189,7 @@ class DetailCOAState extends State<DetailCOA> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                Color.fromARGB(255, 255, 255, 255),
+                                    Color.fromARGB(255, 255, 255, 255),
                                 padding: EdgeInsets.all(20)),
                             onPressed: () {
                               showDialog(
@@ -155,8 +198,9 @@ class DetailCOAState extends State<DetailCOA> {
                                     return Dialog2Button(
                                         content: "Hapus Chart of Account",
                                         content_detail:
-                                        "Anda yakin ingin menghapus data ini?",
-                                        path_image: 'assets/images/hapus_coa.png',
+                                            "Anda yakin ingin menghapus data ini?",
+                                        path_image:
+                                            'assets/images/hapus_coa.png',
                                         button1: "Tetap Simpan",
                                         button2: "Ya, Hapus",
                                         onPressed1: () {
@@ -164,7 +208,18 @@ class DetailCOAState extends State<DetailCOA> {
                                             Navigator.pop(context);
                                           });
                                         },
-                                        onPressed2: () {});
+                                        onPressed2: () {
+                                          AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunDeleted(kode_akun: widget.akun.kode_akun));
+                                          Future.delayed(Duration(seconds: 2), () {
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => SideNavigationBar(
+                                                    index: 1,
+                                                    coaIndex: 0,
+                                                    bukuBesarIndex: 0,
+                                                    client: widget.client
+                                                )));
+                                          });
+                                        });
                                   });
                             },
                             child: const Text(
@@ -182,7 +237,6 @@ class DetailCOAState extends State<DetailCOA> {
                   )
                 ],
               ),
-            )
-            ));
+            )));
   }
 }

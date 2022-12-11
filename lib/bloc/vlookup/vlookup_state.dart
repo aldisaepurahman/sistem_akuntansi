@@ -14,15 +14,6 @@ class VLookupState extends DataState {
   final SystemStatus status;
   final List<Akun> list_coa;
   final String error;
-  /*const VLookupState({
-    this.status = SystemStatus.loading,
-    this.list_coa = const <Akun>[],
-    this.error = ""
-  });
-
-  final SystemStatus status;
-  final List<Akun> list_coa;
-  final String error;*/
 
   VLookupState copyWith({
     SystemStatus? status,
@@ -35,8 +26,5 @@ class VLookupState extends DataState {
       error: error ?? this.error
     );
   }
-/*
-  @override
-  List<Object?> get props => [status, list_coa, error];*/
 
 }

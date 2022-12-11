@@ -2,8 +2,10 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_cubit.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
@@ -29,17 +31,14 @@ class ListCOA extends StatefulWidget {
 
 class ListCOAState extends State<ListCOA> {
   @override
-  // void dispose() {}
+  void dispose() {
+    super.dispose();
+  }
 
-  String kode_akun = "1.1-1104-01-02-01-05-05";
-  String nama_akun =
-      "Penyisihan Piutang Mahasiswa angkatan 2016/2017 D3 Perekam & Inf. Kes";
-  String keterangan = "Akun, Debit";
-  String kode_reference = "2";
-  String saldo_awal = "-";
-  String saldo_awal_baru = "Rp 29.702.072";
+  String keyword = "";
+  List<Akun> data_akun = [];
   var tableRow;
-
+  
   int total_row = 5;
 
   String _selectedEntries = '5';
@@ -70,6 +69,7 @@ class ListCOAState extends State<ListCOA> {
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
             body: BlocProvider<VLookupBloc>(
               create: (BuildContext context) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+              // create: (BuildContext context) => VLookupCubit(service: SupabaseService(supabaseClient: widget.client)),
               child: ListView(
                 children: [
                   /*Container(
@@ -157,7 +157,7 @@ class ListCOAState extends State<ListCOA> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              SizedBox(
+                              /*SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.19,
                                 child: TextField(
                                   decoration: InputDecoration(
@@ -173,18 +173,23 @@ class ListCOAState extends State<ListCOA> {
                                       border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(8))),
-                                  onChanged: (value) {
-                                    VLookupBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunSearched(keyword: value));
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      keyword = value;
+                                      VLookupBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunSearched(keyword: value, data_akun: data_akun));
+                                    });
+                                    // BlocProvider.of<VLookupCubit>(context).getSearchData(keyword, data_akun);
                                   },
                                 ),
-                              ),
+                              ),*/
                               SizedBox(width: 20),
                               SizedBox(
                                 child: DropdownFilter(
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       if (newValue != null) {
-                                        total_row = int.parse(newValue);
+                                        int count = int.parse(newValue);
+                                        total_row = (data_akun.length > count) ? count : data_akun.length;
                                         _selectedEntries = newValue;
                                       }
                                     });
@@ -198,15 +203,19 @@ class ListCOAState extends State<ListCOA> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      BlocBuilder<VLookupBloc, VLookupState>(
-                          builder: (context, state) {
-                            switch (state.status) {
-                              case SystemStatus.failure:
-                                return Center(child: Text(state.error));
-                              case SystemStatus.success:
-                                if (state.list_coa.isEmpty) {
-                                  return const Center(child: Text("No Data"));
-                                }
+                      BlocBuilder<VLookupBloc, SiakState>(
+                        /*listener: (context, state) {
+                          *//*if (state is SuccessState) {
+                            data_akun.clear();
+                            data_akun.add(state.datastore);
+                          }*//*
+                        },*/
+                          builder: (_, state) {
+                            if (state is FailureState) {
+                              return Center(child: Text(state.error));
+                            }
+                            if (state is SuccessState) {
+                              data_akun = state.datastore;
                                 return PaginatedDataTable(
                                   columns: <DataColumn>[
                                     DataColumn(
@@ -229,22 +238,25 @@ class ListCOAState extends State<ListCOA> {
                                     ),
                                   ],
                                   source: RowTableCOA(
-                                    contentData: state.list_coa.where((coa) => coa.keterangan_akun != "Header").toList(),
+                                    contentData: data_akun,
                                     seeDetail: (int index) {
                                       Navigator.of(context).push(MaterialPageRoute(
                                           builder: (context) =>
-                                              SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client, params: state.list_coa[index])));
+                                              SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client, params: {"akun": data_akun[index]})));
                                     },
                                     context: context,
                                   ),
+                                  sortAscending: true,
                                   rowsPerPage: total_row,
                                   showCheckboxColumn: false,
                                   dataRowHeight: 70,
                                 );
-                              case SystemStatus.loading:
+                              }
+                              if (state is LoadingState) {
                                 return const Center(child: CircularProgressIndicator());
+                              }
+                              return const Center(child: Text("No Data"));
                             }
-                          },
                       )
                     ],
                   ),
