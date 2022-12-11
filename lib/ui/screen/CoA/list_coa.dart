@@ -1,27 +1,29 @@
 // import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-//<<<<<<< branch_prilla
-//=======
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_cubit.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
-//>>>>>>> branch_aldi_backend
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListCOA extends StatefulWidget {
-  final SupabaseClient client;
-
   const ListCOA({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   ListCOAState createState() {
@@ -30,15 +32,15 @@ class ListCOA extends StatefulWidget {
 }
 
 class ListCOAState extends State<ListCOA> {
-  String kode_akun = "1.1-1104-01-02-01-05-05";
-  String nama_akun =
-      "Penyisihan Piutang Mahasiswa angkatan 2016/2017 D3 Perekam & Inf. Kes";
-  String keterangan = "Akun, Debit";
-  String kode_reference = "2";
-  String saldo_awal = "-";
-  String saldo_awal_baru = "Rp 29.702.072";
-  var tableRow;
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
+  String keyword = "";
+  List<Akun> data_akun = [];
+  var tableRow;
+  
   int total_row = 5;
 
   String _selectedEntries = '5';
@@ -99,13 +101,9 @@ class ListCOAState extends State<ListCOA> {
         title: 'List Chart of Account',
         home: Scaffold(
             backgroundColor: Color.fromARGB(255, 248, 249, 253),
-/*<<<<<<< branch_prilla
-            body: ListView(
-              children: [
-                Container(
-=======*/
-            body: BlocProvider(
-              create: (_) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+            body: BlocProvider<VLookupBloc>(
+              create: (BuildContext context) => VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched()),
+              // create: (BuildContext context) => VLookupCubit(service: SupabaseService(supabaseClient: widget.client)),
               child: ListView(
                 children: [
                 Container(
@@ -140,6 +138,10 @@ class ListCOAState extends State<ListCOA> {
                                     padding: EdgeInsets.all(20)),
                                 onPressed: () {
                                   _navigateToTambahCoa(context);
+                                  /*setState(() {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => SideNavigationBar(index: 1, coaIndex: 1, bukuBesarIndex: 0, client: widget.client)));
+                                  });*/
                                 },
                                 child: Row(
                                   mainAxisAlignment:
@@ -162,7 +164,6 @@ class ListCOAState extends State<ListCOA> {
                                           "Tambah Chart of Account",
                                           style: TextStyle(
                                             fontFamily: "Inter",
-//<<<<<<< branch_prilla
                                             color:
                                                 Color.fromARGB(255, 50, 52, 55),
                                             fontWeight: FontWeight.bold,
@@ -176,7 +177,7 @@ class ListCOAState extends State<ListCOA> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              SizedBox(
+                              /*SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.19,
                                 child: TextField(
                                   decoration: InputDecoration(
@@ -192,15 +193,24 @@ class ListCOAState extends State<ListCOA> {
                                       border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(8))),
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      keyword = value;
+                                      VLookupBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunSearched(keyword: value, data_akun: data_akun));
+                                    });
+                                    // BlocProvider.of<VLookupCubit>(context).getSearchData(keyword, data_akun);
+                                  },
                                 ),
-                              ),
+                              ),*/
                               SizedBox(width: 20),
                               SizedBox(
                                 child: DropdownFilter(
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       if (newValue != null) {
-                                        total_row = int.parse(newValue);
+                                        int count = int.parse(newValue);
+                                        total_row = (data_akun.length > count) ? count : data_akun.length;
+                                        _selectedEntries = newValue;
                                       }
                                     });
                                   },
@@ -213,97 +223,61 @@ class ListCOAState extends State<ListCOA> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      Container(
-                        width: double.infinity,
-                        child: PaginatedDataTable(
-                          source: tableRow,
-                          rowsPerPage: total_row,
-                          showCheckboxColumn: false,
-                          dataRowHeight: 70,
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Text("No."),
-                            ),
-                            DataColumn(
-                              label: Text("Kode"),
-                            ),
-                            DataColumn(
-                              label: Text("Nama Akun"),
-                            ),
-                            DataColumn(
-                              label: Text("Keterangan"),
-                            ),
-                            DataColumn(
-                              label: Text("Indentasi"),
-                            ),
-                            DataColumn(
-                              label: Text("Action"),
-                            ),
-                          ],
-                        ),
-                      )
-//=======
-                                              /*color:
-                                              Color.fromARGB(255, 50, 52, 55),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                        ],
-                      ),
-                      SizedBox(height: 25),*/
-                      /*PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Bulan"),
-                          ),
-                          DataColumn(
-                            label: Text("Tahun"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: BlocBuilder<VLookupBloc, VLookupState>(
-                          builder: (context, state) {
-                            switch (state.status) {
-                              case SystemStatus.failure:
-                                return const Center(child: Text("Failed to fetch data"));
-                              case SystemStatus.success:
-                                if (state.list_coa.isEmpty) {
-                                  return const Center(child: Text("No Data"));
-                                }
-                                return ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      RowTable(
-                                        contentData: state.list_coa,
-                                        seeDetail: (){
-                                          setState(() {
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client)));
-                                          });
-                                        },
-                                        context: context
-                                      );
-                                    },
-                                );
-                              case SystemStatus.loading:
-                                return const Center(child: CircularProgressIndicator());
+                      BlocBuilder<VLookupBloc, SiakState>(
+                        /*listener: (context, state) {
+                          *//*if (state is SuccessState) {
+                            data_akun.clear();
+                            data_akun.add(state.datastore);
+                          }*//*
+                        },*/
+                          builder: (_, state) {
+                            if (state is FailureState) {
+                              return Center(child: Text(state.error));
                             }
-                          },
-                        ),
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
-                      )*/
-//>>>>>>> branch_aldi_backend
+                            if (state is SuccessState) {
+                              data_akun = state.datastore;
+                                return PaginatedDataTable(
+                                  columns: <DataColumn>[
+                                    DataColumn(
+                                      label: Text("No."),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Kode"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Nama Akun"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Keterangan"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Indentasi"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Action"),
+                                    ),
+                                  ],
+                                  source: RowTableCOA(
+                                    contentData: data_akun,
+                                    seeDetail: (int index) {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              SideNavigationBar(index: 1, coaIndex: 2, bukuBesarIndex: 0, client: widget.client, params: {"akun": data_akun[index]})));
+                                    },
+                                    context: context,
+                                  ),
+                                  sortAscending: true,
+                                  rowsPerPage: total_row,
+                                  showCheckboxColumn: false,
+                                  dataRowHeight: 70,
+                                );
+                              }
+                              if (state is LoadingState) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              return const Center(child: Text("No Data"));
+                            }
+                      )
                     ],
                   ),
                 )

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/saldo.dart';
+import 'package:sistem_akuntansi/ui/screen/CoA/edit_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/insert_coa.dart';
 import 'package:sistem_akuntansi/ui/screen/CoA/detail_coa.dart';
@@ -33,6 +36,7 @@ class SideNavigationBar extends StatefulWidget{
   final int jurnalPenyesuaianIndex;
 
   final SupabaseClient client;
+  final Map<String, dynamic>? params;
 
   SideNavigationBar(
       {Key? key,
@@ -45,6 +49,7 @@ class SideNavigationBar extends StatefulWidget{
         required this.amortisasiIndex,
         required this.jurnalPenyesuaianIndex,
         required this.client
+        this.params
       })
       : super(key: key);
 
@@ -93,6 +98,13 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     }
     else if (selectedJurnalUmumIndex == 3) {
       return DetailTransaksi(client: widget.client); // detail transaksi
+/*      return InsertCOA(client: widget.client);
+    }
+    else if (selectedCoaIndex == 2) {
+      return DetailCOA(client: widget.client, akun: widget.params?['akun'] as Akun);
+    }
+    else if (selectedCoaIndex == 3) {
+      return EditCOA(client: widget.client, akun: widget.params?['akun'] as Akun, akun_saldo: widget.params?['akun_saldo'] as Saldo);*/
     }
     return JurnalUmumList(client: widget.client); // tabel bulan tahun jurnal
   }

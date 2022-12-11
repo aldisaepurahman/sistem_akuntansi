@@ -12,8 +12,10 @@ class AkunInserted extends Event {
 class AkunUpdated extends Event {
   final Akun akun;
   final Saldo saldo;
+  final String kode_akun;
+  final int id_saldo;
 
-  AkunUpdated({required this.akun, required this.saldo});
+  AkunUpdated({required this.akun, required this.saldo, required this.kode_akun, required this.id_saldo});
 }
 class AkunDeleted extends Event {
   final String kode_akun;
