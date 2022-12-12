@@ -1,5 +1,6 @@
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
@@ -72,7 +73,7 @@ class SupabaseService {
     }
   }
 
-  Future<List<VJurnal>> getAllJurnal(
+  Future<List<VJurnal>> getAllTransaksiJurnal(
       String table_name, Map<String, dynamic> equivalent) async {
     try {
       final response = (equivalent['id_jurnal'] > 0)
@@ -122,36 +123,52 @@ class SupabaseService {
     }
   }
 
-  Future<List<VBulanJurnal>> getAllBulan(
+  Future<ServiceStatus> getAllBulan(
       String table_name, Map<String, dynamic> equivalent) async {
     try {
-      final response = (equivalent['bulan'] > 0 && equivalent['tahun'] > 0)
+      final response = (equivalent['month'] > 0 && equivalent['year'] > 0)
           ? await _supabaseClient
               .from(table_name)
               .select()
-              .eq("EXTRACT(MONTH FROM tgl_transaksi)", equivalent['bulan'])
-              .eq("EXTRACT(YEAR FROM tgl_transaksi)", equivalent['tahun'])
-              .eq("id_jurnal", equivalent['id_jurnal'])
-              .execute()
-          : (equivalent['bulan'] > 0)
+              .eq("month", equivalent['month'])
+              .eq("year", equivalent['year'])
+          : (equivalent['month'] > 0)
               ? await _supabaseClient
                   .from(table_name)
                   .select()
-                  .eq("EXTRACT(MONTH FROM tgl_transaksi)", equivalent['bulan'])
-                  .execute()
-              : (equivalent['tahun'] > 0)
+                  .eq("month", equivalent['month'])
+              : (equivalent['year'] > 0)
                   ? await _supabaseClient
                       .from(table_name)
                       .select()
-                      .eq("EXTRACT(YEAR FROM tgl_transaksi)",
-                          equivalent['tahun'])
-                      .execute()
-                  : await _supabaseClient.from(table_name).select().execute();
+                      .eq("year",
+                          equivalent['year'])
+                  : await _supabaseClient.from(table_name).select();
 
-      final data = response.data as List<Map<String, dynamic>>;
-      return data.map((e) => VBulanJurnal.fromJson(e)).toList();
+      if (response == null) {
+        return ServiceStatus(datastore: List<VBulanJurnal>.from([]), message: response.toString());
+      }
+
+      return ServiceStatus(datastore: List<VBulanJurnal>.from(response.map((e) => VBulanJurnal.fromJson(e)).toList()));
     } catch (error, stackTrace) {
-      Error.throwWithStackTrace(error, stackTrace);
+      return ServiceStatus(datastore: List<VBulanJurnal>.from([]), message: stackTrace.toString());
+    }
+  }
+
+  Future<ServiceStatus> getAllJurnal(
+      String table_name, Map<String, dynamic> equivalent) async {
+    try {
+      final response = await _supabaseClient.from(table_name)
+          .select()
+      .eq("tipe_jurnal", equivalent['tipe_jurnal']);
+
+      if (response == null) {
+        return ServiceStatus(datastore: List<JenisJurnal>.from([]), message: response.toString());
+      }
+
+      return ServiceStatus(datastore: List<JenisJurnal>.from(response.map((e) => JenisJurnal.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      return ServiceStatus(datastore: List<JenisJurnal>.from([]), message: stackTrace.toString());
     }
   }
 

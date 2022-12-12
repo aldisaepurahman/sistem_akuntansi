@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
+import 'package:sistem_akuntansi/bloc/jenisjurnal/jenisjurnal_bloc.dart';
+import 'package:sistem_akuntansi/bloc/jenisjurnal/jenisjurnal_event.dart';
+import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_event.dart';
+import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_bloc.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
+import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
@@ -41,9 +51,12 @@ class JurnalUmumListState extends State<JurnalUmumList> {
     super.dispose();
   }
 
-  String _selectedJurnalInsert = "JURNAL PENGELUARAN KAS";
+  late String _selectedJurnalInsert;
+  int id_jurnal = 0;
 
   var tableRow;
+  var list_bulan = <VBulanJurnal>[];
+  var list_jurnal = <JenisJurnal>[];
 
   void _navigateToJenisJurnal(BuildContext context){
     Navigator.of(context).push(
@@ -63,16 +76,43 @@ class JurnalUmumListState extends State<JurnalUmumList> {
     );
   }
 
+  void _navigateSelf(BuildContext context){
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) =>
+            SideNavigationBar(
+                index: 2,
+                coaIndex: 0,
+                jurnalUmumIndex: 0,
+                bukuBesarIndex: 0,
+                labaRugiIndex: 0,
+                neracaLajurIndex: 0,
+                amortisasiIndex: 0,
+                jurnalPenyesuaianIndex: 0,
+                client: widget.client
+            )
+        )
+    );
+  }
+
+  late VBulanJurnalBloc _bulanBloc;
+  late JenisJurnalBloc _jenisJurnalBloc;
+  late VJurnalBloc _jurnalBloc;
+
   @override
   void initState() {
     super.initState();
     tableRow = new BulanTahunTableData(
-      contentData: contents,
+      contentData: const <VBulanJurnal>[],
       seeDetail: () {
         _navigateToJenisJurnal(context);
       },
       context: context,
     );
+
+    _selectedJurnalInsert = "JURNAL PENGELUARAN KAS";
+    _bulanBloc = VBulanJurnalBloc(service: SupabaseService(supabaseClient: widget.client))..add(BulanFetched());
+    _jenisJurnalBloc = JenisJurnalBloc(service: SupabaseService(supabaseClient: widget.client))..add(JenisJurnalFetched(tipe: "UMUM"));
+    _jurnalBloc = VJurnalBloc(service: SupabaseService(supabaseClient: widget.client));
   }
 
   void showForm() {
@@ -217,236 +257,231 @@ class JurnalUmumListState extends State<JurnalUmumList> {
       title: 'List Jurnal Umum',
       home: Scaffold(
         backgroundColor: background,
-        body: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 25, left: 25),
-              child: HeaderText(
-                  content: "Jurnal Umum", size: 32, color: hitam
-              )
-            ),
-            Container(
-              width: 30,
-              margin: EdgeInsets.only(left: 25, top: 10),
-              child: Row(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => _bulanBloc),
+            BlocProvider(create: (context) => _jenisJurnalBloc)
+          ],
+          child: ListView(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: 25, left: 25),
+                  child: HeaderText(
+                      content: "Jurnal Umum", size: 32, color: hitam
+                  )
+              ),
+              Container(
+                  width: 30,
+                  margin: EdgeInsets.only(left: 25, top: 10),
+                  child: Row(
                     children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: kuning,
-                              padding: const EdgeInsets.all(18)),
-                          onPressed: (disable_button ? null : showForm),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kuning,
+                                  padding: const EdgeInsets.all(18)),
+                              onPressed: (disable_button ? null : showForm),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.add,
-                                    size: 13,
-                                    color: hitam,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 13,
+                                        color: hitam,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Tambah Transaksi",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: hitam,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "Tambah Transaksi",
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      color: hitam,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
                                 ],
-                              ),
-                            ],
+                              )
                           )
-                      )
-                    ],
-                  ),
-                  SizedBox(width: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: kuning,
-                              padding: const EdgeInsets.all(18)),
-                          onPressed: (disable_button2 ? null : showForm2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        ],
+                      ),
+                      SizedBox(width: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kuning,
+                                  padding: const EdgeInsets.all(18)),
+                              onPressed: (disable_button2 ? null : showForm2),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.add,
-                                    size: 13,
-                                    color: hitam,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 13,
+                                        color: hitam,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Tambah Jenis Jurnal",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: hitam,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "Tambah Jenis Jurnal",
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      color: hitam,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
                                 ],
-                              ),
-                            ],
+                              )
                           )
+                        ],
                       )
                     ],
                   )
-                ],
-              )
-            ),
-            Visibility(
-                visible: show,
-                child: Container(
-                  margin: EdgeInsets.all(25),
-                  padding: EdgeInsets.all(25),
-                  color: background2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 15),
-                        child: HeaderText(
-                            content: "Tambah Transaksi",
-                            size: 18,
-                            color: hitam),
-                      ),
-                      Row( // BARIS PERTAMA FORM
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.13,
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 10, bottom: 20),
-                                  child: TextField(
-                                    controller: tanggal,
-                                    style: TextStyle(fontSize: 13),
-                                    readOnly: true,
-                                    onTap: () async {
-                                      DateTime? date = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(1900),
-                                          lastDate: DateTime(2100)
-                                      );
+              ),
+              Visibility(
+                  visible: show,
+                  child: Container(
+                    margin: EdgeInsets.all(25),
+                    padding: EdgeInsets.all(25),
+                    color: background2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 15),
+                          child: HeaderText(
+                              content: "Tambah Transaksi",
+                              size: 18,
+                              color: hitam),
+                        ),
+                        Row( // BARIS PERTAMA FORM
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                  // width: MediaQuery.of(context).size.width * 0.13,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 10, bottom: 20),
+                                    child: TextField(
+                                      controller: tanggal,
+                                      style: TextStyle(fontSize: 13),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        DateTime? date = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(1900),
+                                            lastDate: DateTime(2100)
+                                        );
 
-                                      if (date != null) {
-                                        String formattedDate =
-                                        DateFormat('yyyy-MM-dd')
-                                            .format(date);
-                                        setState(() {
+                                        if (date != null) {
+                                          String formattedDate =
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(date);
+                                          setState(() {
                                             tanggal.text = formattedDate;
-                                        });
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                        hintText: "Masukkan tanggal transaksi",
-                                        prefixIcon: Icon(Icons.calendar_today),
-                                        contentPadding: const EdgeInsets.all(5),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(8)
-                                        )
+                                          });
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: "Masukkan tanggal transaksi",
+                                          prefixIcon: Icon(Icons.calendar_today),
+                                          contentPadding: const EdgeInsets.all(5),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8)
+                                          )
+                                      ),
                                     ),
-                                  ),
-                                )
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.20,
-                                child: TextForm(
-                                  hintText: "Masukkan nama transaksi",
-                                  textController: nama_transaksi,
-                                )
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.35,
-                                child: DropdownForm(
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      if (newValue != null) {
-                                        _selectedJurnalInsert = newValue!;
-                                      }
-                                    });
-                                  },
-                                  content: _selectedJurnalInsert,
-                                  items: jurnal,
-                                )
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.15,
-                                child: TextForm(
-                                  hintText: "Masukkan no. bukti",
-                                  textController: no_bukti,
-                                )
-                            ),
-                          ]
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 5),
-                                    child: HeaderText(
-                                        content: "Debit",
-                                        size: 16,
-                                        color: hitam
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  ButtonAdd(
-                                      onPressed: (){
-                                        setState(() {
-                                          addDynamicDebit();
-                                        });
-                                      }
                                   )
-                                ],
                               ),
-                              // iterasi dlm sini
-                              for (var i in dynamicDebitList) i,
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 25),
-                                child: Row(
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                  // width: MediaQuery.of(context).size.width * 0.20,
+                                  child: TextForm(
+                                    hintText: "Masukkan nama transaksi",
+                                    textController: nama_transaksi,
+                                  )
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              BlocBuilder<JenisJurnalBloc, SiakState>(
+                                builder: (_, state) {
+                                  if (state is LoadingState || state is FailureState) {
+                                    return SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.3,
+                                    );
+                                  }
+                                  if (state is SuccessState) {
+                                    var list_filter = <String>[];
+                                    list_jurnal = state.datastore;
+                                    for (var jurnal in list_jurnal) { list_filter.add(jurnal.kategori_jurnal); }
+                                    print(list_filter);
+                                    return Expanded(
+                                        // width: MediaQuery.of(context).size.width * 0.3,
+                                        child: DropdownForm(
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              if (newValue != null) {
+                                                _selectedJurnalInsert = newValue!!;
+                                                var indexItem = list_jurnal.indexWhere((jurnal) => jurnal.kategori_jurnal == _selectedJurnalInsert);
+                                                print(indexItem);
+                                              }
+                                            });
+                                          },
+                                          content: _selectedJurnalInsert,
+                                          items: list_filter,
+                                        )
+                                    );
+                                  }
+                                  return SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.3
+                                  );
+                                }
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                  // width: MediaQuery.of(context).size.width * 0.15,
+                                  child: TextForm(
+                                    hintText: "Masukkan no. bukti",
+                                    textController: no_bukti,
+                                  )
+                              ),
+                            ]
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.only(),
+                                      margin: EdgeInsets.only(bottom: 5),
                                       child: HeaderText(
-                                          content: "Kredit",
+                                          content: "Debit",
                                           size: 16,
                                           color: hitam
                                       ),
@@ -457,186 +492,254 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                     ButtonAdd(
                                         onPressed: (){
                                           setState(() {
-                                            addDynamicKredit();
+                                            addDynamicDebit();
                                           });
                                         }
                                     )
                                   ],
                                 ),
-                              ),
-                              // iterasi dlm sini
-                              for (var i in dynamicKreditList) i,
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ButtonNoIcon(
-                              bg_color: background2,
-                              text_color: merah,
-                              onPressed: disableForm,
-                              content: "Batal"
-                          ),
-                          SizedBox(width: 20),
-                          ButtonNoIcon(
-                              bg_color: kuning,
-                              text_color: hitam,
-                              onPressed: (){
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      Future.delayed(Duration(seconds: 1), () {
-                                        Navigator.of(context).pop(true);
-                                      });
-                                      return DialogNoButton(
-                                          content: "Berhasil Ditambahkan!",
-                                          content_detail: "Transaksi baru berhasil ditambahkan",
-                                          path_image: 'assets/images/tambah_coa.png'
-                                      );
-                                    }
-                                );
-                              },
-                              content: "Simpan"
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                )
-            ),
-            Visibility(
-                visible: show2,
-                child: Container(
-                  margin: EdgeInsets.all(25),
-                  padding: EdgeInsets.all(25),
-                  color: background2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: HeaderText(
-                            content: "Tambah Jenis Jurnal",
-                            size: 18,
-                            color: hitam),
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.50,
-                                child: TextForm(
-                                  hintText: "Masukkan jenis jurnal",
-                                  textController: textInsert,
-                                )
+                                // iterasi dlm sini
+                                for (var i in dynamicDebitList) i,
+                              ],
                             ),
-                          ]
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ButtonNoIcon(
-                              bg_color: background2,
-                              text_color: merah,
-                              onPressed: disableForm2,
-                              content: "Batal"),
-                          SizedBox(width: 20),
-                          ButtonNoIcon(
-                              bg_color: kuning,
-                              text_color: hitam,
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      Future.delayed(Duration(seconds: 1), () {
-                                        Navigator.of(context).pop(true);
-                                      });
-                                      return DialogNoButton(
-                                          content: "Berhasil Ditambahkan!",
-                                          content_detail: "Jenis jurnal baru berhasil ditambahkan",
-                                          path_image: 'assets/images/tambah_coa.png'
-                                      );
-                                    }
-                                );
-                              },
-                              content: "Simpan"
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                )
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
-              padding: EdgeInsets.all(25),
-              color: background2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      DropdownFilter(
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            if (newValue != null) {
-                              _selectedMonthFilter = newValue;
-                            }
-                          });
-                        },
-                        content: _selectedMonthFilter,
-                        items: month,
-                      ),
-                      SizedBox(width: 20),
-                      DropdownFilter(
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            if (newValue != null) {
-                              _selectedYearFilter = newValue;
-                            }
-                          });
-                        },
-                        content: _selectedYearFilter,
-                        items: year,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
-                  Container(
-                    width: double.infinity,
-                    child: PaginatedDataTable(
-                      columns: <DataColumn>[
-                        DataColumn(
-                          label: Text("No."),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 25),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(),
+                                        child: HeaderText(
+                                            content: "Kredit",
+                                            size: 16,
+                                            color: hitam
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      ButtonAdd(
+                                          onPressed: (){
+                                            setState(() {
+                                              addDynamicKredit();
+                                            });
+                                          }
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                // iterasi dlm sini
+                                for (var i in dynamicKreditList) i,
+                              ],
+                            )
+                          ],
                         ),
-                        DataColumn(
-                          label: Text("Bulan"),
-                        ),
-                        DataColumn(
-                          label: Text("Tahun"),
-                        ),
-                        DataColumn(
-                          label: Text("Action"),
-                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ButtonNoIcon(
+                                bg_color: background2,
+                                text_color: merah,
+                                onPressed: disableForm,
+                                content: "Batal"
+                            ),
+                            SizedBox(width: 20),
+                            ButtonNoIcon(
+                                bg_color: kuning,
+                                text_color: hitam,
+                                onPressed: (){
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        Future.delayed(Duration(seconds: 2), () {
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => JurnalUmumList(client: widget.client)));
+                                        });
+                                        return DialogNoButton(
+                                            content: "Berhasil Ditambahkan!",
+                                            content_detail: "Transaksi baru berhasil ditambahkan",
+                                            path_image: 'assets/images/tambah_coa.png'
+                                        );
+                                      }
+                                  );
+                                },
+                                content: "Simpan"
+                            )
+                          ],
+                        )
                       ],
-                      source: tableRow,
-                      rowsPerPage: 10,
-                      showCheckboxColumn: false,
                     ),
                   )
-                ],
               ),
-            )
-          ],
+              Visibility(
+                  visible: show2,
+                  child: Container(
+                    margin: EdgeInsets.all(25),
+                    padding: EdgeInsets.all(25),
+                    color: background2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 20),
+                          child: HeaderText(
+                              content: "Tambah Jenis Jurnal",
+                              size: 18,
+                              color: hitam),
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.50,
+                                  child: TextForm(
+                                    hintText: "Masukkan jenis jurnal",
+                                    textController: textInsert,
+                                  )
+                              ),
+                            ]
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ButtonNoIcon(
+                                bg_color: background2,
+                                text_color: merah,
+                                onPressed: disableForm2,
+                                content: "Batal"),
+                            SizedBox(width: 20),
+                            ButtonNoIcon(
+                                bg_color: kuning,
+                                text_color: hitam,
+                                onPressed: () {
+                                  var nama_jurnal = textInsert.text;
+                                  var tipe_jurnal = "UMUM";
+                                  
+                                  if (nama_jurnal.isNotEmpty) {
+                                    _jenisJurnalBloc.add(JenisJurnalInserted(jenis_jurnal: JenisJurnal(kategori_jurnal: nama_jurnal, tipe_jurnal: tipe_jurnal)));
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          Future.delayed(Duration(seconds: 2), () {
+                                            _navigateSelf(context);
+                                          });
+                                          return DialogNoButton(
+                                              content: "Berhasil Ditambahkan!",
+                                              content_detail: "Jenis jurnal baru berhasil ditambahkan",
+                                              path_image: 'assets/images/tambah_coa.png'
+                                          );
+                                        }
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("Pastikan nama jurnal terisi."))
+                                    );
+                                  }
+                                },
+                                content: "Simpan"
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
+                padding: EdgeInsets.all(25),
+                color: background2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        DropdownFilter(
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              if (newValue != null) {
+                                _selectedMonthFilter = newValue;
+                              }
+                            });
+                          },
+                          content: _selectedMonthFilter,
+                          items: month,
+                        ),
+                        SizedBox(width: 20),
+                        DropdownFilter(
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              if (newValue != null) {
+                                _selectedYearFilter = newValue;
+                              }
+                            });
+                          },
+                          content: _selectedYearFilter,
+                          items: year,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25),
+                    BlocConsumer<VBulanJurnalBloc, SiakState>(
+                      listener: (_, state) {
+                        if (state is SuccessState) {
+                          list_bulan.clear();
+                          list_bulan = state.datastore;
+                        }
+                      },
+                        builder: (_, state) {
+                          if (state is LoadingState) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          if (state is FailureState) {
+                            return Center(child: Text(state.error));
+                          }
+                          if (state is SuccessState) {
+                            return Container(
+                              width: double.infinity,
+                              child: PaginatedDataTable(
+                                columns: <DataColumn>[
+                                  DataColumn(
+                                    label: Text("No."),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Bulan"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Tahun"),
+                                  ),
+                                  DataColumn(
+                                    label: Text("Action"),
+                                  ),
+                                ],
+                                source: BulanTahunTableData(
+                                  contentData: list_bulan,
+                                  seeDetail: () {
+                                    _navigateToJenisJurnal(context);
+                                  },
+                                  context: context,
+                                ),
+                                rowsPerPage: 10,
+                                showCheckboxColumn: false,
+                              ),
+                            );
+                          }
+                          return const Center(child: Text("No Data"));
+                        },
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         )
       )
     );
@@ -672,9 +775,10 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
+    return Flexible( // BAGIAN DEBIT
+      // width: MediaQuery.of(context).size.width * 0.40,
       child: Container(
+        padding: EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
               border: Border(
                   right: BorderSide(
@@ -682,9 +786,9 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
                   )
               )
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
+          child: Wrap(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.25,
@@ -752,12 +856,12 @@ class DynamicKreditInsertWidgetState extends State<DynamicKreditInsertWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
+    return Flexible( // BAGIAN DEBIT
+      // width: MediaQuery.of(context).size.width * 0.40,
       child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
+          child: Wrap(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.25,

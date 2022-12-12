@@ -17,7 +17,7 @@ class VJurnalBloc extends Bloc<Event, VJurnalState> {
       JurnalFetched event, Emitter<VJurnalState> emit) async {
     try {
       emit(state.copyWith(status: SystemStatus.loading));
-      final list_jurnal = await service.getAllJurnal(
+      final list_jurnal = await service.getAllTransaksiJurnal(
           TableViewType.v_jurnal.name, {
         "bulan": event.bulan,
         "tahun": event.tahun,

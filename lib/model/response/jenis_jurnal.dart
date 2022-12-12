@@ -1,21 +1,24 @@
 import 'package:equatable/equatable.dart';
 
 class JenisJurnal extends Equatable {
-  final int id_jenis_jurnal;
-  final String nama_jurnal;
+  final int id_jurnal;
+  final String kategori_jurnal;
+  final String tipe_jurnal;
 
-  const JenisJurnal({this.id_jenis_jurnal = 0, required this.nama_jurnal});
+  const JenisJurnal({this.id_jurnal = 0, this.kategori_jurnal = "", this.tipe_jurnal = ""});
 
   factory JenisJurnal.fromJson(Map<String, dynamic> json) {
     return JenisJurnal(
-        id_jenis_jurnal: json['id_jenis_jurnal'],
-        nama_jurnal: json['nama_jurnal']);
+        id_jurnal: json['id_jurnal'],
+      kategori_jurnal: json['kategori_jurnal'],
+      tipe_jurnal: json['tipe_jurnal']
+    );
   }
 
   Map<String, dynamic> toJson() {
-    return {'nama_jurnal': this.nama_jurnal};
+    return {'kategori_jurnal': this.kategori_jurnal, 'tipe_jurnal': this.tipe_jurnal};
   }
 
   @override
-  List<Object> get props => [id_jenis_jurnal, nama_jurnal];
+  List<Object> get props => [id_jurnal, kategori_jurnal, tipe_jurnal];
 }

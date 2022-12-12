@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
@@ -137,12 +138,12 @@ class BulanTahunTableData extends DataTableSource {
   Function seeDetail;
   BuildContext context;
   BulanTahunTableData(
-      {required List<V_bulan_jurnal> contentData,
+      {required List<VBulanJurnal> contentData,
       required this.seeDetail,
       required this.context})
       : _contentData = contentData,
         assert(contentData != null);
-  final List<V_bulan_jurnal> _contentData;
+  final List<VBulanJurnal> _contentData;
 
   @override
   DataRow? getRow(int index) {
