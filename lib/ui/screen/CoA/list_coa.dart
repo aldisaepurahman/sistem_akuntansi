@@ -1,5 +1,4 @@
 // import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_akuntansi/bloc/SiakState.dart';
@@ -15,9 +14,8 @@ import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
+import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/utils/V_lookup.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListCOA extends StatefulWidget {
@@ -247,39 +245,128 @@ class ListCOAState extends State<ListCOA> {
                 }
                 if (state is SuccessState) {
                   data_akun = state.datastore;
-                  return PaginatedDataTable(
-                    columns: <DataColumn>[
-                      DataColumn(
-                        label: Text("No."),
+                  return Container(
+                    width: double.infinity,
+                    child: PaginatedDataTable(
+                      columns: <DataColumn>[
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: greyHeaderColor,
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: greyHeaderColor,
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Kode",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: greyHeaderColor,
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Nama Akun",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: greyHeaderColor,
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Keterangan",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: greyHeaderColor,
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Indentasi",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                              child: Container(
+                                color: greyHeaderColor,
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Action",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                  ),
+                                ),
+                              )
+                          ),
+                        ),
+                      ],
+                      source: RowTableCOA(
+                        contentData: data_akun,
+                        seeDetail: (int index) {
+                          _navigateToDetailCoa(
+                              context, {"akun": data_akun[index]});
+                        },
+                        context: context,
                       ),
-                      DataColumn(
-                        label: Text("Kode"),
-                      ),
-                      DataColumn(
-                        label: Text("Nama Akun"),
-                      ),
-                      DataColumn(
-                        label: Text("Keterangan"),
-                      ),
-                      DataColumn(
-                        label: Text("Indentasi"),
-                      ),
-                      DataColumn(
-                        label: Text("Action"),
-                      ),
-                    ],
-                    source: RowTableCOA(
-                      contentData: data_akun,
-                      seeDetail: (int index) {
-                        _navigateToDetailCoa(
-                            context, {"akun": data_akun[index]});
-                      },
-                      context: context,
+                      sortAscending: true,
+                      rowsPerPage: total_row,
+                      showCheckboxColumn: false,
+                      dataRowHeight: 70,
+                      horizontalMargin: 0,
+                      columnSpacing: 0,
                     ),
-                    sortAscending: true,
-                    rowsPerPage: total_row,
-                    showCheckboxColumn: false,
-                    dataRowHeight: 70,
                   );
                 }
                 if (state is LoadingState) {

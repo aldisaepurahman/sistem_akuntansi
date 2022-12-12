@@ -246,23 +246,98 @@ class RowTableCOA extends DataTableSource {
       cells: <DataCell>[
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text("${index + 1}"),
-        )),
+          child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(right: 20),
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Text(
+                    "${index+1}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+            ),
+        )
+        ),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width / 5.5 - 50,
-          child: Text("${_content.kode_akun}"),
+          child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(right: 20),
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Text(
+                    "${_content.kode_akun}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          )
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.3 - 50,
-          child: Text("${_content.nama_akun}"),
+          child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(right: 20),
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Text(
+                    "${_content.nama_akun}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text("${_content.keterangan_akun}"),
+          width: double.infinity,
+          child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.red),
+              ),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.keterangan_akun}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
-          child: Text("${_content.indentasi}"),
+          width: double.infinity,
+          child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.red),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.indentasi}",
+                    // textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
         )),
         DataCell(SizedBox(
           width: MediaQuery.of(context).size.width * 0.15 - 50,
