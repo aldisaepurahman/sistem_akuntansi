@@ -19,6 +19,7 @@ class DropdownForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
+      isExpanded: true,
       style: TextStyle(fontSize: 13, color: abu_tua),
       decoration: InputDecoration(
         labelText: label,
