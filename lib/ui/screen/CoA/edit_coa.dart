@@ -36,9 +36,29 @@ class EditCOAState extends State<EditCOA> {
           neracaLajurIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
-          client: widget.client
+          client: widget.client,
+          params: {"akun": widget.akun},
         )
       )
+    );
+  }
+
+  void _navigateToListCoa(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) =>
+                SideNavigationBar(
+                    index: 1,
+                    coaIndex: 0,
+                    jurnalUmumIndex: 0,
+                    bukuBesarIndex: 0,
+                    labaRugiIndex: 0,
+                    neracaLajurIndex: 0,
+                    amortisasiIndex: 0,
+                    jurnalPenyesuaianIndex: 0,
+                    client: widget.client
+                )
+        )
     );
   }
   
@@ -118,10 +138,7 @@ class EditCOAState extends State<EditCOA> {
                                           });
                                         },
                                         onPressed2: () {
-                                          setState(() {
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
-                                          });
+                                          _navigateToDetailCoa(context);
                                         });
                                   });
                             });
@@ -325,8 +342,7 @@ class EditCOAState extends State<EditCOA> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     Future.delayed(Duration(seconds: 2), () {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) => SideNavigationBar(index: 1, coaIndex: 0, bukuBesarIndex: 0, client: widget.client)));
+                                      _navigateToListCoa(context);
                                     });
                                     return DialogNoButton(
                                         content: "Berhasil Diedit!",

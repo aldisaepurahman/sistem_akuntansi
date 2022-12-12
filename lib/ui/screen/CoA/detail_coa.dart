@@ -12,9 +12,9 @@ import 'package:sistem_akuntansi/model/response/saldo.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
-import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailCOA extends StatefulWidget {
@@ -31,7 +31,7 @@ class DetailCOA extends StatefulWidget {
 }
 
 class DetailCOAState extends State<DetailCOA> {
-  void _navigateToEditCoa(BuildContext context){
+  void _navigateToEditCoa(BuildContext context, Map<String, dynamic> params){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) =>
         SideNavigationBar(
@@ -43,28 +43,32 @@ class DetailCOAState extends State<DetailCOA> {
           neracaLajurIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
-          client: widget.client
+          client: widget.client,
+          params: params,
         )
       )
     );
   }
 
-  void _navigateToListCoa(BuildContext context){
+  void _navigateToListCoa(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SideNavigationBar(
-          index: 1,
-          coaIndex: 0,
-          jurnalUmumIndex: 0,
-          bukuBesarIndex: 0,
-          labaRugiIndex: 0,
-          neracaLajurIndex: 0,
-          amortisasiIndex: 0,
-          jurnalPenyesuaianIndex: 0,
-          client: widget.client
+        MaterialPageRoute(
+            builder: (context) =>
+                SideNavigationBar(
+                    index: 1,
+                    coaIndex: 0,
+                    jurnalUmumIndex: 0,
+                    bukuBesarIndex: 0,
+                    labaRugiIndex: 0,
+                    neracaLajurIndex: 0,
+                    amortisasiIndex: 0,
+                    jurnalPenyesuaianIndex: 0,
+                    client: widget.client
+                )
         )
-      )
     );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -103,7 +107,7 @@ class DetailCOAState extends State<DetailCOA> {
                           },*/
                             onPressed: () {
                               setState(() {
-                                Navigator.pop(context);
+                                _navigateToListCoa(context);
                               });
                             },
                           )
@@ -201,14 +205,7 @@ class DetailCOAState extends State<DetailCOA> {
                                 padding: EdgeInsets.all(20)),
                             onPressed: () {
                               setState(() {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => SideNavigationBar(
-                                        index: 1,
-                                        coaIndex: 3,
-                                        bukuBesarIndex: 0,
-                                        client: widget.client,
-                                      params: {"akun": widget.akun, "akun_saldo": akun_saldo},
-                                    )));
+                                _navigateToEditCoa(context, {"akun": widget.akun, "akun_saldo": akun_saldo});
                               });
                             },
                             child: const Text(
@@ -246,18 +243,7 @@ class DetailCOAState extends State<DetailCOA> {
                                             Navigator.pop(context);
                                           });
                                         },
-                                        onPressed2: () {
-                                          AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(AkunDeleted(kode_akun: widget.akun.kode_akun));
-                                          Future.delayed(Duration(seconds: 2), () {
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) => SideNavigationBar(
-                                                    index: 1,
-                                                    coaIndex: 0,
-                                                    bukuBesarIndex: 0,
-                                                    client: widget.client
-                                                )));
-                                          });
-                                        });
+                                        onPressed2: () {});
                                   });
                             },
                             child: const Text(

@@ -6,12 +6,13 @@ import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+
+import '../../components/navigationBar.dart';
 
 class LabaRugiList extends StatefulWidget {
-  final SupabaseClient client;
-
   const LabaRugiList({required this.client, Key? key}) : super(key: key);
+
+  final SupabaseClient client;
 
   @override
   LabaRugiListState createState() {

@@ -35,6 +35,7 @@ class SupabaseService {
 
   Future<ServiceStatus> getDetailCOA(
       String table_name, Map<String, String> keyword) async {
+
     Map<int, String> listbulan =
     {
       1: "Januari",

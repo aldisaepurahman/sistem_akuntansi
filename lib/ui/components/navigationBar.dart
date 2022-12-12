@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/amortisasi_aset.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/amortisasi_pendapatan.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/detail_amortisasi_aset.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/detail_amortisasi_pendapatan.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/edit_amortisasi_aset.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/edit_amortisasi_pendapatan.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/tambah_akun_amortisasi.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/saldo.dart';
@@ -25,7 +33,7 @@ import 'package:sistem_akuntansi/ui/screen/JurnalPenyesuaian/detail_transaksi_pe
 import 'package:sistem_akuntansi/ui/screen/dashboard.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SideNavigationBar extends StatefulWidget{
+class SideNavigationBar extends StatefulWidget {
   final int index;
   final int coaIndex;
   final int jurnalUmumIndex;
@@ -48,7 +56,7 @@ class SideNavigationBar extends StatefulWidget{
         required this.labaRugiIndex,
         required this.amortisasiIndex,
         required this.jurnalPenyesuaianIndex,
-        required this.client
+        required this.client,
         this.params
       })
       : super(key: key);
@@ -81,10 +89,10 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
       return InsertCOA(client: widget.client); // insert CoA
     }
     else if (selectedCoaIndex == 2) {
-      return DetailCOA(client: widget.client); // detail CoA
+      return DetailCOA(client: widget.client, akun: widget.params?["akun"] as Akun); // detail CoA
     }
     else if (selectedCoaIndex == 3) {
-      return EditCOA(client: widget.client); // edit CoA
+      return EditCOA(client: widget.client, akun: widget.params?["akun"] as Akun, akun_saldo: widget.params?["akun_saldo"] as Saldo,); // edit CoA
     }
     return ListCOA(client: widget.client); // list CoA
   }
@@ -92,26 +100,18 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   Widget getJurnalUmum() {
     if (selectedJurnalUmumIndex == 1) {
       return JenisJurnal(client: widget.client); // tabel jenis jurnal
-    }
-    else if (selectedJurnalUmumIndex == 2) {
+    } else if (selectedJurnalUmumIndex == 2) {
       return TransaksiList(client: widget.client); // tabel daftar transaksi
-    }
-    else if (selectedJurnalUmumIndex == 3) {
+    } else if (selectedJurnalUmumIndex == 3) {
       return DetailTransaksi(client: widget.client); // detail transaksi
-/*      return InsertCOA(client: widget.client);
-    }
-    else if (selectedCoaIndex == 2) {
-      return DetailCOA(client: widget.client, akun: widget.params?['akun'] as Akun);
-    }
-    else if (selectedCoaIndex == 3) {
-      return EditCOA(client: widget.client, akun: widget.params?['akun'] as Akun, akun_saldo: widget.params?['akun_saldo'] as Saldo);*/
     }
     return JurnalUmumList(client: widget.client); // tabel bulan tahun jurnal
   }
 
-  Widget getBukuBesarPage(){
+  Widget getBukuBesarPage() {
     if (selectedBukuBesarIndex == 1) {
-      return BukuBesarPerAkun(client: widget.client); // tabel buku besar per akun
+      return BukuBesarPerAkun(
+          client: widget.client); // tabel buku besar per akun
     }
     return ListBukuBesar(client: widget.client); // tabel bulan tahun buku besar
   }
@@ -132,9 +132,19 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getAmortisasiPage(){
     if (selectedAmortisasiIndex == 1) {
-      // return
+      return DetailAmortisasiAset(client: widget.client);
+    } else if (selectedAmortisasiIndex == 2) {
+      return EditAmortisasiAset(client: widget.client);
+    } else if (selectedAmortisasiIndex == 3) {
+      return AmortisasiPendapatanList(client: widget.client);
+    } else if (selectedAmortisasiIndex == 4) {
+      return DetailAmortisasiPendapatan(client: widget.client);
+    } else if (selectedAmortisasiIndex == 5) {
+      return EditAmortisasiPendapatan(client: widget.client);
+    } else if (selectedAmortisasiIndex == 6) {
+      return TambahAkunAmortisasiList(client: widget.client);
     }
-    return JurnalPenyesuaianList(client: widget.client);
+    return AmortisasiAsetList(client: widget.client);
   }
 
   Widget getJurnalPenyesuaianPage() {
@@ -213,7 +223,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
                       leading: Row(
                         children: [
                           Image.asset(
-                            "images/logo_stikes.png",
+                            "assets/images/logo_stikes.png",
                             height: 50,
                           ),
                           isExtended == true ? SizedBox(
@@ -234,15 +244,15 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
                                   fontSize: 10,
                                 ),
                               ),
-                              Text(
-                                'STIKes Santo Borromeus',
-                                style: TextStyle(
-                                  color: kuning,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Inter",
-                                  fontSize: 14,
+                                Text(
+                                  'STIKes Santo Borromeus',
+                                  style: TextStyle(
+                                    color: kuning,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Inter",
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ),
                             ],
                           )
                           :

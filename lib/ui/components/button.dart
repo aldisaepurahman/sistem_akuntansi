@@ -82,13 +82,15 @@ class ButtonNoIcon extends StatelessWidget {
             backgroundColor: bg_color, padding: EdgeInsets.all(18)),
         onPressed: onPressed,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   content,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Inter",
                     color: text_color,

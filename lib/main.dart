@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/amortisasi_aset.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/detail_amortisasi_pendapatan.dart';
+import 'package:sistem_akuntansi/ui/screen/Amortisasi/tambah_akun_amortisasi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
 
-Future<void> main() async{
+import 'ui/screen/Amortisasi/detail_amortisasi_aset.dart';
+import 'ui/screen/Amortisasi/edit_amortisasi_aset.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
@@ -38,8 +46,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, jurnalUmumIndex: 0, bukuBesarIndex: 0, client: Supabase.instance.client));
-    return MaterialApp(home: Login(client: Supabase.instance.client));
+    return MaterialApp(
+        //Jangan Dihapus!
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          MonthYearPickerLocalizations.delegate,
+        ], home: Login(client: Supabase.instance.client));
+    // return MaterialApp(home: SideNavigationBar(client: Supabase.instance.client));
+    // return MaterialApp(home: Login(client: Supabase.instance.client));
   /*@override
   Widget build(BuildContext context) {
     return MaterialApp(home: SideNavigationBar(index: 0, coaIndex: 0, bukuBesarIndex: 0, client: client));
