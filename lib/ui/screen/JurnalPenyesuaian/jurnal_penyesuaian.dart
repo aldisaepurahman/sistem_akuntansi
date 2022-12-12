@@ -29,19 +29,19 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
 
   var tableRow;
 
-  void _navigateToEditCoa(BuildContext context){
+  void _navigateToJenisJurnal(BuildContext context){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) =>
         SideNavigationBar(
-            index: 7,
-            coaIndex: 3,
-            jurnalUmumIndex: 0,
-            bukuBesarIndex: 0,
-            labaRugiIndex: 0,
-            neracaLajurIndex: 0,
-            amortisasiIndex: 0,
-            jurnalPenyesuaianIndex: 1,
-            client: widget.client
+          index: 7,
+          coaIndex: 0,
+          jurnalUmumIndex: 0,
+          bukuBesarIndex: 0,
+          labaRugiIndex: 0,
+          neracaLajurIndex: 0,
+          amortisasiIndex: 0,
+          jurnalPenyesuaianIndex: 1,
+          client: widget.client
         )
       )
     );
@@ -53,15 +53,7 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
     tableRow = new BulanTahunTableData(
       contentData: contents,
       seeDetail: () {
-        setState(() {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => SideNavigationBar(
-          //         index: 3,
-          //         coaIndex: 0,
-          //         jurnalUmumIndex: 0,
-          //         bukuBesarIndex: 1,
-          //         client: widget.client)));
-        });
+        _navigateToJenisJurnal(context);
       },
       context: context,
     );
@@ -156,24 +148,27 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
                         ],
                       ),
                       SizedBox(height: 25),
-                      PaginatedDataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text("No."),
-                          ),
-                          DataColumn(
-                            label: Text("Bulan"),
-                          ),
-                          DataColumn(
-                            label: Text("Tahun"),
-                          ),
-                          DataColumn(
-                            label: Text("Action"),
-                          ),
-                        ],
-                        source: tableRow,
-                        rowsPerPage: 10,
-                        showCheckboxColumn: false,
+                      Container(
+                        width: double.infinity,
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Text("No."),
+                            ),
+                            DataColumn(
+                              label: Text("Bulan"),
+                            ),
+                            DataColumn(
+                              label: Text("Tahun"),
+                            ),
+                            DataColumn(
+                              label: Text("Action"),
+                            ),
+                          ],
+                          source: tableRow,
+                          rowsPerPage: 10,
+                          showCheckboxColumn: false,
+                        ),
                       )
                     ],
                   ),

@@ -27,6 +27,9 @@ import 'package:sistem_akuntansi/ui/screen/NeracaLajur/laporan_neracalajur.dart'
 import 'package:sistem_akuntansi/ui/screen/LabaRugi/laba_rugi.dart';
 import 'package:sistem_akuntansi/ui/screen/LabaRugi/laporan_labarugi.dart';
 import 'package:sistem_akuntansi/ui/screen/JurnalPenyesuaian/jurnal_penyesuaian.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalPenyesuaian/jenis_jurnal_penyesuaian.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalPenyesuaian/transaksi_penyesuaian.dart';
+import 'package:sistem_akuntansi/ui/screen/JurnalPenyesuaian/detail_transaksi_penyesuaian.dart';
 import 'package:sistem_akuntansi/ui/screen/dashboard.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -146,7 +149,13 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getJurnalPenyesuaianPage() {
     if (selectedJurnalPenyesuaianIndex ==  1) {
-      // return
+      return JenisJurnalPenyesuaian(client: widget.client);
+    }
+    else if (selectedJurnalPenyesuaianIndex == 2) {
+      return TransaksiPenyesuaianList(client: widget.client);
+    }
+    else if (selectedJurnalPenyesuaianIndex == 3) {
+      return DetailTransaksiPenyesuaian(client: widget.client);
     }
     return JurnalPenyesuaianList(client: widget.client);
   }
