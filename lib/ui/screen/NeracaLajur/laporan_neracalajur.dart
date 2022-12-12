@@ -56,12 +56,6 @@ class LaporanNeracaLajurState extends State<LaporanNeracaLajur> {
       },
       context: context,
     );
-
-    @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      throw UnimplementedError();
-    }
   }
 
   void showForm() {

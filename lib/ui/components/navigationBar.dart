@@ -151,6 +151,13 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     return JurnalPenyesuaianList(client: widget.client);
   }
 
+  Widget logoutDialog() {
+    if (selectedJurnalPenyesuaianIndex ==  1) {
+      // return
+    }
+    return JurnalPenyesuaianList(client: widget.client);
+  }
+
   @override
   void initState() {
     selectedIndex = widget.index;
@@ -171,6 +178,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
       getLabaRugiPage(),
       getAmortisasiPage(),
       getJurnalPenyesuaianPage(),
+      logoutDialog()
     ];
   }
 
@@ -445,6 +453,28 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
           SizedBox.shrink()
         )
       ),
+      NavigationRailDestination(
+          icon: (isExtended == true ? SizedBox.shrink() : Icon(Icons.logout,
+            color: greyFontColor,
+          )),
+          label: (isExtended == true ? Row(
+            children: [
+              Icon(Icons.logout,
+                color: greyFontColor,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Logout',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                ),
+              ),
+            ],
+          )
+              :
+          SizedBox.shrink()
+          )
+      )
     ];
   }
 }
