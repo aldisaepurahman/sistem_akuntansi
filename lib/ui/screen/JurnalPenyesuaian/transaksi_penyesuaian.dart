@@ -9,6 +9,7 @@ import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/utils/Transaksi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:sistem_akuntansi/ui/components/dynamic_input.dart';
 
 class TransaksiPenyesuaianList extends StatefulWidget {
   final SupabaseClient client;
@@ -70,6 +71,18 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
   final TextEditingController tanggal_update = TextEditingController();
   final TextEditingController nama_transaksi_update = TextEditingController();
   final TextEditingController no_bukti_update = TextEditingController();
+
+  final TextEditingController akunDebitText = new TextEditingController();
+  final TextEditingController jumlahDebitText = new TextEditingController();
+
+  final TextEditingController akunDebitUpdateText = new TextEditingController();
+  final TextEditingController jumlahDebitUpdateText = new TextEditingController();
+
+  final TextEditingController akunKreditText = new TextEditingController();
+  final TextEditingController jumlahKreditText = new TextEditingController();
+
+  final TextEditingController akunKreditUpdateText = new TextEditingController();
+  final TextEditingController jumlahKreditUpdateText = new TextEditingController();
 
   void showForm() {
     setState(() {
@@ -232,6 +245,10 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
         DynamicDebitWidget(
           namaAkunList: namaAkunList,
           formCase: _case,
+          jumlahDebitText: jumlahDebitText,
+          jumlahDebitUpdateText: jumlahDebitUpdateText,
+          akunDebitText: akunDebitText,
+          akunDebitUpdateText: akunDebitUpdateText,
         )
     );
   }
@@ -250,6 +267,10 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
         DynamicKreditWidget(
           namaAkunList: namaAkunList,
           formCase: _case,
+          jumlahKreditUpdateText: jumlahKreditUpdateText,
+          jumlahKreditText: jumlahKreditText,
+          akunKreditText: akunKreditText,
+          akunKreditUpdateText: akunKreditUpdateText,
         )
     );
   }
@@ -680,173 +701,6 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
               ],
             )
         )
-    );
-  }
-}
-
-class DynamicDebitWidget extends StatefulWidget {
-  final List<String> namaAkunList;
-  final int formCase;
-
-  DynamicDebitWidget({
-    required this.namaAkunList,
-    required this.formCase,
-  });
-
-  @override
-  DynamicDebitWidgetState createState() => DynamicDebitWidgetState();
-}
-
-class DynamicDebitWidgetState extends State<DynamicDebitWidget> {
-  TextEditingController akunDebitText = new TextEditingController();
-  TextEditingController jumlahDebitText = new TextEditingController();
-
-  TextEditingController akunDebitUpdateText = new TextEditingController();
-  TextEditingController jumlahDebitUpdateText = new TextEditingController();
-
-  @override
-  void dispose() {
-    akunDebitText.dispose();
-    jumlahDebitText.dispose();
-    akunDebitUpdateText.dispose();
-    jumlahDebitUpdateText.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
-      child: Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  right: BorderSide(
-                      color: abu_transparan
-                  )
-              )
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: DropdownSearchButton(
-                  isNeedChangeColor: false,
-                  notFoundText: 'Akun tidak ditemukan',
-                  hintText: 'Pilih akun',
-                  controller: (widget.formCase == 1 ? akunDebitText : akunDebitUpdateText),
-                  onChange: (String? newValue){
-                    setState(() {
-                      if(newValue != null) {
-                        if (widget.formCase == 1) {
-                          akunDebitText.text = newValue;
-                        }
-                        else {
-                          akunDebitUpdateText.text = newValue;
-                        }
-                      }
-                    });
-                  },
-                  items: widget.namaAkunList,
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
-                child: TextForm(
-                  hintText: "Jumlah",
-                  textController: (widget.formCase == 1 ? jumlahDebitText : jumlahDebitUpdateText),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-            ],
-          )
-      ),
-    );
-  }
-}
-
-class DynamicKreditWidget extends StatefulWidget {
-  final List<String> namaAkunList;
-  final int formCase;
-
-  DynamicKreditWidget({
-    required this.namaAkunList,
-    required this.formCase,
-  });
-
-  @override
-  DynamicKreditWidgetState createState() => DynamicKreditWidgetState();
-}
-
-class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
-  TextEditingController akunKreditText = new TextEditingController();
-  TextEditingController jumlahKreditText = new TextEditingController();
-
-  TextEditingController akunKreditUpdateText = new TextEditingController();
-  TextEditingController jumlahKreditUpdateText = new TextEditingController();
-
-  @override
-  void dispose() {
-    akunKreditText.dispose();
-    jumlahKreditText.dispose();
-    akunKreditUpdateText.dispose();
-    jumlahKreditUpdateText.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
-      child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: DropdownSearchButton(
-                  isNeedChangeColor: false,
-                  notFoundText: 'Akun tidak ditemukan',
-                  hintText: 'Pilih akun',
-                  controller: (widget.formCase == 1 ? akunKreditText : akunKreditUpdateText),
-                  onChange: (String? newValue){
-                    setState(() {
-                      if(newValue != null) {
-                        if (widget.formCase == 1) {
-                          akunKreditText.text = newValue;
-                        }
-                        else {
-                          akunKreditUpdateText.text = newValue;
-                        }
-                      }
-                    });
-                  },
-                  items: widget.namaAkunList,
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
-                child: TextForm(
-                  hintText: "Jumlah",
-                  textController: (widget.formCase == 1 ? jumlahKreditText : jumlahKreditUpdateText),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-            ],
-          )
-      ),
     );
   }
 }

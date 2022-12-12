@@ -58,9 +58,6 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
     );
   }
 
-  @override
-  void dispose() {}
-
   bool show = false;
   bool disable_button = false;
 
@@ -84,6 +81,11 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
     setState(() {
       show = true;
       disable_button = true;
+
+      keterangan.text = "";
+      total_harga.text = "";
+      jumlah_mahasiswa.text = "";
+      akun.text = "";
     });
   }
 
@@ -91,7 +93,21 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
     setState(() {
       show = false;
       disable_button = false;
+
+      keterangan.text = "";
+      total_harga.text = "";
+      jumlah_mahasiswa.text = "";
+      akun.text = "";
     });
+  }
+
+  @override
+  void dispose(){
+    keterangan.dispose();
+    total_harga.dispose();
+    jumlah_mahasiswa.dispose();
+    akun.dispose();
+    super.dispose();
   }
 
   //Inisialisasi untuk Dropdown
@@ -162,7 +178,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: kuning,
                                 padding: const EdgeInsets.all(18)),
-                            onPressed: showForm,
+                            onPressed: (disable_button ? null : showForm),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -365,45 +381,114 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             DataColumn(
-                              label: Text(
-                                "No.",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "No.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Keterangan",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Keterangan",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Total",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Total (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Jumlah Mahasiswa",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Jumlah Mahasiswa",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Penyusutan",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Penyusutan (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Action",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Action",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                           ],
                           source: tableRow,
                           rowsPerPage: int.parse(_selectedEntryFilter),
                           showCheckboxColumn: false,
+                          horizontalMargin: 0,
+                          columnSpacing: 0,
+                          dataRowHeight: 70,
                         ),
                       )
                     ],

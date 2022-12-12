@@ -9,6 +9,7 @@ class CardSaldo extends StatelessWidget {
   final Color fontColor;
   final Color bgColor;
   final String textCard;
+  final String imgPath;
 
   const CardSaldo({
     super.key,
@@ -16,6 +17,7 @@ class CardSaldo extends StatelessWidget {
     required this.fontColor,
     required this.bgColor,
     required this.textCard,
+    required this.imgPath,
   });
 
   @override
@@ -36,7 +38,7 @@ class CardSaldo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SvgPicture.asset(
-              "assets/icons/EmptyWallet.svg",
+              imgPath,
               height: 24,
               width: 24,
             ),

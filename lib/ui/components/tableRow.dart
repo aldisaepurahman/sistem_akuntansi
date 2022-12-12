@@ -34,62 +34,95 @@ class BukuBesarTableData extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-            width: MediaQuery.of(context).size.width / 10 - 50,
-            child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                "${_content.tgl}",
-                style: TextStyle(
-                  fontFamily: "Inter",
-                ),
-              ),
-            ))),
-        DataCell(SizedBox(
-            width: MediaQuery.of(context).size.width / 3 - 50,
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "${_content.nama_transaksi}",
-                style: TextStyle(
-                  fontFamily: "Inter",
-                ),
-              ),
-            ))),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 10 - 50,
+          width: double.infinity,
           child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              "${_content.no_bukti}",
-              style: TextStyle(
-                fontFamily: "Inter",
-              ),
-            ),
-          ),
-        )),
-        DataCell(SizedBox(
-            width: MediaQuery.of(context).size.width / 10 - 50,
-            child: Container(
               alignment: Alignment.center,
-              child: Text(
-                "${_content.keterangan}",
-                style: TextStyle(
-                  fontFamily: "Inter",
-                ),
-              ),
-            ))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.tgl}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
         DataCell(SizedBox(
-            width: MediaQuery.of(context).size.width / 8 - 50,
-            child: Container(
-              padding: EdgeInsets.only(right: 20),
-              alignment: Alignment.centerRight,
-              child: Text(
-                "${_content.saldo}",
-                style: TextStyle(
-                  fontFamily: "Inter",
-                ),
-              ),
-            ))),
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.nama_transaksi}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.no_bukti}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.keterangan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.saldo}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
       ],
     );
   }
@@ -156,58 +189,81 @@ class BulanTahunTableData extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-            width: MediaQuery.of(context).size.width / 5 - 50,
-            child: Container(
+          width: double.infinity,
+          child: Container(
               alignment: Alignment.center,
-              child: Text(
-                "${index + 1}",
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${index+1}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.bulan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.tahun}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )
+        ),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                padding: EdgeInsets.all(20),
+              ),
+              onPressed: () {
+                seeDetail();
+              },
+              child: const Text(
+                "Lihat Detail",
                 style: TextStyle(
                   fontFamily: "Inter",
+                  color: Color.fromARGB(255, 50, 52, 55),
                 ),
               ),
-            ))),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 5 - 50,
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              "${_content.bulan}",
-              style: TextStyle(
-                fontFamily: "Inter",
-              ),
             ),
-          ),
+          )
         )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 5 - 50,
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              "${_content.tahun}",
-              style: TextStyle(
-                fontFamily: "Inter",
-              ),
-            ),
-          ),
-        )),
-        DataCell(
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 255, 204, 0),
-              padding: EdgeInsets.all(20),
-            ),
-            onPressed: () {
-              seeDetail();
-            },
-            child: const Text(
-              "Lihat Detail",
-              style: TextStyle(
-                fontFamily: "Inter",
-                color: Color.fromARGB(255, 50, 52, 55),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -245,13 +301,12 @@ class RowTableCOA extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
+          width: double.infinity,
           child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(right: 20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
                   Text(
                     "${index+1}",
                     style: TextStyle(
@@ -264,13 +319,13 @@ class RowTableCOA extends DataTableSource {
         )
         ),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width / 5.5 - 50,
+          width: double.infinity,
           child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(right: 20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
                   Text(
                     "${_content.kode_akun}",
                     style: TextStyle(
@@ -282,13 +337,13 @@ class RowTableCOA extends DataTableSource {
           )
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.3 - 50,
+          width: double.infinity,
           child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(right: 20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
                   Text(
                     "${_content.nama_akun}",
                     style: TextStyle(
@@ -302,9 +357,6 @@ class RowTableCOA extends DataTableSource {
         DataCell(SizedBox(
           width: double.infinity,
           child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.red),
-              ),
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -322,9 +374,6 @@ class RowTableCOA extends DataTableSource {
         DataCell(SizedBox(
           width: double.infinity,
           child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.red),
-              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -340,23 +389,30 @@ class RowTableCOA extends DataTableSource {
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15 - 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 255, 204, 0),
-              padding: EdgeInsets.all(20),
-            ),
-            onPressed: () {
-              seeDetail(index);
-            },
-            child: const Text(
-              "Lihat Detail",
-              style: TextStyle(
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 50, 52, 55),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
+          width: double.infinity,
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                    padding: EdgeInsets.all(20),
+                  ),
+                  onPressed: () {
+                    seeDetail(index);
+                  },
+                  child: const Text(
+                    "Lihat Detail",
+                    style: TextStyle(
+                        fontFamily: "Inter",
+                        color: Color.fromARGB(255, 50, 52, 55),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            )
+          )
         )),
       ],
     );
@@ -398,66 +454,79 @@ class RowTableDetail extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2 - 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (int i = 0; i < totalDebit; i++)
-                Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Text("${_contentDataDebit[i].akun}")
-                  ],
-                )
-            ],
-          ),
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (int i = 0; i < totalDebit; i++)
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Text("${_contentDataDebit[i].akun}")
+                    ],
+                  )
+              ],
+            ),
+          )
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              for (int i = 0; i < totalDebit; i++)
-                Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Text("${_contentDataDebit[i].saldo}")
-                  ],
-                )
-            ],
-          ),
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.centerRight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (int i = 0; i < totalDebit; i++)
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Text("${_contentDataDebit[i].saldo}")
+                    ],
+                  ),
+              ],
+            ),
+          )
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2 - 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (int i = 0; i < totalKredit; i++)
-                Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Text("${_contentDataKredit[i].akun}")
-                  ],
-                )
-            ],
-          ),
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (int i = 0; i < totalKredit; i++)
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Text("${_contentDataKredit[i].akun}")
+                    ],
+                  ),
+              ],
+            ),
+          )
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              for (int i = 0; i < totalKredit; i++)
-                Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Text("${_contentDataKredit[i].saldo}")
-                  ],
-                )
-            ],
-          ),
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.centerRight,
+            margin: EdgeInsets.only(right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (int i = 0; i < totalKredit; i++)
+                  Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Text("${_contentDataKredit[i].saldo}"),
+                    ],
+                  ),
+              ],
+            ),
+          )
         )),
       ],
     );
@@ -497,47 +566,111 @@ class AmortisasiPendapatanTable extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
-          child: Text("${index + 1}", textAlign: TextAlign.center),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.25 - 50,
-          child: Text("${_content.keterangan}"),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text(
-            "${_content.total_harga}",
-            textAlign: TextAlign.right,
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${index+1}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.07 - 50,
-          child:
-              Text("${_content.jumlah_mahasiswa}", textAlign: TextAlign.center),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text("${_content.penyusutan}", textAlign: TextAlign.right),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15 - 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 255, 204, 0),
-              padding: EdgeInsets.all(20),
-            ),
-            onPressed: () {
-              seeDetail();
-            },
-            child: const Text(
-              "Lihat Detail",
-              style: TextStyle(
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 50, 52, 55),
-                  fontWeight: FontWeight.bold),
-            ),
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.keterangan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
           ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerRight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.total_harga}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.jumlah_mahasiswa}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerRight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.penyusutan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                padding: EdgeInsets.all(20),
+              ),
+              onPressed: () {
+                seeDetail();
+              },
+              child: const Text(
+                "Lihat Detail",
+                style: TextStyle(
+                    fontFamily: "Inter",
+                    color: Color.fromARGB(255, 50, 52, 55),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
         )),
       ],
     );
@@ -576,51 +709,129 @@ class AmortisasiAsetTable extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
-          child: Text("${index + 1}", textAlign: TextAlign.center),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.18 - 50,
-          child: Text("${_content.keterangan}"),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.12 - 50,
-          child: Text(
-            "${_content.saat_perolehan}",
-            textAlign: TextAlign.right,
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${index+1}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
           ),
         )),
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
-          child: Text("${_content.masa_guna}", textAlign: TextAlign.center),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.10 - 50,
-          child:
-              Text("${_content.nilai_perolehan}", textAlign: TextAlign.right),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.1 - 50,
-          child: Text("${_content.penyusutan}", textAlign: TextAlign.right),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15 - 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 255, 204, 0),
-              padding: EdgeInsets.all(20),
-            ),
-            onPressed: () {
-              seeDetail();
-            },
-            child: const Text(
-              "Lihat Detail",
-              style: TextStyle(
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 50, 52, 55),
-                  fontWeight: FontWeight.bold),
-            ),
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.keterangan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
           ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.saat_perolehan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.masa_guna}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerRight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.nilai_perolehan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              margin: EdgeInsets.only(right: 20),
+              alignment: Alignment.centerRight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.penyusutan}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+            width: double.infinity,
+            child: Container(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                  padding: EdgeInsets.all(20),
+                ),
+                onPressed: () {
+                  seeDetail();
+                },
+                child: const Text(
+                  "Lihat Detail",
+                  style: TextStyle(
+                      fontFamily: "Inter",
+                      color: Color.fromARGB(255, 50, 52, 55),
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            )
         )),
       ],
     );
@@ -661,41 +872,70 @@ class ListAmortisasiTable extends DataTableSource {
       index: index,
       cells: <DataCell>[
         DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.04 - 50,
-          child: Text("${index + 1}", textAlign: TextAlign.center),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.30 - 50,
-          child: Text("${_content.akun}"),
-        )),
-        DataCell(SizedBox(
-          width: MediaQuery.of(context).size.width * 0.15 - 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: kuning,
-              padding: EdgeInsets.all(20),
-            ),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog2Button(
-                      content: "Hapus Transaksi",
-                      content_detail: "Anda yakin ingin menghapus data ini?",
-                      path_image: 'assets/images/hapus_coa.png',
-                      button1: "Tetap Simpan",
-                      button2: "Ya, Hapus",
-                      onPressed1: onPressed1(),
-                      onPressed2: onPressed2(),
-                    );
-                  });
-            },
-            child: Text("Hapus",
-                style: TextStyle(
-                    fontFamily: "Inter",
-                    color: hitam,
-                    fontWeight: FontWeight.bold)),
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${index+1}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
           ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_content.akun}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
+                  ),
+                ],
+              )
+          ),
+        )),
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kuning,
+                padding: EdgeInsets.all(20),
+              ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog2Button(
+                        content: "Hapus Transaksi",
+                        content_detail: "Anda yakin ingin menghapus data ini?",
+                        path_image: 'assets/images/hapus_coa.png',
+                        button1: "Tetap Simpan",
+                        button2: "Ya, Hapus",
+                        onPressed1: onPressed1(),
+                        onPressed2: onPressed2(),
+                      );
+                    });
+              },
+              child: Text("Hapus",
+                  style: TextStyle(
+                      fontFamily: "Inter",
+                      color: hitam,
+                      fontWeight: FontWeight.bold)),
+            ),
+          )
         )),
       ],
     );

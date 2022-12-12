@@ -151,21 +151,80 @@ class LabaRugiListState extends State<LabaRugiList> {
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             DataColumn(
-                              label: Text("No."),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "No.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                             DataColumn(
-                              label: Text("Bulan"),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Bulan",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                             DataColumn(
-                              label: Text("Tahun"),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Tahun",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                             DataColumn(
-                              label: Text("Action"),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Action",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                           ],
                           source: tableRow,
                           rowsPerPage: 10,
                           showCheckboxColumn: false,
+                          dataRowHeight: 70,
+                          columnSpacing: 0,
+                          horizontalMargin: 0,
                         ),
                       ),
                     ],

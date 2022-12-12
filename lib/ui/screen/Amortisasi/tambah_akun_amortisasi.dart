@@ -44,7 +44,10 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    akun.dispose();
+    super.dispose();
+  }
 
   bool show = false;
   bool disable_button = false;
@@ -77,6 +80,8 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
     setState(() {
       show = true;
       disable_button = true;
+
+      akun.text = "";
     });
   }
 
@@ -84,6 +89,8 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
     setState(() {
       show = false;
       disable_button = false;
+
+      akun.text = "";
     });
   }
 
@@ -135,7 +142,7 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: kuning,
                               padding: const EdgeInsets.all(18)),
-                          onPressed: showForm,
+                          onPressed: (disable_button ? null : showForm),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -278,28 +285,63 @@ class TambahAkunAmortisasiListState extends State<TambahAkunAmortisasiList> {
                       child: PaginatedDataTable(
                         columns: <DataColumn>[
                           DataColumn(
-                            label: Text(
-                              "No.",
-                              textAlign: TextAlign.center,
+                            label: Expanded(
+                                child: Container(
+                                  color: greyHeaderColor,
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "No.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Inter",
+                                    ),
+                                  ),
+                                )
                             ),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Akun",
-                              textAlign: TextAlign.center,
+                            label: Expanded(
+                                child: Container(
+                                  color: greyHeaderColor,
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Akun",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Inter",
+                                    ),
+                                  ),
+                                )
                             ),
                           ),
                           DataColumn(
-                            label: Text(
-                              "Action",
-                              textAlign: TextAlign.center,
+                            label: Expanded(
+                                child: Container(
+                                  color: greyHeaderColor,
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Action",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Inter",
+                                    ),
+                                  ),
+                                )
                             ),
                           ),
                         ],
                         source: tableRow,
                         rowsPerPage: int.parse(_selectedEntryFilter),
                         showCheckboxColumn: false,
-                        dataRowHeight: 60,
+                        dataRowHeight: 70,
+                        horizontalMargin: 0,
+                        columnSpacing: 0,
                       ),
                     )
                   ],

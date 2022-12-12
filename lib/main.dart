@@ -8,7 +8,6 @@ import 'package:sistem_akuntansi/ui/screen/Amortisasi/detail_amortisasi_pendapat
 import 'package:sistem_akuntansi/ui/screen/Amortisasi/tambah_akun_amortisasi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
-import 'package:sistem_akuntansi/ui/screen/CoA/list_coa.dart';
 
 
 import 'ui/screen/Amortisasi/detail_amortisasi_aset.dart';
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           MonthYearPickerLocalizations.delegate,
-        ], home: ListCOA(client: Supabase.instance.client));
+        ], home: Login(client: Supabase.instance.client));
     // return MaterialApp(home: SideNavigationBar(client: Supabase.instance.client));
     // return MaterialApp(home: Login(client: Supabase.instance.client));
   /*@override
