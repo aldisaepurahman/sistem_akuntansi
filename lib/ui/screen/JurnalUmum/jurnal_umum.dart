@@ -6,7 +6,10 @@ import 'package:sistem_akuntansi/bloc/jenisjurnal/jenisjurnal_event.dart';
 import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_event.dart';
 import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
@@ -97,6 +100,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
   late VBulanJurnalBloc _bulanBloc;
   late JenisJurnalBloc _jenisJurnalBloc;
   late VJurnalBloc _jurnalBloc;
+  late VLookupBloc _coaBloc;
 
   @override
   void initState() {
@@ -113,6 +117,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
     _bulanBloc = VBulanJurnalBloc(service: SupabaseService(supabaseClient: widget.client))..add(BulanFetched());
     _jenisJurnalBloc = JenisJurnalBloc(service: SupabaseService(supabaseClient: widget.client))..add(JenisJurnalFetched(tipe: "UMUM"));
     _jurnalBloc = VJurnalBloc(service: SupabaseService(supabaseClient: widget.client));
+    _coaBloc = VLookupBloc(service: SupabaseService(supabaseClient: widget.client))..add(AkunFetched());
   }
 
   void showForm() {
@@ -213,21 +218,34 @@ class JurnalUmumListState extends State<JurnalUmumList> {
   List<String> akunKreditList = [];
   List<String> jumlahKreditList = [];
 
-  List<String> namaAkunList = ['Beban Kesekretariatan', 'Beban ART', 'Uang Tunai (Bendahara)', 'Rekening Giro Bank NISP'];
+  List<String> namaAkunDebitList = ['Beban Kesekretariatan', 'Beban ART', 'Uang Tunai (Bendahara)', 'Rekening Giro Bank NISP'];
+  List<String> namaAkunKreditList = ['Beban Kesekretariatan', 'Beban ART', 'Uang Tunai (Bendahara)', 'Rekening Giro Bank NISP'];
+
+  List<TextEditingController> akunControllers = <TextEditingController>[];
+  List<TextEditingController> akunKreditControllers = <TextEditingController>[];
+  List<TextEditingController> jumlahControllers = <TextEditingController>[];
+  List<TextEditingController> jumlahKreditControllers = <TextEditingController>[];
 
   addDynamicDebit(){
     if(akunDebitList.length != 0){
       akunDebitList = [];
       jumlahDebitList = [];
       dynamicDebitList = [];
+      akunControllers = [];
+      jumlahControllers = [];
     }
     setState(() {});
     if (dynamicDebitList.length >= 10) {
       return;
     }
+
+    akunControllers.add(TextEditingController());
+    jumlahControllers.add(TextEditingController());
     dynamicDebitList.add(
       DynamicDebitInsertWidget(
-        namaAkunList: namaAkunList,
+        akunController: akunControllers[akunControllers.length - 1],
+        jumlahController: jumlahControllers[jumlahControllers.length - 1],
+        namaAkunList: namaAkunDebitList,
       )
     );
   }
@@ -237,14 +255,21 @@ class JurnalUmumListState extends State<JurnalUmumList> {
       akunKreditList = [];
       jumlahKreditList = [];
       dynamicKreditList = [];
+      akunKreditControllers = [];
+      jumlahKreditControllers = [];
     }
     setState(() {});
     if (dynamicKreditList.length >= 10) {
       return;
     }
+
+    akunKreditControllers.add(TextEditingController());
+    jumlahKreditControllers.add(TextEditingController());
     dynamicKreditList.add(
       DynamicKreditInsertWidget(
-        namaAkunList: namaAkunList,
+        akunController: akunKreditControllers[akunKreditControllers.length-1],
+        jumlahController: jumlahKreditControllers[jumlahKreditControllers.length-1],
+        namaAkunList: namaAkunKreditList,
       )
     );
   }
@@ -260,7 +285,8 @@ class JurnalUmumListState extends State<JurnalUmumList> {
         body: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => _bulanBloc),
-            BlocProvider(create: (context) => _jenisJurnalBloc)
+            BlocProvider(create: (context) => _jenisJurnalBloc),
+            BlocProvider(create: (context) => _coaBloc)
           ],
           child: ListView(
             children: [
@@ -552,11 +578,15 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                 bg_color: kuning,
                                 text_color: hitam,
                                 onPressed: (){
+                                  for (var i in akunControllers) {
+                                    print(i.text);
+                                  }
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         Future.delayed(Duration(seconds: 2), () {
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => JurnalUmumList(client: widget.client)));
+                                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => JurnalUmumList(client: widget.client)));
+                                          Navigator.of(context).pop();
                                         });
                                         return DialogNoButton(
                                             content: "Berhasil Ditambahkan!",
@@ -748,9 +778,11 @@ class JurnalUmumListState extends State<JurnalUmumList> {
 
 class DynamicDebitInsertWidget extends StatefulWidget {
   final List<String> namaAkunList;
+  final TextEditingController akunController;
+  final TextEditingController jumlahController;
 
   DynamicDebitInsertWidget({
-    required this.namaAkunList,
+    required this.namaAkunList, required this.akunController, required this.jumlahController
   });
 
   @override
@@ -790,22 +822,52 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: DropdownSearchButton(
-                  isNeedChangeColor: false,
-                  notFoundText: 'Akun tidak ditemukan',
-                  hintText: 'Pilih akun',
-                  controller: akunDebitText,
-                  onChange: (String? newValue){
-                    setState(() {
-                      if(newValue != null) {
-                        akunDebitText.text = newValue;
+              BlocBuilder<VLookupBloc, SiakState>(
+                  builder: (_, state) {
+                    if (state is SuccessState) {
+                      widget.namaAkunList.clear();
+                      var filter_akun = List<Akun>.from(state.datastore);
+                      for (var akun in filter_akun) {
+                        if (akun.keterangan_akun.contains("Debit")) {
+                          widget.namaAkunList.add(akun.nama_akun);
+                        }
                       }
-                    });
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: DropdownSearchButton(
+                          isNeedChangeColor: false,
+                          notFoundText: 'Akun tidak ditemukan',
+                          hintText: 'Pilih akun',
+                          controller: widget.akunController,
+                          onChange: (String? newValue){
+                            setState(() {
+                              if(newValue != null) {
+                                akunDebitText.text = newValue;
+                              }
+                            });
+                          },
+                          items: widget.namaAkunList,
+                        ),
+                      );
+                    }
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      child: DropdownSearchButton(
+                        isNeedChangeColor: false,
+                        notFoundText: 'Akun tidak ditemukan',
+                        hintText: 'Pilih akun',
+                        controller: widget.akunController,
+                        onChange: (String? newValue){
+                          setState(() {
+                            if(newValue != null) {
+                              akunDebitText.text = newValue;
+                            }
+                          });
+                        },
+                        items: widget.namaAkunList,
+                      ),
+                    );
                   },
-                  items: widget.namaAkunList,
-                ),
               ),
               SizedBox(
                 width: 10,
@@ -814,7 +876,7 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: TextForm(
                   hintText: "Jumlah",
-                  textController: jumlahDebitText,
+                  textController: widget.jumlahController,
                 ),
               ),
               SizedBox(
@@ -829,9 +891,11 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
 
 class DynamicKreditInsertWidget extends StatefulWidget {
   final List<String> namaAkunList;
+  final TextEditingController akunController;
+  final TextEditingController jumlahController;
 
   DynamicKreditInsertWidget({
-    required this.namaAkunList,
+    required this.namaAkunList, required this.akunController, required this.jumlahController
   });
 
   @override
@@ -863,22 +927,52 @@ class DynamicKreditInsertWidgetState extends State<DynamicKreditInsertWidget> {
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: DropdownSearchButton(
-                  isNeedChangeColor: false,
-                  notFoundText: 'Akun tidak ditemukan',
-                  hintText: 'Pilih akun',
-                  controller: akunKreditText,
-                  onChange: (String? newValue){
-                    setState(() {
-                      if(newValue != null) {
-                        akunKreditText.text = newValue;
+              BlocBuilder<VLookupBloc, SiakState>(
+                builder: (_, state) {
+                  if (state is SuccessState) {
+                    widget.namaAkunList.clear();
+                    var filter_akun = List<Akun>.from(state.datastore);
+                    for (var akun in filter_akun) {
+                      if (akun.keterangan_akun.contains("Kredit")) {
+                        widget.namaAkunList.add(akun.nama_akun);
                       }
-                    });
-                  },
-                  items: widget.namaAkunList,
-                ),
+                    }
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      child: DropdownSearchButton(
+                        isNeedChangeColor: false,
+                        notFoundText: 'Akun tidak ditemukan',
+                        hintText: 'Pilih akun',
+                        controller: widget.akunController,
+                        onChange: (String? newValue){
+                          setState(() {
+                            if(newValue != null) {
+                              akunKreditText.text = newValue;
+                            }
+                          });
+                        },
+                        items: widget.namaAkunList,
+                      ),
+                    );
+                  }
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: DropdownSearchButton(
+                      isNeedChangeColor: false,
+                      notFoundText: 'Akun tidak ditemukan',
+                      hintText: 'Pilih akun',
+                      controller: widget.akunController,
+                      onChange: (String? newValue){
+                        setState(() {
+                          if(newValue != null) {
+                            akunKreditText.text = newValue;
+                          }
+                        });
+                      },
+                      items: widget.namaAkunList,
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 width: 10,
@@ -887,7 +981,7 @@ class DynamicKreditInsertWidgetState extends State<DynamicKreditInsertWidget> {
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: TextForm(
                   hintText: "Jumlah",
-                  textController: jumlahKreditText,
+                  textController: widget.jumlahController,
                 ),
               ),
               SizedBox(
