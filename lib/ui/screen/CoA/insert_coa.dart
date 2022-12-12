@@ -146,7 +146,6 @@ class InsertCOAState extends State<InsertCOA> {
                     Container(
                       margin: EdgeInsets.only(top: 10, bottom: 20),
                       child: TextField(
-                        controller: namaAkunController,
                         decoration: InputDecoration(
                             hintText: 'Masukkan nama akun...',
                             contentPadding: const EdgeInsets.all(8),
@@ -271,10 +270,7 @@ class InsertCOAState extends State<InsertCOA> {
                             var kode_akun = kodeController.text;
                             var keterangan = keteranganController.text;
                             var indentasi = indentasiController.text;
-                            var saldo = 0;
-                            if (saldoController.text.isEmpty) {
-                              saldo = 0;
-                            }
+                            var saldo = saldoController.text;
                             var bulan = listbulan[DateTime.now().month];
                             var tahun = DateTime.now().year;
 
@@ -289,7 +285,7 @@ class InsertCOAState extends State<InsertCOA> {
                                     ),
                                     saldo: Saldo(
                                       kode_akun: kode_akun,
-                                      saldo: saldo,
+                                      saldo: int.parse(saldo),
                                       bulan: bulan!!,
                                       tahun: tahun
                                     )

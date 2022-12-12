@@ -87,7 +87,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
         body: ListView(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
+              margin: EdgeInsets.only(top: 25, left: 25),
               child: Text(
                 "Buku Besar",
                 style: TextStyle(
@@ -138,6 +138,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                   Container(
                     width: double.infinity,
                     child: PaginatedDataTable(
+                      dataRowHeight: 70,
                       columnSpacing: 0,
                       horizontalMargin: 0,
                       columns: <DataColumn>[

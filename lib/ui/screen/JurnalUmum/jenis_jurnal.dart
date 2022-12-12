@@ -320,20 +320,65 @@ class JenisJurnalState extends State<JenisJurnal> {
                       Container(
                         width: double.infinity,
                         child: PaginatedDataTable(
+                          dataRowHeight: 70,
                           columns: <DataColumn>[
                             DataColumn(
-                              label: Text("No."),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "No.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                             DataColumn(
-                              label: Text("Jenis Jurnal"),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Jenis Jurnal",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                             DataColumn(
-                              label: Text("Action"),
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Action",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
+                              ),
                             ),
                           ],
                           source: tableRow,
                           rowsPerPage: 10,
                           showCheckboxColumn: false,
+                          columnSpacing: 0,
+                          horizontalMargin: 0,
                         ),
                       )
                     ],
@@ -377,41 +422,49 @@ class JenisJurnalTableData extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: <DataCell>[
-        DataCell(
-          SizedBox(
-              width: MediaQuery.of(context).size.width / 10 - 50,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "${index+1}",
-                  style: TextStyle(
-                    fontFamily: "Inter",
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${index+1}",
+                    style: TextStyle(
+                      fontFamily: "Inter",
+                    ),
                   ),
-                ),
+                ],
               )
           ),
+        )
         ),
-        DataCell(
-            SizedBox(
-                width: MediaQuery.of(context).size.width / 3 - 50,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
+        DataCell(SizedBox(
+          width: double.infinity,
+          child: Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
                     "${_content.nama_jurnal}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
                   ),
-                )
-            )
+                ],
+              )
+          ),
+        )
         ),
         DataCell(
             SizedBox(
-                width: MediaQuery.of(context).size.width / 5 - 50,
+                width: double.infinity,
                 child: Container(
                     padding: EdgeInsets.only(right: 20),
-                    alignment: Alignment.centerRight,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(

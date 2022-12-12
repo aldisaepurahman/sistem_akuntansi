@@ -140,21 +140,79 @@ class DetailTransaksiPenyesuaianState extends State<DetailTransaksiPenyesuaian> 
                           child: PaginatedDataTable(
                             rowsPerPage: total_row,
                             dataRowHeight: 150,
-                            columns: const [
+                            columns: [
                               DataColumn(
-                                label: HeaderTable(content: "Akun Debit"),
+                                label: Expanded(
+                                    child: Container(
+                                      color: greyHeaderColor,
+                                      height: double.infinity,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Akun Debit",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Inter",
+                                        ),
+                                      ),
+                                    )
+                                ),
                               ),
                               DataColumn(
-                                label: HeaderTable(content: "Saldo (Rp.)"),
+                                label: Expanded(
+                                    child: Container(
+                                      color: greyHeaderColor,
+                                      height: double.infinity,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Saldo Debit (Rp.)",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Inter",
+                                        ),
+                                      ),
+                                    )
+                                ),
                               ),
                               DataColumn(
-                                label: HeaderTable(content: "Akun Kredit"),
+                                label: Expanded(
+                                    child: Container(
+                                      color: greyHeaderColor,
+                                      height: double.infinity,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Akun Kredit",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Inter",
+                                        ),
+                                      ),
+                                    )
+                                ),
                               ),
                               DataColumn(
-                                label: HeaderTable(content: "Saldo (Rp.)"),
+                                label: Expanded(
+                                    child: Container(
+                                      color: greyHeaderColor,
+                                      height: double.infinity,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Saldo Kredit (Rp.)",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Inter",
+                                        ),
+                                      ),
+                                    )
+                                ),
                               ),
                             ],
                             source: tableRow,
+                            horizontalMargin: 0,
+                            columnSpacing: 0,
                           ),
                         ),
                         Container(

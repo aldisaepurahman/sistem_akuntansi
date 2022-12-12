@@ -23,9 +23,6 @@ class AmortisasiAsetList extends StatefulWidget {
 }
 
 class AmortisasiAsetListState extends State<AmortisasiAsetList> {
-  @override
-  void dispose() {}
-
   DateTime? _saat_perolehan;
 
   bool show = false;
@@ -104,6 +101,13 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
 
   void showForm() {
     setState(() {
+      keterangan.text = "";
+      nilai_perolehan.text = "";
+      masa_guna.text = "";
+      akumulasi_penyusutan_tahun_lalu.text = "";
+      saat_perolehan.text = "";
+      akun.text = "";
+
       show = true;
       disable_button = true;
     });
@@ -113,6 +117,13 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
     setState(() {
       show = false;
       disable_button = false;
+
+      keterangan.text = "";
+      nilai_perolehan.text = "";
+      masa_guna.text = "";
+      akumulasi_penyusutan_tahun_lalu.text = "";
+      saat_perolehan.text = "";
+      akun.text = "";
     });
   }
 
@@ -120,10 +131,20 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
   TextEditingController keterangan = TextEditingController();
   TextEditingController nilai_perolehan = TextEditingController();
   TextEditingController masa_guna = TextEditingController();
-  TextEditingController akumulasi_penyusutan_tahun_lalu =
-      TextEditingController();
+  TextEditingController akumulasi_penyusutan_tahun_lalu = TextEditingController();
   TextEditingController saat_perolehan = TextEditingController();
   TextEditingController akun = TextEditingController();
+
+  @override
+  void dispose(){
+    keterangan.dispose();
+    nilai_perolehan.dispose();
+    masa_guna.dispose();
+    akumulasi_penyusutan_tahun_lalu.dispose();
+    saat_perolehan.dispose();
+    akun.dispose();
+    super.dispose();
+  }
 
   String _selectedAkunFilter = 'Beban Kesekretariatan';
   String _selectedYearFilter = '2022';
@@ -178,7 +199,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: kuning,
                                 padding: const EdgeInsets.all(18)),
-                            onPressed: showForm,
+                            onPressed: (disable_button ? null : showForm),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -503,45 +524,122 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             DataColumn(
-                              label: Text(
-                                "No",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "No.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Keterangan",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Keterangan",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Saat Perolehan",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Saat Perolehan",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Masa Guna",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Masa Guna",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Nilai Perolehan",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Nilai Perolehan (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Penyusutan",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Penyusutan (Rp.)",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                             DataColumn(
-                              label: Text(
-                                "Action",
-                                textAlign: TextAlign.center,
+                              label: Expanded(
+                                  child: Container(
+                                    color: greyHeaderColor,
+                                    height: double.infinity,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Action",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: "Inter",
+                                      ),
+                                    ),
+                                  )
                               ),
                             ),
                           ],
@@ -549,6 +647,8 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                           rowsPerPage: int.parse(_selectedEntryFilter),
                           showCheckboxColumn: false,
                           dataRowHeight: 70,
+                          columnSpacing: 0,
+                          horizontalMargin: 0,
                         ),
                       )
                     ],

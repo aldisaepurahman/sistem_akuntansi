@@ -9,6 +9,7 @@ import 'package:sistem_akuntansi/ui/screen/Amortisasi/tambah_akun_amortisasi.dar
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
 
+
 import 'ui/screen/Amortisasi/detail_amortisasi_aset.dart';
 import 'ui/screen/Amortisasi/edit_amortisasi_aset.dart';
 
