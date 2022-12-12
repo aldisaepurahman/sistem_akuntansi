@@ -6,19 +6,15 @@ class DynamicDebitWidget extends StatefulWidget {
   final List<String> namaAkunList;
   final int formCase;
 
-  final TextEditingController akunDebitText;
-  final TextEditingController jumlahDebitText;
+  final TextEditingController akunDebitText = TextEditingController();
+  final TextEditingController jumlahDebitText = TextEditingController();
 
-  final TextEditingController akunDebitUpdateText;
-  final TextEditingController jumlahDebitUpdateText;
+  final TextEditingController akunDebitUpdateText = TextEditingController();
+  final TextEditingController jumlahDebitUpdateText = TextEditingController();
 
   DynamicDebitWidget({
     required this.namaAkunList,
     required this.formCase,
-    required this.akunDebitText,
-    required this.jumlahDebitText,
-    required this.akunDebitUpdateText,
-    required this.jumlahDebitUpdateText,
   });
 
   @override
@@ -98,19 +94,15 @@ class DynamicKreditWidget extends StatefulWidget {
   final List<String> namaAkunList;
   final int formCase;
 
-  final TextEditingController akunKreditText;
-  final TextEditingController jumlahKreditText;
+  final TextEditingController akunKreditText = TextEditingController();
+  final TextEditingController jumlahKreditText = TextEditingController();
 
-  final TextEditingController akunKreditUpdateText;
-  final TextEditingController jumlahKreditUpdateText;
+  final TextEditingController akunKreditUpdateText = TextEditingController();
+  final TextEditingController jumlahKreditUpdateText = TextEditingController();
 
   DynamicKreditWidget({
     required this.namaAkunList,
     required this.formCase,
-    required this.akunKreditText,
-    required this.jumlahKreditText,
-    required this.akunKreditUpdateText,
-    required this.jumlahKreditUpdateText,
   });
 
   @override
@@ -181,18 +173,14 @@ class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
 class DynamicDebitInsertWidget extends StatefulWidget {
   final List<String> namaAkunList;
 
-  final TextEditingController akunDebitText;
-  final TextEditingController jumlahDebitText;
+  final TextEditingController akunDebitText = TextEditingController();
+  final TextEditingController jumlahDebitText = TextEditingController();
 
-  final TextEditingController akunDebitUpdateText;
-  final TextEditingController jumlahDebitUpdateText;
+  final TextEditingController akunDebitUpdateText = TextEditingController();
+  final TextEditingController jumlahDebitUpdateText = TextEditingController();
 
   DynamicDebitInsertWidget({
     required this.namaAkunList,
-    required this.akunDebitText,
-    required this.jumlahDebitText,
-    required this.akunDebitUpdateText,
-    required this.jumlahDebitUpdateText,
   });
 
   @override
@@ -265,18 +253,14 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
 class DynamicKreditInsertWidget extends StatefulWidget {
   final List<String> namaAkunList;
 
-  final TextEditingController akunKreditText;
-  final TextEditingController jumlahKreditText;
+  final TextEditingController akunKreditText = TextEditingController();
+  final TextEditingController jumlahKreditText = TextEditingController();
 
-  final TextEditingController akunKreditUpdateText;
-  final TextEditingController jumlahKreditUpdateText;
+  final TextEditingController akunKreditUpdateText = TextEditingController();
+  final TextEditingController jumlahKreditUpdateText = TextEditingController();
 
   DynamicKreditInsertWidget({
     required this.namaAkunList,
-    required this.akunKreditText,
-    required this.jumlahKreditText,
-    required this.akunKreditUpdateText,
-    required this.jumlahKreditUpdateText,
   });
 
   @override

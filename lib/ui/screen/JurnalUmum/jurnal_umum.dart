@@ -33,18 +33,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
   final TextEditingController no_bukti = TextEditingController();
   final TextEditingController textInsert = TextEditingController();
 
-  final TextEditingController akunDebitText = new TextEditingController();
-  final TextEditingController jumlahDebitText = new TextEditingController();
-
-  final TextEditingController akunDebitUpdateText = new TextEditingController();
-  final TextEditingController jumlahDebitUpdateText = new TextEditingController();
-
-  final TextEditingController akunKreditText = new TextEditingController();
-  final TextEditingController jumlahKreditText = new TextEditingController();
-
-  final TextEditingController akunKreditUpdateText = new TextEditingController();
-  final TextEditingController jumlahKreditUpdateText = new TextEditingController();
-
   @override
   void dispose(){
     tanggal.dispose();
@@ -201,10 +189,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
     dynamicDebitList.add(
       DynamicDebitInsertWidget(
         namaAkunList: namaAkunList,
-        akunDebitUpdateText: akunDebitUpdateText,
-        akunDebitText: akunDebitText,
-        jumlahDebitUpdateText: jumlahDebitUpdateText,
-        jumlahDebitText: jumlahDebitText,
       )
     );
   }
@@ -222,10 +206,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
     dynamicKreditList.add(
       DynamicKreditInsertWidget(
         namaAkunList: namaAkunList,
-        akunKreditUpdateText: akunKreditUpdateText,
-        akunKreditText: akunKreditText,
-        jumlahKreditText: jumlahKreditText,
-        jumlahKreditUpdateText: jumlahKreditUpdateText,
       )
     );
   }

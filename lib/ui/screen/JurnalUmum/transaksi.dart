@@ -72,18 +72,6 @@ class TransaksiListState extends State<TransaksiList> {
   final TextEditingController nama_transaksi_update = TextEditingController();
   final TextEditingController no_bukti_update = TextEditingController();
 
-  final TextEditingController akunDebitText = new TextEditingController();
-  final TextEditingController jumlahDebitText = new TextEditingController();
-
-  final TextEditingController akunDebitUpdateText = new TextEditingController();
-  final TextEditingController jumlahDebitUpdateText = new TextEditingController();
-
-  final TextEditingController akunKreditText = new TextEditingController();
-  final TextEditingController jumlahKreditText = new TextEditingController();
-
-  final TextEditingController akunKreditUpdateText = new TextEditingController();
-  final TextEditingController jumlahKreditUpdateText = new TextEditingController();
-
   void showForm() {
     setState(() {
       show = true;
@@ -245,10 +233,6 @@ class TransaksiListState extends State<TransaksiList> {
       DynamicDebitWidget(
         namaAkunList: namaAkunList,
         formCase: _case,
-        akunDebitText: akunDebitText,
-        akunDebitUpdateText: akunDebitUpdateText,
-        jumlahDebitText: jumlahDebitText,
-        jumlahDebitUpdateText: akunDebitUpdateText,
       )
     );
   }
@@ -267,10 +251,6 @@ class TransaksiListState extends State<TransaksiList> {
       DynamicKreditWidget(
         namaAkunList: namaAkunList,
         formCase: _case,
-        akunKreditText: akunKreditText,
-        akunKreditUpdateText: akunKreditUpdateText,
-        jumlahKreditText: jumlahKreditText,
-        jumlahKreditUpdateText: jumlahKreditUpdateText,
       )
     );
   }
