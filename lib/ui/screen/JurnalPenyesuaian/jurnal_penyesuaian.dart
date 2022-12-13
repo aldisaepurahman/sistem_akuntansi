@@ -53,7 +53,7 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
-      seeDetail: () {
+      seeDetail: (int index) {
         _navigateToJenisJurnal(context);
       },
       context: context,

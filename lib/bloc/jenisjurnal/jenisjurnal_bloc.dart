@@ -10,6 +10,8 @@ class JenisJurnalBloc extends Bloc<Event, SiakState> {
   JenisJurnalBloc({required this.service}) : super(EmptyState()) {
     on<JenisJurnalFetched>(_getAllJurnal);
     on<JenisJurnalInserted>(_insertData);
+    on<JenisJurnalUpdated>(_updateData);
+    on<JenisJurnalDeleted>(_deleteData);
   }
 
   final SupabaseService service;
@@ -21,7 +23,7 @@ class JenisJurnalBloc extends Bloc<Event, SiakState> {
       await service.getAllJurnal(
           TableViewType.jurnal_umum.name, {"tipe_jurnal": event.tipe})
           .then((all_jurnal) {
-        var list_jurnal = List<JenisJurnal>.from(all_jurnal.datastore);
+        var list_jurnal = List<JenisJurnalModel>.from(all_jurnal.datastore);
         emit((all_jurnal.message.isEmpty)
             ? SuccessState(list_jurnal)
             : FailureState((all_jurnal.message.isNotEmpty)
@@ -39,7 +41,27 @@ class JenisJurnalBloc extends Bloc<Event, SiakState> {
     try {
       emit(LoadingState());
       await service.insert(TableViewType.jurnal_umum.name, event.jenis_jurnal.toJson());
-      emit(const SuccessState(true));
+      emit(const CrudState(true));
+    } catch (error) {
+      emit(FailureState(error.toString()));
+    }
+  }
+
+  Future<void> _updateData(JenisJurnalUpdated event, Emitter<SiakState> emit) async {
+    try {
+      emit(LoadingState());
+      await service.update(TableViewType.jurnal_umum.name, event.jenis_jurnal.toJson(), {"id_jurnal": event.id_jurnal});
+      emit(const CrudState(true));
+    } catch (error) {
+      emit(FailureState(error.toString()));
+    }
+  }
+
+  Future<void> _deleteData(JenisJurnalDeleted event, Emitter<SiakState> emit) async {
+    try {
+      emit(LoadingState());
+      await service.delete(TableViewType.jurnal_umum.name, {"id_jurnal": event.id_jurnal});
+      emit(const CrudState(true));
     } catch (error) {
       emit(FailureState(error.toString()));
     }

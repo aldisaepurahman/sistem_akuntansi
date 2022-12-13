@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
+import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
@@ -168,7 +169,7 @@ class ActionButton extends StatelessWidget {
 }
 
 class BulanTahunTableData extends DataTableSource {
-  Function seeDetail;
+  Function(int) seeDetail;
   BuildContext context;
   BulanTahunTableData(
       {required List<VBulanJurnal> contentData,
@@ -253,7 +254,7 @@ class BulanTahunTableData extends DataTableSource {
                 padding: EdgeInsets.all(20),
               ),
               onPressed: () {
-                seeDetail();
+                seeDetail(index);
               },
               child: const Text(
                 "Lihat Detail",
@@ -432,14 +433,14 @@ class RowTableCOA extends DataTableSource {
 class RowTableDetail extends DataTableSource {
   BuildContext context;
   RowTableDetail(
-      {required List<V_detail_transaksi> contentDataDebit,
-      required List<V_detail_transaksi> contentDataKredit,
+      {required List<VJurnalExpand> contentDataDebit,
+      required List<VJurnalExpand> contentDataKredit,
       required this.context})
       : _contentDataDebit = contentDataDebit,
         _contentDataKredit = contentDataKredit,
         assert(contentDataDebit != null && contentDataKredit != null);
-  final List<V_detail_transaksi> _contentDataDebit;
-  final List<V_detail_transaksi> _contentDataKredit;
+  final List<VJurnalExpand> _contentDataDebit;
+  final List<VJurnalExpand> _contentDataKredit;
 
   @override
   DataRow? getRow(int index) {
@@ -466,7 +467,7 @@ class RowTableDetail extends DataTableSource {
                   Column(
                     children: [
                       SizedBox(height: 10),
-                      Text("${_contentDataDebit[i].akun}")
+                      Text("${_contentDataDebit[i].nama_akun}")
                     ],
                   )
               ],
@@ -484,7 +485,7 @@ class RowTableDetail extends DataTableSource {
                   Column(
                     children: [
                       SizedBox(height: 10),
-                      Text("${_contentDataDebit[i].saldo}")
+                      Text("${_contentDataDebit[i].nominal_transaksi}")
                     ],
                   ),
               ],
@@ -503,7 +504,7 @@ class RowTableDetail extends DataTableSource {
                   Column(
                     children: [
                       SizedBox(height: 10),
-                      Text("${_contentDataKredit[i].akun}")
+                      Text("${_contentDataKredit[i].nama_akun}")
                     ],
                   ),
               ],
@@ -522,7 +523,7 @@ class RowTableDetail extends DataTableSource {
                   Column(
                     children: [
                       SizedBox(height: 10),
-                      Text("${_contentDataKredit[i].saldo}"),
+                      Text("${_contentDataKredit[i].nominal_transaksi}"),
                     ],
                   ),
               ],

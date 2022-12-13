@@ -53,7 +53,7 @@ class NeracaLajurListState extends State<NeracaLajurList> {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
-      seeDetail: () {
+      seeDetail: (int index) {
         _navigateToLaporanNeracaLajur(context);
       },
       context: context,

@@ -6,11 +6,14 @@ import 'package:sistem_akuntansi/bloc/jenisjurnal/jenisjurnal_event.dart';
 import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_event.dart';
 import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_event.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
+import 'package:sistem_akuntansi/model/response/transaksi_debit_kredit.dart';
+import 'package:sistem_akuntansi/model/response/transaksi_model.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
@@ -18,10 +21,13 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+import 'package:sistem_akuntansi/utils/table_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:intl/intl.dart';
+
+var list_coa = <Akun>[];
 
 class JurnalUmumList extends StatefulWidget {
   const JurnalUmumList({required this.client, Key? key}) : super(key: key);
@@ -56,12 +62,13 @@ class JurnalUmumListState extends State<JurnalUmumList> {
 
   late String _selectedJurnalInsert;
   int id_jurnal = 0;
+  String kode_akun = "";
 
   var tableRow;
   var list_bulan = <VBulanJurnal>[];
-  var list_jurnal = <JenisJurnal>[];
+  var list_jurnal = <JenisJurnalModel>[];
 
-  void _navigateToJenisJurnal(BuildContext context){
+  void _navigateToJenisJurnal(BuildContext context, int bulan, int tahun){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) =>
         SideNavigationBar(
@@ -73,7 +80,8 @@ class JurnalUmumListState extends State<JurnalUmumList> {
           neracaLajurIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
-          client: widget.client
+          client: widget.client,
+          params: {"bulan": bulan, "tahun": tahun},
         )
       )
     );
@@ -107,8 +115,8 @@ class JurnalUmumListState extends State<JurnalUmumList> {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
-      seeDetail: () {
-        _navigateToJenisJurnal(context);
+      seeDetail: (int index) {
+        _navigateToJenisJurnal(context, 0, 0);
       },
       context: context,
     );
@@ -286,7 +294,8 @@ class JurnalUmumListState extends State<JurnalUmumList> {
           providers: [
             BlocProvider(create: (context) => _bulanBloc),
             BlocProvider(create: (context) => _jenisJurnalBloc),
-            BlocProvider(create: (context) => _coaBloc)
+            BlocProvider(create: (context) => _coaBloc),
+            BlocProvider(create: (context) => _jurnalBloc)
           ],
           child: ListView(
             children: [
@@ -468,7 +477,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                               if (newValue != null) {
                                                 _selectedJurnalInsert = newValue!!;
                                                 var indexItem = list_jurnal.indexWhere((jurnal) => jurnal.kategori_jurnal == _selectedJurnalInsert);
-                                                print(indexItem);
+                                                id_jurnal = list_jurnal[indexItem].id_jurnal;
                                               }
                                             });
                                           },
@@ -578,23 +587,76 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                 bg_color: kuning,
                                 text_color: hitam,
                                 onPressed: (){
-                                  for (var i in akunControllers) {
-                                    print(i.text);
-                                  }
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        Future.delayed(Duration(seconds: 2), () {
-                                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => JurnalUmumList(client: widget.client)));
-                                          Navigator.of(context).pop();
-                                        });
-                                        return DialogNoButton(
-                                            content: "Berhasil Ditambahkan!",
-                                            content_detail: "Transaksi baru berhasil ditambahkan",
-                                            path_image: 'assets/images/tambah_coa.png'
+                                  var tgl_transaksi = tanggal.text;
+                                  var nama = nama_transaksi.text;
+                                  var id_journal = id_jurnal;
+                                  var nomor_bukti = no_bukti.text;
+                                  var idTransaksi = "${tgl_transaksi}_${getRandomString(5)}";
+                                  
+                                  if (tgl_transaksi.isNotEmpty && nama.isNotEmpty && id_journal > 0 && nomor_bukti.isNotEmpty) {
+                                    var transaksi = TransaksiModel(
+                                      id_transaksi: idTransaksi,
+                                        tgl_transaksi: DateFormat('yyyy-MM-dd').parse(tgl_transaksi),
+                                        nama_transaksi: nama,
+                                        no_bukti: nomor_bukti,
+                                        id_jurnal: id_journal
+                                    );
+
+                                    var transaksi_dk = <TransaksiDK>[];
+
+                                    for (var i = 0; i < akunControllers.length; i += 1) {
+                                      if (akunControllers[i].text.isNotEmpty) {
+                                        var indexItem = list_coa.indexWhere((element) => element.nama_akun == akunControllers[i].text);
+
+                                        transaksi_dk.add(
+                                            TransaksiDK(
+                                                id_transaksi: idTransaksi,
+                                                jenis_transaksi: "Debit",
+                                                nominal_transaksi: int.parse(jumlahControllers[i].text),
+                                              kode_akun: list_coa[indexItem].kode_akun
+                                            )
                                         );
                                       }
-                                  );
+                                    }
+
+                                    for (var i = 0; i < akunKreditControllers.length; i += 1) {
+                                      if (akunKreditControllers[i].text.isNotEmpty) {
+                                        var indexItem = list_coa.indexWhere((element) => element.nama_akun == akunKreditControllers[i].text);
+
+                                        transaksi_dk.add(
+                                            TransaksiDK(
+                                                id_transaksi: idTransaksi,
+                                                jenis_transaksi: "Kredit",
+                                                nominal_transaksi: int.parse(jumlahKreditControllers[i].text),
+                                                kode_akun: list_coa[indexItem].kode_akun
+                                            )
+                                        );
+                                      }
+                                    }
+
+                                    // print(transaksi);
+                                    _jurnalBloc.add(JurnalInserted(transaksiModel: transaksi, transaksi_dk: transaksi_dk));
+                                    
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          Future.delayed(Duration(seconds: 2), () {
+                                            _navigateSelf(context);
+                                            // Navigator.of(context).pop();
+                                          });
+                                          return DialogNoButton(
+                                              content: "Berhasil Ditambahkan!",
+                                              content_detail: "Transaksi baru berhasil ditambahkan",
+                                              path_image: 'assets/images/tambah_coa.png'
+                                          );
+                                        }
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("Pastikan semua kolom inputan terisi."))
+                                    );
+                                  }
+                                  
                                 },
                                 content: "Simpan"
                             )
@@ -653,7 +715,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                   var tipe_jurnal = "UMUM";
                                   
                                   if (nama_jurnal.isNotEmpty) {
-                                    _jenisJurnalBloc.add(JenisJurnalInserted(jenis_jurnal: JenisJurnal(kategori_jurnal: nama_jurnal, tipe_jurnal: tipe_jurnal)));
+                                    _jenisJurnalBloc.add(JenisJurnalInserted(jenis_jurnal: JenisJurnalModel(kategori_jurnal: nama_jurnal, tipe_jurnal: tipe_jurnal)));
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -752,8 +814,8 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                 ],
                                 source: BulanTahunTableData(
                                   contentData: list_bulan,
-                                  seeDetail: () {
-                                    _navigateToJenisJurnal(context);
+                                  seeDetail: (int index) {
+                                    _navigateToJenisJurnal(context, list_bulan[index].bulan, list_bulan[index].tahun);
                                   },
                                   context: context,
                                 ),
@@ -827,6 +889,7 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
                     if (state is SuccessState) {
                       widget.namaAkunList.clear();
                       var filter_akun = List<Akun>.from(state.datastore);
+                      list_coa = filter_akun;
                       for (var akun in filter_akun) {
                         if (akun.keterangan_akun.contains("Debit")) {
                           widget.namaAkunList.add(akun.nama_akun);

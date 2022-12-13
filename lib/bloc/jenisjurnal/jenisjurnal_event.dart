@@ -8,13 +8,13 @@ class JenisJurnalFetched extends Event {
 }
 
 class JenisJurnalInserted extends Event {
-  final JenisJurnal jenis_jurnal;
+  final JenisJurnalModel jenis_jurnal;
 
   JenisJurnalInserted({required this.jenis_jurnal});
 }
 
 class JenisJurnalUpdated extends Event {
-  final JenisJurnal jenis_jurnal;
+  final JenisJurnalModel jenis_jurnal;
   final int id_jurnal;
 
   JenisJurnalUpdated({required this.jenis_jurnal, this.id_jurnal = 0});

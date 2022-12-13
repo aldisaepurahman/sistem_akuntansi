@@ -49,7 +49,7 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
-      seeDetail: () {
+      seeDetail: (int index) {
         setState(() {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>

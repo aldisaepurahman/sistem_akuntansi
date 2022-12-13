@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
+import 'package:sistem_akuntansi/bloc/jenisjurnal/jenisjurnal_bloc.dart';
+import 'package:sistem_akuntansi/bloc/jenisjurnal/jenisjurnal_event.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
@@ -10,9 +16,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 
 class JenisJurnal extends StatefulWidget {
-  const JenisJurnal({required this.client, Key? key}) : super(key: key);
+  const JenisJurnal({required this.client, required this.bulan, required this.tahun, Key? key}) : super(key: key);
 
   final SupabaseClient client;
+  final int bulan, tahun;
 
   @override
   JenisJurnalState createState() {
@@ -26,10 +33,14 @@ class JenisJurnalState extends State<JenisJurnal> {
   int _case = 1; // 1: insert. 2: update.
   final textInsert = TextEditingController();
   final textUpdate = TextEditingController();
+  late JenisJurnalBloc _jenisJurnalBloc;
 
   var tableRow;
+  int id_jurnal = 0;
+  List<JenisJurnalModel> list_jurnal = <JenisJurnalModel>[];
+  late JenisJurnalModel jurnal;
 
-  void _navigateToDaftarTransaksi(BuildContext context) {
+  void _navigateToDaftarTransaksi(BuildContext context, int id_jurnal) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) =>
         SideNavigationBar(
@@ -41,7 +52,8 @@ class JenisJurnalState extends State<JenisJurnal> {
           neracaLajurIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
-          client: widget.client
+          client: widget.client,
+          params: {"bulan": widget.bulan, "tahun": widget.tahun, "id_jurnal": id_jurnal}
         )
       )
     );
@@ -59,7 +71,8 @@ class JenisJurnalState extends State<JenisJurnal> {
             neracaLajurIndex: 0,
             amortisasiIndex: 0,
             jurnalPenyesuaianIndex: 0,
-            client: widget.client
+            client: widget.client,
+          params: {"bulan": widget.bulan, "tahun": widget.tahun},
         )
       )
     );
@@ -77,7 +90,7 @@ class JenisJurnalState extends State<JenisJurnal> {
           neracaLajurIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
-          client: widget.client
+          client: widget.client,
         )
       )
     );
@@ -94,11 +107,11 @@ class JenisJurnalState extends State<JenisJurnal> {
   void initState() {
     super.initState();
     tableRow = new JenisJurnalTableData(
-      contentData: contents,
-      seeDetail: (){
-        _navigateToDaftarTransaksi(context);
+      contentData: const <JenisJurnalModel>[],
+      seeDetail: (int index){
+        _navigateToDaftarTransaksi(context, 0);
       },
-      editForm: () {
+      editForm: (int index) {
         showForm();
       },
       tetapSimpan: (){
@@ -106,7 +119,7 @@ class JenisJurnalState extends State<JenisJurnal> {
           Navigator.pop(context);
         });
       },
-      hapus: (){
+      hapus: (int index){
         _navigateToJenisJurnal(context);
       },
       context: context,
@@ -116,6 +129,9 @@ class JenisJurnalState extends State<JenisJurnal> {
         });
       },
     );
+
+    _jenisJurnalBloc = JenisJurnalBloc(service: SupabaseService(supabaseClient: widget.client))..add(JenisJurnalFetched(tipe: "UMUM"));
+    jurnal = JenisJurnalModel();
   }
 
   void showForm() {
@@ -126,7 +142,7 @@ class JenisJurnalState extends State<JenisJurnal> {
         textInsert.text = "";
       }
       else {
-        textUpdate.text = "";
+        textUpdate.text = jurnal.kategori_jurnal;
         _case = 1; // set lagi ke state awal, yaitu insert
       }
     });
@@ -170,221 +186,284 @@ class JenisJurnalState extends State<JenisJurnal> {
         title: 'List Jurnal Umum',
         home: Scaffold(
             backgroundColor: background,
-            body: ListView(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25, right: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: (){
-                            _navigateToJurnalUmum(context);
-                          },
-                        )
-                      ],
-                    )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 25, left: 25),
-                  child: HeaderText(
-                    content: "Jenis Jurnal",
-                    size: 32,
-                    color: hitam,
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 15, left: 25),
-                  child: HeaderText(
-                    content: "Jurnal Umum - Maret 2022",
-                    size: 18,
-                    color: hitam,
-                  )
-                ),
-                Container(
-                  width: 30,
-                  margin: EdgeInsets.only(left: 25, top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: kuning,
-                          padding: const EdgeInsets.all(18)),
-                        onPressed: (disable_button == true ? null : showForm),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  size: 13,
-                                  color: hitam,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Tambah Jenis Jurnal",
-                                  style: TextStyle(
-                                    fontFamily: "Inter",
-                                    color: hitam,
-                                    fontWeight: FontWeight.bold,
+            body: BlocProvider<JenisJurnalBloc>(
+              create: (context) => _jenisJurnalBloc,
+              child: ListView(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 25, bottom: 15, left: 25, right: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ButtonBack(
+                            onPressed: (){
+                              _navigateToJurnalUmum(context);
+                            },
+                          )
+                        ],
+                      )
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 25, left: 25),
+                      child: HeaderText(
+                        content: "Jenis Jurnal",
+                        size: 32,
+                        color: hitam,
+                      )
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(bottom: 15, left: 25),
+                      child: HeaderText(
+                        content: "Jurnal Umum - Maret 2022",
+                        size: 18,
+                        color: hitam,
+                      )
+                  ),
+                  Container(
+                      width: 30,
+                      margin: EdgeInsets.only(left: 25, top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kuning,
+                                  padding: const EdgeInsets.all(18)),
+                              onPressed: (disable_button == true ? null : showForm),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 13,
+                                        color: hitam,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Tambah Jenis Jurnal",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: hitam,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
                                   ),
+                                ],
+                              )
+                          )
+                        ],
+                      )
+                  ),
+                  Visibility(
+                      visible: show,
+                      child: Container(
+                        margin: EdgeInsets.all(25),
+                        padding: EdgeInsets.all(25),
+                        color: background2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: HeaderText(
+                                  content: (_case == 1 ? "Tambah Jenis Jurnal" : "Ubah Jenis Jurnal"),
+                                  size: 18,
+                                  color: hitam),
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.50,
+                                      child: TextForm(
+                                        hintText: "Masukkan jenis jurnal",
+                                        textController: (_case == 1 ? textInsert : textUpdate),
+                                      )
+                                  ),
+                                ]
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ButtonNoIcon(
+                                    bg_color: background2,
+                                    text_color: merah,
+                                    onPressed: disableForm,
+                                    content: "Batal"),
+                                SizedBox(width: 20),
+                                ButtonNoIcon(
+                                    bg_color: kuning,
+                                    text_color: hitam,
+                                    onPressed: () {
+                                      var nama_jurnal = _case == 1 ? textInsert.text : textUpdate.text;
+                                      var tipe_jurnal = "UMUM";
+
+                                      if (nama_jurnal.isNotEmpty) {
+                                        _case == 1
+                                            ? _jenisJurnalBloc.add(JenisJurnalInserted(jenis_jurnal: JenisJurnalModel(kategori_jurnal: nama_jurnal, tipe_jurnal: tipe_jurnal)))
+                                            : _jenisJurnalBloc.add(JenisJurnalUpdated(jenis_jurnal: JenisJurnalModel(kategori_jurnal: nama_jurnal, tipe_jurnal: tipe_jurnal), id_jurnal: jurnal.id_jurnal));
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              Future.delayed(Duration(seconds: 2), () {
+                                                _navigateToJenisJurnal(context);
+                                              });
+                                              return DialogNoButton(
+                                                  content: _case == 1 ? "Berhasil Ditambahkan!" : "Berhasil Diubah!",
+                                                  content_detail: (_case == 1 ? "Jenis jurnal baru berhasil ditambahkan" : "Jenis jurnal berhasil diubah"),
+                                                  path_image: 'assets/images/tambah_coa.png'
+                                              );
+                                            }
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text("Pastikan nama jurnal terisi."))
+                                        );
+                                      }
+                                    },
+                                    content: "Simpan"
                                 )
                               ],
-                            ),
+                            )
                           ],
-                        )
+                        ),
                       )
-                    ],
-                  )
-                ),
-                Visibility(
-                  visible: show,
-                  child: Container(
-                    margin: EdgeInsets.all(25),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
                     padding: EdgeInsets.all(25),
                     color: background2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: HeaderText(
-                            content: (_case == 1 ? "Tambah Jenis Jurnal" : "Ubah Jenis Jurnal"),
-                            size: 18,
-                            color: hitam),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.50,
-                              child: TextForm(
-                                hintText: "Masukkan jenis jurnal",
-                                textController: (_case == 1 ? textInsert : textUpdate),
-                              )
-                            ),
-                          ]
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ButtonNoIcon(
-                                bg_color: background2,
-                                text_color: merah,
-                                onPressed: disableForm,
-                                content: "Batal"),
-                            SizedBox(width: 20),
-                            ButtonNoIcon(
-                              bg_color: kuning,
-                              text_color: hitam,
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      Future.delayed(Duration(seconds: 1), () {
-                                        Navigator.of(context).pop(true);
-                                      });
-                                      return DialogNoButton(
-                                          content: (_case == 1 ? "Berhasil Ditambahkan!" : "Berhasil Diubah!"),
-                                          content_detail: (_case == 1 ? "Jenis jurnal baru berhasil ditambahkan" : "Jenis jurnal berhasil diubah"),
-                                          path_image: 'assets/images/tambah_coa.png'
-                                      );
-                                    }
+                        BlocConsumer<JenisJurnalBloc, SiakState>(
+                          listener: (_, state) {
+                            if (state is SuccessState) {
+                              list_jurnal.clear();
+                              list_jurnal = state.datastore;
+                            }
+                          },
+                            builder: (_, state) {
+                              if (state is LoadingState) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              if (state is FailureState) {
+                                return Center(child: Text(state.error));
+                              }
+                              if (state is SuccessState) {
+
+                                return Container(
+                                  width: double.infinity,
+                                  child: PaginatedDataTable(
+                                    dataRowHeight: 70,
+                                    columns: <DataColumn>[
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "No.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Jenis Jurnal",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Action",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                    ],
+                                    source: JenisJurnalTableData(
+                                      contentData: list_jurnal,
+                                      seeDetail: (int index){
+                                        _navigateToDaftarTransaksi(context, list_jurnal[index].id_jurnal);
+                                      },
+                                      editForm: (int index) {
+                                        jurnal.id_jurnal = list_jurnal[index].id_jurnal;
+                                        jurnal.kategori_jurnal = list_jurnal[index].kategori_jurnal;
+                                        jurnal.tipe_jurnal = list_jurnal[index].tipe_jurnal;
+                                        showForm();
+                                      },
+                                      tetapSimpan: (){
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      hapus: (int index){
+                                        _jenisJurnalBloc.add(JenisJurnalDeleted(id_jurnal: list_jurnal[index].id_jurnal));
+                                        Future.delayed(Duration(seconds: 2), () {
+                                          _navigateToJenisJurnal(context);
+                                        });
+                                      },
+                                      context: context,
+                                      changeCaseToUpdate: (){
+                                        setState(() {
+                                          _case = 2;
+                                        });
+                                      },
+                                    ),
+                                    rowsPerPage: 10,
+                                    showCheckboxColumn: false,
+                                    columnSpacing: 0,
+                                    horizontalMargin: 0,
+                                  ),
                                 );
-                              },
-                              content: "Simpan"
-                            )
-                          ],
+                              }
+                              return const Center(child: Text("No data"));
+                            },
                         )
                       ],
                     ),
                   )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
-                  padding: EdgeInsets.all(25),
-                  color: background2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        child: PaginatedDataTable(
-                          dataRowHeight: 70,
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "No.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Jenis Jurnal",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Action",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                          ],
-                          source: tableRow,
-                          rowsPerPage: 10,
-                          showCheckboxColumn: false,
-                          columnSpacing: 0,
-                          horizontalMargin: 0,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                ],
+              ),
             )
         )
     );
@@ -392,16 +471,16 @@ class JenisJurnalState extends State<JenisJurnal> {
 }
 
 class JenisJurnalTableData extends DataTableSource {
-  Function seeDetail;
-  Function editForm;
+  Function(int) seeDetail;
+  Function(int) editForm;
   Function tetapSimpan;
-  Function hapus;
+  Function(int) hapus;
   BuildContext context;
-  final List<Jenis_jurnal> _contentData;
+  final List<JenisJurnalModel> _contentData;
   Function changeCaseToUpdate;
 
   JenisJurnalTableData({
-    required List<Jenis_jurnal> contentData,
+    required List<JenisJurnalModel> contentData,
     required this.context,
     required this.seeDetail,
     required this.editForm,
@@ -448,7 +527,7 @@ class JenisJurnalTableData extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.nama_jurnal}",
+                    "${_content.kategori_jurnal}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -472,7 +551,7 @@ class JenisJurnalTableData extends DataTableSource {
                             padding: EdgeInsets.all(20),
                           ),
                           onPressed: () {
-                            seeDetail();
+                            seeDetail(index);
                           },
                           child: Icon(Icons.remove_red_eye),
                         ),
@@ -483,7 +562,7 @@ class JenisJurnalTableData extends DataTableSource {
                             padding: EdgeInsets.all(20),
                           ),
                           onPressed: () {
-                            editForm();
+                            editForm(index);
                             changeCaseToUpdate();
                           },
                           child: Icon(Icons.edit),
@@ -509,7 +588,7 @@ class JenisJurnalTableData extends DataTableSource {
                                     tetapSimpan();
                                   },
                                   onPressed2: () {
-                                    hapus();
+                                    hapus(index);
                                   }
                                 );
                               }

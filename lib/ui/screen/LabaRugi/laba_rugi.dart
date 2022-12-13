@@ -53,7 +53,7 @@ class LabaRugiListState extends State<LabaRugiList> {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
-      seeDetail: () {
+      seeDetail: (int index) {
         _navigateToLaporanLabaRugi(context);
       },
       context: context,

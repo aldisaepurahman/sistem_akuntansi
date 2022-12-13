@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/screen/Amortisasi/amortisasi_aset.dart';
 import 'package:sistem_akuntansi/ui/screen/Amortisasi/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/ui/screen/Amortisasi/detail_amortisasi_aset.dart';
@@ -99,11 +101,11 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getJurnalUmum() {
     if (selectedJurnalUmumIndex == 1) {
-      return JenisJurnal(client: widget.client); // tabel jenis jurnal
+      return JenisJurnal(client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int); // tabel jenis jurnal
     } else if (selectedJurnalUmumIndex == 2) {
-      return TransaksiList(client: widget.client); // tabel daftar transaksi
+      return TransaksiList(client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, id_jurnal: widget.params?['id_jurnal'] as int); // tabel daftar transaksi
     } else if (selectedJurnalUmumIndex == 3) {
-      return DetailTransaksi(client: widget.client); // detail transaksi
+      return DetailTransaksi(client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, id_jurnal: widget.params?['id_jurnal'] as int, transaksi: widget.params?['transaksi'] as Map<String, List<VJurnalExpand>>); // detail transaksi
     }
     return JurnalUmumList(client: widget.client); // tabel bulan tahun jurnal
   }
@@ -160,13 +162,6 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     return JurnalPenyesuaianList(client: widget.client);
   }
 
-  Widget logoutDialog() {
-    if (selectedJurnalPenyesuaianIndex ==  1) {
-      // return
-    }
-    return JurnalPenyesuaianList(client: widget.client);
-  }
-
   @override
   void initState() {
     selectedIndex = widget.index;
@@ -186,14 +181,40 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
       getNeracaLajurPage(),
       getLabaRugiPage(),
       getAmortisasiPage(),
-      getJurnalPenyesuaianPage(),
-      logoutDialog()
+      getJurnalPenyesuaianPage()
     ];
   }
 
   void _changeIndex(int index) {
     setState(() {
-      selectedIndex = index;
+      if (index == 8) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog2Button(
+                  content: "Logout",
+                  content_detail:
+                  "Anda yakin ingin meninggalkan akun anda?",
+                  path_image: 'assets/images/hapus_coa.png',
+                  button1: "Tidak",
+                  button2: "Ya, Keluar",
+                  onPressed1: () {
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                  onPressed2: () {
+                    Future.delayed(Duration(seconds: 2), () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                        return Login(client: widget.client);
+                      }));
+                      // Navigator.of(context).pop();
+                    });
+                  });
+            });
+      }
+
+      selectedIndex = (index <= 7) ? index : selectedIndex;
     });
   }
 

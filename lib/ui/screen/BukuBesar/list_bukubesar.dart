@@ -71,7 +71,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
     super.initState();
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
-      seeDetail: () {
+      seeDetail: (int index) {
         _navigateToBukuBesarPerAkun(context);
       },
       context: context,
