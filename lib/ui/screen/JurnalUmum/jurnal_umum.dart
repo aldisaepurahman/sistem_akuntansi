@@ -387,6 +387,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                       )
                     ],
                   )
+                ],
               ),
               Visibility(
                   visible: show,
@@ -409,7 +410,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Expanded(
-                                  // width: MediaQuery.of(context).size.width * 0.13,
                                   child: Container(
                                     margin: EdgeInsets.only(top: 10, bottom: 20),
                                     child: TextField(
@@ -448,7 +448,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                 width: 10,
                               ),
                               Expanded(
-                                  // width: MediaQuery.of(context).size.width * 0.20,
                                   child: TextForm(
                                     hintText: "Masukkan nama transaksi",
                                     textController: nama_transaksi,
@@ -470,7 +469,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                     for (var jurnal in list_jurnal) { list_filter.add(jurnal.kategori_jurnal); }
                                     print(list_filter);
                                     return Expanded(
-                                        // width: MediaQuery.of(context).size.width * 0.3,
                                         child: DropdownForm(
                                           onChanged: (newValue) {
                                             setState(() {
@@ -495,7 +493,6 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                 width: 10,
                               ),
                               Expanded(
-                                  // width: MediaQuery.of(context).size.width * 0.15,
                                   child: TextForm(
                                     hintText: "Masukkan no. bukti",
                                     textController: no_bukti,

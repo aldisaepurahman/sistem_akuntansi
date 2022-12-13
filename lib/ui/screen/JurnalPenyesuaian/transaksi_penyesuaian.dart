@@ -72,18 +72,6 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
   final TextEditingController nama_transaksi_update = TextEditingController();
   final TextEditingController no_bukti_update = TextEditingController();
 
-  final TextEditingController akunDebitText = new TextEditingController();
-  final TextEditingController jumlahDebitText = new TextEditingController();
-
-  final TextEditingController akunDebitUpdateText = new TextEditingController();
-  final TextEditingController jumlahDebitUpdateText = new TextEditingController();
-
-  final TextEditingController akunKreditText = new TextEditingController();
-  final TextEditingController jumlahKreditText = new TextEditingController();
-
-  final TextEditingController akunKreditUpdateText = new TextEditingController();
-  final TextEditingController jumlahKreditUpdateText = new TextEditingController();
-
   void showForm() {
     setState(() {
       show = true;
@@ -245,10 +233,6 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
         DynamicDebitWidget(
           namaAkunList: namaAkunList,
           formCase: _case,
-          jumlahDebitText: jumlahDebitText,
-          jumlahDebitUpdateText: jumlahDebitUpdateText,
-          akunDebitText: akunDebitText,
-          akunDebitUpdateText: akunDebitUpdateText,
         )
     );
   }
@@ -267,10 +251,6 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
         DynamicKreditWidget(
           namaAkunList: namaAkunList,
           formCase: _case,
-          jumlahKreditUpdateText: jumlahKreditUpdateText,
-          jumlahKreditText: jumlahKreditText,
-          akunKreditText: akunKreditText,
-          akunKreditUpdateText: akunKreditUpdateText,
         )
     );
   }
@@ -380,8 +360,7 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.13,
+                                Expanded(
                                     child: Container(
                                       margin: EdgeInsets.only(top: 10, bottom: 20),
                                       child: TextField(
@@ -424,8 +403,7 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.20,
+                                Expanded(
                                     child: TextForm(
                                       hintText: "Masukkan nama transaksi",
                                       textController: (_case == 1 ? nama_transaksi : nama_transaksi_update),
@@ -434,8 +412,7 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.35,
+                                Expanded(
                                     child: DropdownForm(
                                       onChanged: (String? newValue) {
                                         setState(() {
@@ -454,8 +431,7 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.15,
+                                Expanded(
                                     child: TextForm(
                                       hintText: "Masukkan no. bukti",
                                       textController: (_case == 1 ? no_bukti : no_bukti_update),
@@ -467,46 +443,16 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 5),
-                                        child: HeaderText(
-                                            content: "Debit",
-                                            size: 16,
-                                            color: hitam
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      ButtonAdd(
-                                          onPressed: (){
-                                            setState(() {
-                                              addDynamicDebit();
-                                            });
-                                          }
-                                      )
-                                    ],
-                                  ),
-                                  // iterasi dlm sini
-                                  for (var i in dynamicDebitList) i,
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 25),
-                                    child: Row(
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
                                       children: [
                                         Container(
-                                          margin: EdgeInsets.only(),
+                                          margin: EdgeInsets.only(bottom: 5),
                                           child: HeaderText(
-                                              content: "Kredit",
+                                              content: "Debit",
                                               size: 16,
                                               color: hitam
                                           ),
@@ -517,16 +463,50 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                         ButtonAdd(
                                             onPressed: (){
                                               setState(() {
-                                                addDynamicKredit();
+                                                addDynamicDebit();
                                               });
                                             }
                                         )
                                       ],
                                     ),
-                                  ),
-                                  // iterasi dlm sini
-                                  for (var i in dynamicKreditList) i,
-                                ],
+                                    // iterasi dlm sini
+                                    for (var i in dynamicDebitList) i,
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 25),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(),
+                                            child: HeaderText(
+                                                content: "Kredit",
+                                                size: 16,
+                                                color: hitam
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          ButtonAdd(
+                                              onPressed: (){
+                                                setState(() {
+                                                  addDynamicKredit();
+                                                });
+                                              }
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    // iterasi dlm sini
+                                    for (var i in dynamicKreditList) i,
+                                  ],
+                                )
                               )
                             ],
                           ),

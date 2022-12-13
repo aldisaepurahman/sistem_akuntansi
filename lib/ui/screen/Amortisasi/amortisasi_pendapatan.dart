@@ -228,18 +228,14 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.25,
+                                Expanded(
                                     child: TextForm(
                                         hintText: "Masukkan keterangan...",
                                         textController: keterangan)),
                                 SizedBox(
                                   width: 10,
                                 ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.25,
+                                Expanded(
                                     child: TextForm(
                                         hintText: "Masukkan total harga...",
                                         textController: total_harga,
@@ -247,9 +243,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.25,
+                                Expanded(
                                   child: DropdownForm(
                                       onChanged: (String? newValue) {
                                         setState(() {
@@ -268,9 +262,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.25,
+                                Expanded(
                                     child: TextForm(
                                         hintText:
                                             "Masukkan jumlah mahasiswa...",
@@ -278,9 +270,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.25,
+                                Expanded(
                                     child: DropdownSearchButton(
                                         controller: akun,
                                         hintText: "Masukkan Akun Amortisasi...",

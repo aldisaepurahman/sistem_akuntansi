@@ -6,19 +6,15 @@ class DynamicDebitWidget extends StatefulWidget {
   final List<String> namaAkunList;
   final int formCase;
 
-  final TextEditingController akunDebitText;
-  final TextEditingController jumlahDebitText;
+  final TextEditingController akunDebitText = TextEditingController();
+  final TextEditingController jumlahDebitText = TextEditingController();
 
-  final TextEditingController akunDebitUpdateText;
-  final TextEditingController jumlahDebitUpdateText;
+  final TextEditingController akunDebitUpdateText = TextEditingController();
+  final TextEditingController jumlahDebitUpdateText = TextEditingController();
 
   DynamicDebitWidget({
     required this.namaAkunList,
     required this.formCase,
-    required this.akunDebitText,
-    required this.jumlahDebitText,
-    required this.akunDebitUpdateText,
-    required this.jumlahDebitUpdateText,
   });
 
   @override
@@ -39,7 +35,7 @@ class DynamicDebitWidgetState extends State<DynamicDebitWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
+      width: MediaQuery.of(context).size.width * 0.50,
       child: Container(
           decoration: BoxDecoration(
               border: Border(
@@ -52,8 +48,7 @@ class DynamicDebitWidgetState extends State<DynamicDebitWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
+              Expanded(
                 child: DropdownSearchButton(
                   isNeedChangeColor: false,
                   notFoundText: 'Akun tidak ditemukan',
@@ -77,8 +72,7 @@ class DynamicDebitWidgetState extends State<DynamicDebitWidget> {
               SizedBox(
                 width: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
+              Expanded(
                 child: TextForm(
                   hintText: "Jumlah",
                   textController: (widget.formCase == 1 ? widget.jumlahDebitText : widget.jumlahDebitUpdateText),
@@ -98,19 +92,15 @@ class DynamicKreditWidget extends StatefulWidget {
   final List<String> namaAkunList;
   final int formCase;
 
-  final TextEditingController akunKreditText;
-  final TextEditingController jumlahKreditText;
+  final TextEditingController akunKreditText = TextEditingController();
+  final TextEditingController jumlahKreditText = TextEditingController();
 
-  final TextEditingController akunKreditUpdateText;
-  final TextEditingController jumlahKreditUpdateText;
+  final TextEditingController akunKreditUpdateText = TextEditingController();
+  final TextEditingController jumlahKreditUpdateText = TextEditingController();
 
   DynamicKreditWidget({
     required this.namaAkunList,
     required this.formCase,
-    required this.akunKreditText,
-    required this.jumlahKreditText,
-    required this.akunKreditUpdateText,
-    required this.jumlahKreditUpdateText,
   });
 
   @override
@@ -130,14 +120,16 @@ class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
+      width: MediaQuery.of(context).size.width * 0.50,
       child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
+                width: 10,
+              ),
+              Expanded(
                 child: DropdownSearchButton(
                   isNeedChangeColor: false,
                   notFoundText: 'Akun tidak ditemukan',
@@ -161,8 +153,7 @@ class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
               SizedBox(
                 width: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
+              Expanded(
                 child: TextForm(
                   hintText: "Jumlah",
                   textController: (widget.formCase == 1 ? widget.jumlahKreditText : widget.jumlahKreditUpdateText),
@@ -181,18 +172,14 @@ class DynamicKreditWidgetState extends State<DynamicKreditWidget> {
 class DynamicDebitInsertWidget extends StatefulWidget {
   final List<String> namaAkunList;
 
-  final TextEditingController akunDebitText;
-  final TextEditingController jumlahDebitText;
+  final TextEditingController akunDebitText = TextEditingController();
+  final TextEditingController jumlahDebitText = TextEditingController();
 
-  final TextEditingController akunDebitUpdateText;
-  final TextEditingController jumlahDebitUpdateText;
+  final TextEditingController akunDebitUpdateText = TextEditingController();
+  final TextEditingController jumlahDebitUpdateText = TextEditingController();
 
   DynamicDebitInsertWidget({
     required this.namaAkunList,
-    required this.akunDebitText,
-    required this.jumlahDebitText,
-    required this.akunDebitUpdateText,
-    required this.jumlahDebitUpdateText,
   });
 
   @override
@@ -212,7 +199,7 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
+      width: MediaQuery.of(context).size.width * 0.50,
       child: Container(
           decoration: BoxDecoration(
               border: Border(
@@ -225,8 +212,7 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
+              Expanded(
                 child: DropdownSearchButton(
                   isNeedChangeColor: false,
                   notFoundText: 'Akun tidak ditemukan',
@@ -245,8 +231,7 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
               SizedBox(
                 width: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
+              Expanded(
                 child: TextForm(
                   hintText: "Jumlah",
                   textController: widget.jumlahDebitText,
@@ -265,18 +250,14 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
 class DynamicKreditInsertWidget extends StatefulWidget {
   final List<String> namaAkunList;
 
-  final TextEditingController akunKreditText;
-  final TextEditingController jumlahKreditText;
+  final TextEditingController akunKreditText = TextEditingController();
+  final TextEditingController jumlahKreditText = TextEditingController();
 
-  final TextEditingController akunKreditUpdateText;
-  final TextEditingController jumlahKreditUpdateText;
+  final TextEditingController akunKreditUpdateText = TextEditingController();
+  final TextEditingController jumlahKreditUpdateText = TextEditingController();
 
   DynamicKreditInsertWidget({
     required this.namaAkunList,
-    required this.akunKreditText,
-    required this.jumlahKreditText,
-    required this.akunKreditUpdateText,
-    required this.jumlahKreditUpdateText,
   });
 
   @override
@@ -295,15 +276,17 @@ class DynamicKreditInsertWidgetState extends State<DynamicKreditInsertWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox( // BAGIAN DEBIT
-      width: MediaQuery.of(context).size.width * 0.40,
+    return SizedBox( // BAGIAN KREDIT
+      width: MediaQuery.of(context).size.width * 0.50,
       child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
+                width: 10,
+              ),
+              Expanded(
                 child: DropdownSearchButton(
                   isNeedChangeColor: false,
                   notFoundText: 'Akun tidak ditemukan',
@@ -322,8 +305,7 @@ class DynamicKreditInsertWidgetState extends State<DynamicKreditInsertWidget> {
               SizedBox(
                 width: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
+              Expanded(
                 child: TextForm(
                   hintText: "Jumlah",
                   textController: widget.jumlahKreditText,

@@ -136,24 +136,21 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(
                                 child: TextForm(
                                     hintText: "Masukkan keterangan...",
                                     textController: keterangan)),
                             SizedBox(
                               width: 10,
                             ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(
                                 child: TextForm(
                                     hintText: "Masukkan masa guna...",
                                     textController: masa_guna)),
                             SizedBox(
                               width: 10,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(
                               child: TextForm(
                                   hintText: "Masukkan nilai perolehan...",
                                   textController: nilai_perolehan,
@@ -167,8 +164,7 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(
                                 child: TextForm(
                                   hintText: "Masukkan penyusutan tahun lalu...",
                                   textController:
@@ -178,8 +174,7 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                             SizedBox(
                               width: 10,
                             ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(
                                 child: DropdownSearchButton(
                                     controller: akun,
                                     hintText: "Masukkan Akun Amortisasi...",
@@ -190,8 +185,7 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                             SizedBox(
                               width: 10,
                             ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(
                                 child: Container(
                                     margin: EdgeInsets.only(bottom: 3),
                                     child: TextField(
