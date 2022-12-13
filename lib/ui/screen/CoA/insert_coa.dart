@@ -120,265 +120,252 @@ class InsertCOAState extends State<InsertCOA> {
                     style: TextStyle(
                         fontFamily: "Inter",
                         fontWeight: FontWeight.bold,
-                        fontSize: 32,
-                        color: Color.fromARGB(255, 50, 52, 55)),
-                  ),
-                ),
-                Container(
-                  margin:
-                  EdgeInsets.only(top: 25, bottom: 60, right: 25, left: 25),
-                  padding: EdgeInsets.all(25),
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                        fontSize: 24,
+                        color: Color.fromARGB(255, 255, 204, 0)),
+                  )),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 25),
+                    child: Text(
+                      "Nama Akun",
+                      style: TextStyle(
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Color.fromARGB(255, 255, 204, 0)),
+                    )),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25),
+                      child: Text(
+                        "Nama Akun",
+                        style: TextStyle(
+                            fontFamily: "Inter",
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 50, 52, 55)),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 20),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: 'Masukkan nama akun...',
+                            contentPadding: const EdgeInsets.all(8),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8))),
+                      ),
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                          Container(
-                            child: const Text(
-                              "Informasi CoA",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  color: Color.fromARGB(255, 255, 204, 0)),
-                            )),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 25),
-                              child: Text(
-                                "Nama Akun",
-                                style: TextStyle(
-                                    fontFamily: "Inter",
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 50, 52, 55)),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 10, bottom: 20),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    hintText: 'Masukkan nama akun...',
-                                    contentPadding: const EdgeInsets.all(8),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8))),
-                              ),
-                            ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Kode',
-                                          style: TextStyle(
-                                              fontFamily: "Inter",
-                                              fontSize: 14,
-                                              color: Color.fromARGB(255, 50, 52, 55))),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.2,
-                                        child: Container(
-                                          margin: EdgeInsets.only(top: 10),
-                                          child: TextField(
-                                            controller: kodeController,
-                                            decoration: InputDecoration(
-                                                hintText: 'Masukkan kode...',
-                                                contentPadding: const EdgeInsets.all(8),
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(8))),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Keterangan',
-                                          style: TextStyle(
-                                              fontFamily: "Inter",
-                                              fontSize: 14,
-                                              color: Color.fromARGB(255, 50, 52, 55))),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.2,
-                                        child: Container(
-                                          margin: EdgeInsets.only(top: 10),
-                                          child: TextField(
-                                            controller: keteranganController,
-                                            decoration: InputDecoration(
-                                                hintText: 'Masukkan keterangan...',
-                                                contentPadding: const EdgeInsets.all(8),
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(8))),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Indentasi',
-                                          style: TextStyle(
-                                              fontFamily: "Inter",
-                                              fontSize: 14,
-                                              color: Color.fromARGB(255, 50, 52, 55))),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.2,
-                                        child: Container(
-                                          margin: EdgeInsets.only(top: 10),
-                                          child: TextField(
-                                            controller: indentasiController,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                hintText: 'Masukkan indentasi...',
-                                                contentPadding: const EdgeInsets.all(8),
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(8))),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 25),
-                                child: Text(
-                                  "Saldo Awal (Opsional)",
+                              Text('Kode',
                                   style: TextStyle(
                                       fontFamily: "Inter",
                                       fontSize: 14,
-                                      color: Color.fromARGB(255, 50, 52, 55)),
+                                      color: Color.fromARGB(255, 50, 52, 55))),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: TextField(
+                                    controller: kodeController,
+                                    decoration: InputDecoration(
+                                        hintText: 'Masukkan kode...',
+                                        contentPadding: const EdgeInsets.all(8),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8))),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, bottom: 20),
-                                child: TextField(
-                                  controller: saldoController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      labelText: 'Rp',
-                                      hintText: 'Masukkan saldo awal...',
-                                      contentPadding: const EdgeInsets.all(8),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(8))),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(top: 16, bottom: 25),
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color.fromARGB(255, 255, 204, 0),
-                                      padding: EdgeInsets.all(20)),
-                                  onPressed: () {
-                                    var nama_akun = namaAkunController.text;
-                                    var kode_akun = kodeController.text;
-                                    var keterangan = keteranganController.text;
-                                    var indentasi = indentasiController.text;
-                                    var saldo = saldoController.text;
-                                    var bulan = listbulan[DateTime.now().month];
-                                    var tahun = DateTime.now().year;
-
-                                    if (nama_akun.isNotEmpty && kode_akun.isNotEmpty && keterangan.isNotEmpty && indentasi.isNotEmpty) {
-                                      AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(
-                                        AkunInserted(
-                                            akun: Akun(
-                                              kode_akun: kode_akun,
-                                              nama_akun: nama_akun,
-                                              keterangan_akun: keterangan,
-                                              indentasi: int.parse(indentasi)
-                                            ),
-                                            saldo: Saldo(
-                                              kode_akun: kode_akun,
-                                              saldo: int.parse(saldo),
-                                              bulan: bulan!!,
-                                              tahun: tahun
-                                            )
-                                        )
-                                      );
-
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            Future.delayed(Duration(seconds: 2), () {
-                                              _navigateToListCoa(context);
-                                            });
-                                            return DialogNoButton(
-                                                content: "Berhasil Ditambahkan!",
-                                                content_detail:
-                                                "Chart of Account baru berhasil ditambahkan",
-                                                path_image:
-                                                'assets/images/tambah_coa.png');
-                                          });
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text("Pastikan seluruh kolom terisi, kecuali kolom saldo awal"))
-                                      );
-                                    }
-                                  },
-                                  child: const Text(
-                                    "Simpan",
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      color: Color.fromARGB(255, 50, 52, 55),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                )
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 25),
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Color.fromARGB(255, 255, 255, 255),
-                                      padding: EdgeInsets.all(20)),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Dialog2Button(
-                                              content: "Batalkan Perubahan",
-                                              content_detail:
-                                                  "Anda yakin ingin membatalkan perubahan ini?",
-                                              path_image:
-                                                  'assets/images/berhasil_hapus_coa.png',
-                                              button1: "Tetap Simpan",
-                                              button2: "Ya, Hapus",
-                                              onPressed1: () {
-                                                setState(() {
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                              onPressed2: () {
-                                                setState(() {
-                                                  _navigateToListCoa(context);
-                                                });
-                                              });
-                                        });
-                                  },
-                                  child: const Text(
-                                    "Batalkan",
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      color: Color.fromARGB(255, 245, 0, 0),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                )
                               )
                             ],
                           ),
-                        )
-                      ],
-                    ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Keterangan',
+                                  style: TextStyle(
+                                      fontFamily: "Inter",
+                                      fontSize: 14,
+                                      color: Color.fromARGB(255, 50, 52, 55))),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: TextField(
+                                    controller: keteranganController,
+                                    decoration: InputDecoration(
+                                        hintText: 'Masukkan keterangan...',
+                                        contentPadding: const EdgeInsets.all(8),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8))),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Indentasi',
+                                  style: TextStyle(
+                                      fontFamily: "Inter",
+                                      fontSize: 14,
+                                      color: Color.fromARGB(255, 50, 52, 55))),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: TextField(
+                                    controller: indentasiController,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                        hintText: 'Masukkan indentasi...',
+                                        contentPadding: const EdgeInsets.all(8),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8))),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 25),
+                        child: Text(
+                          "Saldo Awal (Opsional)",
+                          style: TextStyle(
+                              fontFamily: "Inter",
+                              fontSize: 14,
+                              color: Color.fromARGB(255, 50, 52, 55)),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 20),
+                        child: TextField(
+                          controller: saldoController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              labelText: 'Rp',
+                              hintText: 'Masukkan saldo awal...',
+                              contentPadding: const EdgeInsets.all(8),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 16, bottom: 25),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color.fromARGB(255, 255, 204, 0),
+                              padding: EdgeInsets.all(20)),
+                          onPressed: () {
+                            var nama_akun = namaAkunController.text;
+                            var kode_akun = kodeController.text;
+                            var keterangan = keteranganController.text;
+                            var indentasi = indentasiController.text;
+                            var saldo = saldoController.text;
+                            var bulan = listbulan[DateTime.now().month];
+                            var tahun = DateTime.now().year;
 
-                  )
+                            if (nama_akun.isNotEmpty && kode_akun.isNotEmpty && keterangan.isNotEmpty && indentasi.isNotEmpty) {
+                              AkunBloc(service: SupabaseService(supabaseClient: widget.client)).add(
+                                AkunInserted(
+                                    akun: Akun(
+                                      kode_akun: kode_akun,
+                                      nama_akun: nama_akun,
+                                      keterangan_akun: keterangan,
+                                      indentasi: int.parse(indentasi)
+                                    ),
+                                    saldo: Saldo(
+                                      kode_akun: kode_akun,
+                                      saldo: int.parse(saldo),
+                                      bulan: bulan!!,
+                                      tahun: tahun
+                                    )
+                                )
+                              );
+
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    Future.delayed(Duration(seconds: 2), () {
+                                      _navigateToListCoa(context);
+                                    });
+                                    return DialogNoButton(
+                                        content: "Berhasil Ditambahkan!",
+                                        content_detail:
+                                        "Chart of Account baru berhasil ditambahkan",
+                                        path_image:
+                                        'assets/images/tambah_coa.png');
+                                  });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Pastikan seluruh kolom terisi, kecuali kolom saldo awal"))
+                              );
+                            }
+                          },
+                          child: const Text(
+                            "Simpan",
+                            style: TextStyle(
+                              fontFamily: "Inter",
+                              color: Color.fromARGB(255, 50, 52, 55),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        )
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 25),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Color.fromARGB(255, 255, 255, 255),
+                              padding: EdgeInsets.all(20)),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog2Button(
+                                      content: "Batalkan Perubahan",
+                                      content_detail:
+                                          "Anda yakin ingin membatalkan perubahan ini?",
+                                      path_image:
+                                          'assets/images/berhasil_hapus_coa.png',
+                                      button1: "Tetap Simpan",
+                                      button2: "Ya, Hapus",
+                                      onPressed1: () {
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      onPressed2: () {
+                                        setState(() {
+                                          _navigateToListCoa(context);
+                                        });
+                                      });
+                                });
+                          },
+                          child: const Text(
+                            "Batalkan",
+                            style: TextStyle(
+                              fontFamily: "Inter",
+                              color: Color.fromARGB(255, 245, 0, 0),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        )
+                      )
+                    ],
+                  ),
+        )
     );
   }
 }

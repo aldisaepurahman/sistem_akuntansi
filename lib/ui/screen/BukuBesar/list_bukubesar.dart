@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
@@ -69,8 +70,8 @@ class ListBukuBesarState extends State<ListBukuBesar> {
   void initState() {
     super.initState();
     tableRow = new BulanTahunTableData(
-      contentData: contents,
-      seeDetail: () {
+      contentData: const <VBulanJurnal>[],
+      seeDetail: (int index) {
         _navigateToBukuBesarPerAkun(context);
       },
       context: context,

@@ -243,7 +243,14 @@ class DetailCOAState extends State<DetailCOA> {
                                             Navigator.pop(context);
                                           });
                                         },
-                                        onPressed2: () {});
+                                        onPressed2: () {
+                                          AkunBloc(
+                                              service: SupabaseService(supabaseClient: widget.client))
+                                            ..add(AkunDeleted(kode_akun: widget.akun.kode_akun));
+                                          Future.delayed(Duration(seconds: 2), () {
+                                            _navigateToListCoa(context);
+                                          });
+                                        });
                                   });
                             },
                             child: const Text(

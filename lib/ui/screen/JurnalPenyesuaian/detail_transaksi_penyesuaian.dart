@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
@@ -55,8 +56,8 @@ class DetailTransaksiPenyesuaianState extends State<DetailTransaksiPenyesuaian> 
   void initState() {
     super.initState();
     tableRow = new RowTableDetail(
-        contentDataDebit: contents_debit,
-        contentDataKredit: contents_kredit,
+        contentDataDebit: <VJurnalExpand>[],
+        contentDataKredit: <VJurnalExpand>[],
         context: context);
   }
 

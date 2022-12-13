@@ -63,7 +63,7 @@ class VLookupBloc extends Bloc<Event, SiakState> {
   Future<void> _getSearchData(AkunSearched event, Emitter<SiakState> emit) async {
     try {
       emit(LoadingState());
-      final list_coa = event.data_akun.where((akun) => akun.nama_akun.contains(event.keyword)).toList();
+      final list_coa = await event.data_akun.where((akun) => akun.nama_akun.contains(event.keyword)).toList();
       emit(SuccessState(list_coa));
     } catch (error) {
       emit(FailureState(error.toString()));

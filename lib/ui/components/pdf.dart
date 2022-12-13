@@ -79,7 +79,7 @@ void add_data(
 PdfPage header_laporan(
     PdfPage page, Size pageSize, String nama_laporan, String periode) {
   final Uint8List imageData =
-      File('assets/images/logo_stikes.jpg').readAsBytesSync();
+      File('assets/images/logo_stikes.png').readAsBytesSync();
   final PdfBitmap image = PdfBitmap(imageData);
 
   page.graphics.drawImage(image, Rect.fromLTWH(30, 0, 90, 90));

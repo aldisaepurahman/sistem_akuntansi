@@ -28,3 +28,12 @@ class FailureState extends SiakState {
   @override
   List<Object> get props => [error];
 }
+
+class CrudState extends SiakState {
+  final bool status;
+
+  const CrudState(this.status);
+
+  @override
+  List<Object> get props => [status];
+}
