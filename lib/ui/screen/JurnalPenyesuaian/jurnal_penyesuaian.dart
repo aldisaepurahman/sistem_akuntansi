@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
+import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vbulan_jurnal/vbulan_jurnal_event.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
@@ -28,9 +33,12 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
   bool show = false;
   bool disable_button = false;
 
+  var list_bulan = <VBulanJurnal>[];
+  late VBulanJurnalBloc _bulanBloc;
+
   var tableRow;
 
-  void _navigateToJenisJurnal(BuildContext context){
+  void _navigateToJenisJurnal(BuildContext contex, int bulan, int tahun){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) =>
         SideNavigationBar(
@@ -42,7 +50,8 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
           neracaLajurIndex: 0,
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 1,
-          client: widget.client
+          client: widget.client,
+          params: {"bulan": bulan, "tahun": tahun},
         )
       )
     );
@@ -54,10 +63,12 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
     tableRow = new BulanTahunTableData(
       contentData: const <VBulanJurnal>[],
       seeDetail: (int index) {
-        _navigateToJenisJurnal(context);
+        _navigateToJenisJurnal(context, 0, 0);
       },
       context: context,
     );
+
+    _bulanBloc = VBulanJurnalBloc(service: SupabaseService(supabaseClient: widget.client))..add(BulanFetched());
   }
 
   void showForm() {
@@ -103,137 +114,165 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
         title: 'List Jurnal Umum',
         home: Scaffold(
             backgroundColor: background,
-            body: ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 25, left: 25),
-                  child: HeaderText(
-                      content: "Jurnal Penyesuaian", size: 32, color: hitam
-                  )
-                ),
-                Container(
-                  margin:
-                  EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
-                  padding: EdgeInsets.all(25),
-                  color: background2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          DropdownFilter(
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                if (newValue != null) {
-                                  _selectedMonthFilter = newValue;
-                                }
-                              });
-                            },
-                            content: _selectedMonthFilter,
-                            items: month,
-                          ),
-                          SizedBox(width: 20),
-                          DropdownFilter(
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                if (newValue != null) {
-                                  _selectedYearFilter = newValue;
-                                }
-                              });
-                            },
-                            content: _selectedYearFilter,
-                            items: year,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 25),
-                      Container(
-                        width: double.infinity,
-                        child: PaginatedDataTable(
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "No.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
+            body: BlocProvider<VBulanJurnalBloc>(
+              create: (context) => _bulanBloc,
+              child: ListView(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 25, left: 25),
+                      child: HeaderText(
+                          content: "Jurnal Penyesuaian", size: 32, color: hitam
+                      )
+                  ),
+                  Container(
+                    margin:
+                    EdgeInsets.only(top: 25, bottom: 50, right: 25, left: 25),
+                    padding: EdgeInsets.all(25),
+                    color: background2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /*Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            DropdownFilter(
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (newValue != null) {
+                                    _selectedMonthFilter = newValue;
+                                  }
+                                });
+                              },
+                              content: _selectedMonthFilter,
+                              items: month,
                             ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Bulan",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Tahun",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Action",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
+                            SizedBox(width: 20),
+                            DropdownFilter(
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (newValue != null) {
+                                    _selectedYearFilter = newValue;
+                                  }
+                                });
+                              },
+                              content: _selectedYearFilter,
+                              items: year,
                             ),
                           ],
-                          source: tableRow,
-                          rowsPerPage: 10,
-                          showCheckboxColumn: false,
-                          columnSpacing: 0,
-                          horizontalMargin: 0,
-                          dataRowHeight: 70,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        ),*/
+                        SizedBox(height: 25),
+                        BlocConsumer<VBulanJurnalBloc, SiakState>(
+                            builder: (_, state) {
+                              if (state is LoadingState) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              if (state is FailureState) {
+                                return Center(child: Text(state.error));
+                              }
+                              if (state is SuccessState) {
+                                return Container(
+                                  width: double.infinity,
+                                  child: PaginatedDataTable(
+                                    columns: <DataColumn>[
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "No.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Bulan",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Tahun",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Action",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                    ],
+                                    source: BulanTahunTableData(
+                                      contentData: list_bulan,
+                                      seeDetail: (int index) {
+                                        _navigateToJenisJurnal(context, list_bulan[index].bulan, list_bulan[index].tahun);
+                                      },
+                                      context: context,
+                                    ),
+                                    rowsPerPage: 10,
+                                    showCheckboxColumn: false,
+                                    columnSpacing: 0,
+                                    horizontalMargin: 0,
+                                    dataRowHeight: 70,
+                                  ),
+                                );
+                              }
+                              return const Center(child: Text("No data"));
+                            },
+                            listener: (_, state) {
+                              if (state is SuccessState) {
+                                list_bulan.clear();
+                                list_bulan = state.datastore;
+                              }
+                            },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             )));
   }
 }

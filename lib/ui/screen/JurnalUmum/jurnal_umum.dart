@@ -386,8 +386,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                         ],
                       )
                     ],
-                  )
-                ],
+                  ),
               ),
               Visibility(
                   visible: show,
@@ -747,7 +746,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    /*Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -775,7 +774,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                           items: year,
                         ),
                       ],
-                    ),
+                    ),*/
                     SizedBox(height: 25),
                     BlocConsumer<VBulanJurnalBloc, SiakState>(
                       listener: (_, state) {

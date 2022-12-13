@@ -526,23 +526,6 @@ class TransaksiListState extends State<TransaksiList> {
                                         );
                                       }
                                   ),
-                                  /*SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.35,
-                                      child: DropdownForm(
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            if (_case == 1) {
-                                              _selectedJurnalInsert = newValue!;
-                                            }
-                                            else {
-                                              _selectedJurnalUpdate = newValue!;
-                                            }
-                                          });
-                                        },
-                                        content: (_case == 1 ? _selectedJurnalInsert : _selectedJurnalUpdate),
-                                        items: jurnal,
-                                      )
-                                  ),*/
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -891,7 +874,6 @@ class TransaksiListState extends State<TransaksiList> {
                             },
                             listener: (_, state) {
                               if (state is SuccessState) {
-                                // list_transaksi.clear();
                                 list_transaksi.clear();
                                 temp_list_transaksi.clear();
                                 temp_list_transaksi = state.datastore;
@@ -899,7 +881,6 @@ class TransaksiListState extends State<TransaksiList> {
                                 list_transaksi.forEach((key, value) {
                                   split_key_transaksi.add(List<String>.from(key.split("+")));
                                 });
-                                // list_transaksi = state.datastore;
                               }
                             },
                         )
@@ -1169,7 +1150,6 @@ class TransaksiTableData extends DataTableSource {
     });
 
     final _content = listContent[index];
-    // final _detailContent = _contentData[index].detail_transaksi;
     final _debitContent = _content.where((element) => element.jenis_transaksi == "Debit").toList();
     final _kreditContent = _content.where((element) => element.jenis_transaksi == "Kredit").toList();
 

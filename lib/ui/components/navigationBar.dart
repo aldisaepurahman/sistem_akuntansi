@@ -83,7 +83,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   bool isExtended = false;
 
   Widget dashboardPage(){
-    return Dashboard();
+    return Dashboard(client: widget.client);
   }
 
   Widget getCoaPage(){
@@ -151,13 +151,13 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getJurnalPenyesuaianPage() {
     if (selectedJurnalPenyesuaianIndex ==  1) {
-      return JenisJurnalPenyesuaian(client: widget.client);
+      return JenisJurnalPenyesuaian(client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int);
     }
     else if (selectedJurnalPenyesuaianIndex == 2) {
-      return TransaksiPenyesuaianList(client: widget.client);
+      return TransaksiPenyesuaianList(client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, id_jurnal: widget.params?['id_jurnal'] as int);
     }
     else if (selectedJurnalPenyesuaianIndex == 3) {
-      return DetailTransaksiPenyesuaian(client: widget.client);
+      return DetailTransaksiPenyesuaian(client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, id_jurnal: widget.params?['id_jurnal'] as int, transaksi: widget.params?['transaksi'] as Map<String, List<VJurnalExpand>>);
     }
     return JurnalPenyesuaianList(client: widget.client);
   }
