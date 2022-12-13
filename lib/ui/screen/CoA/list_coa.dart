@@ -175,7 +175,7 @@ class ListCOAState extends State<ListCOA> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              SizedBox(
+                              /*SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.19,
                                 child: TextField(
                                   decoration: InputDecoration(
@@ -199,7 +199,7 @@ class ListCOAState extends State<ListCOA> {
                                     // BlocProvider.of<VLookupCubit>(context).getSearchData(keyword, data_akun);
                                   },
                                 ),
-                              ),
+                              ),*/
                               SizedBox(width: 20),
                               SizedBox(
                                 child: DropdownFilter(

@@ -19,7 +19,12 @@ enum TableViewType {
   v_saldo_jurnal_umum,
   v_total_saldo_akun_jurnal_umum,
   v_saldo_jurnal_penyesuaian,
-  v_neraca_lajur
+  v_neraca_lajur,
+  amortisasi_akun,
+  amortisasi_aset,
+  amortisasi_aset_detail,
+  amortisasi_pendapatan,
+  amortisasi_pendapatan_detail
 }
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

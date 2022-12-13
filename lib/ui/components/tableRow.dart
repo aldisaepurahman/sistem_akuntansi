@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_akun.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
@@ -7,7 +9,7 @@ import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/utils/AkunAmortisasi.dart';
-import 'package:sistem_akuntansi/utils/AmortisasiAset.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
 import 'package:sistem_akuntansi/utils/AmortisasiPendapatan.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
@@ -19,10 +21,10 @@ import 'package:sistem_akuntansi/utils/V_LabaRugi.dart';
 class BukuBesarTableData extends DataTableSource {
   BuildContext context;
   BukuBesarTableData(
-      {required List<Buku_besar> contentData, required this.context})
+      {required List<VJurnalExpand> contentData, required this.context})
       : _contentData = contentData,
         assert(contentData != null);
-  final List<Buku_besar> _contentData;
+  final List<VJurnalExpand> _contentData;
 
   @override
   DataRow? getRow(int index) {
@@ -43,7 +45,7 @@ class BukuBesarTableData extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.tgl}",
+                    DateFormat('dd/MM').format(_content.tgl_transaksi),
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -97,7 +99,7 @@ class BukuBesarTableData extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.keterangan}",
+                    "${_content.jenis_transaksi}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -115,7 +117,7 @@ class BukuBesarTableData extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.saldo}",
+                    "${_content.nominal_transaksi}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -689,7 +691,7 @@ class AmortisasiPendapatanTable extends DataTableSource {
 }
 
 class AmortisasiAsetTable extends DataTableSource {
-  Function seeDetail;
+  Function(int) seeDetail;
   BuildContext context;
   AmortisasiAsetTable(
       {required List<AmortisasiAset> contentData,
@@ -752,7 +754,7 @@ class AmortisasiAsetTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.saat_perolehan}",
+                    "${_content.tahun}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -786,7 +788,7 @@ class AmortisasiAsetTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.nilai_perolehan}",
+                    "${_content.nilai_awal}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -823,7 +825,7 @@ class AmortisasiAsetTable extends DataTableSource {
                   padding: EdgeInsets.all(20),
                 ),
                 onPressed: () {
-                  seeDetail();
+                  seeDetail(index);
                 },
                 child: const Text(
                   "Lihat Detail",
@@ -851,16 +853,16 @@ class AmortisasiAsetTable extends DataTableSource {
 
 class ListAmortisasiTable extends DataTableSource {
   Function onPressed1;
-  Function onPressed2;
+  Function(int) onPressed2;
   BuildContext context;
   ListAmortisasiTable(
-      {required List<AkunAmortisasi> contentData,
+      {required List<AmortisasiAkun> contentData,
       required this.onPressed1,
       required this.onPressed2,
       required this.context})
       : _contentData = contentData,
         assert(contentData != null);
-  final List<AkunAmortisasi> _contentData;
+  final List<AmortisasiAkun> _contentData;
 
   @override
   DataRow? getRow(int index) {
@@ -898,7 +900,7 @@ class ListAmortisasiTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.akun}",
+                    "${_content.nama_akun}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -926,8 +928,12 @@ class ListAmortisasiTable extends DataTableSource {
                         path_image: 'assets/images/hapus_coa.png',
                         button1: "Tetap Simpan",
                         button2: "Ya, Hapus",
-                        onPressed1: onPressed1(),
-                        onPressed2: onPressed2(),
+                        onPressed1: () {
+                          onPressed1();
+                        },
+                        onPressed2: () {
+                          onPressed2(index);
+                        },
                       );
                     });
               },

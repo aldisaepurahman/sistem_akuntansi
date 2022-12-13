@@ -139,13 +139,15 @@ class DialogNoButton extends StatelessWidget {
 class DialogPenyusutan extends StatelessWidget {
   final String penyusutan;
   final TextEditingController persentase;
-  final VoidCallback? onPressed;
+  Function onPressed;
+  Function onPressed2;
 
-  const DialogPenyusutan(
+  DialogPenyusutan(
       {Key? key,
       required this.penyusutan,
       required this.persentase,
-      required this.onPressed})
+      required this.onPressed,
+      required this.onPressed2})
       : super(key: key);
 
   @override
@@ -157,7 +159,7 @@ class DialogPenyusutan extends StatelessWidget {
       child: Container(
         width: 400,
         padding: EdgeInsets.all(50),
-        height: 400,
+        height: 450,
         child: Column(
           children: [
             HeaderText(content: "Form Penyusutan", size: 17, color: hitam),
@@ -189,8 +191,18 @@ class DialogPenyusutan extends StatelessWidget {
             ButtonNoIcon(
                 bg_color: kuning,
                 text_color: hitam,
-                onPressed: onPressed,
-                content: "Simpan")
+                onPressed: () {
+                  onPressed();
+                },
+                content: "Simpan"),
+            SizedBox(height: 15),
+            ButtonNoIcon(
+                bg_color: Colors.white,
+                text_color: merah,
+                onPressed: () {
+                  onPressed2();
+                },
+                content: "Batal"),
           ],
         ),
       ),

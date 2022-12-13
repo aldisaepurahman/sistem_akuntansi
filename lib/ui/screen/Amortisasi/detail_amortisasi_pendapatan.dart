@@ -115,7 +115,9 @@ class DetailAmortisasiPendapatanState
                                     return DialogPenyusutan(
                                         penyusutan: penyusutan,
                                         persentase: persentase,
-                                        onPressed: () {});
+                                        onPressed: () {},
+                                      onPressed2: () {},
+                                    );
                                   });
                             },
                             child: Row(

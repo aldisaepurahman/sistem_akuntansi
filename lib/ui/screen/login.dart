@@ -17,6 +17,9 @@ class _LoginState extends State<Login> {
   bool checkedValue = false;
   bool _passwordVisible = true;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   void _navigateToDashboard(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) =>
@@ -139,6 +142,7 @@ class _LoginState extends State<Login> {
                       height: 8,
                     ),
                     TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -173,6 +177,7 @@ class _LoginState extends State<Login> {
                       height: 8,
                     ),
                     TextField(
+                      controller: passwordController,
                       obscureText: !_passwordVisible,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -256,7 +261,19 @@ class _LoginState extends State<Login> {
                           MaterialStatePropertyAll(Colors.transparent),
                         ),
                         onPressed: () {
-                          _navigateToDashboard(context);
+                          if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+                            Future.delayed(Duration(seconds: 2), () {
+                              _navigateToDashboard(context);
+                            });
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Login Berhasil"))
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Pastikan kolom email dan password terisi dengan benar."))
+                            );
+                          }
                         },
                         child: Text(
                           'Login',

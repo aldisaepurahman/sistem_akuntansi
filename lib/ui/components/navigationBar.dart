@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
@@ -113,7 +114,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   Widget getBukuBesarPage() {
     if (selectedBukuBesarIndex == 1) {
       return BukuBesarPerAkun(
-          client: widget.client); // tabel buku besar per akun
+          client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, kode_akun: widget.params?['kode_akun'] as String); // tabel buku besar per akun
     }
     return ListBukuBesar(client: widget.client); // tabel bulan tahun buku besar
   }
@@ -134,7 +135,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getAmortisasiPage(){
     if (selectedAmortisasiIndex == 1) {
-      return DetailAmortisasiAset(client: widget.client);
+      return DetailAmortisasiAset(client: widget.client, aset: widget.params?['aset'] as AmortisasiAset);
     } else if (selectedAmortisasiIndex == 2) {
       return EditAmortisasiAset(client: widget.client);
     } else if (selectedAmortisasiIndex == 3) {

@@ -38,7 +38,7 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
 
   var tableRow;
 
-  void _navigateToJenisJurnal(BuildContext contex, int bulan, int tahun){
+  void _navigateToJenisJurnal(BuildContext context, int bulan, int tahun){
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) =>
         SideNavigationBar(

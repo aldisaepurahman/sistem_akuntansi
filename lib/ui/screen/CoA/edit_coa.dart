@@ -314,7 +314,11 @@ class EditCOAState extends State<EditCOA> {
                             var kode_akun = kodeController.text;
                             var keterangan = keteranganController.text;
                             var indentasi = indentasiController.text;
-                            var saldo = saldoController.text;
+                            var saldo = 0;
+                            if(saldoController.text.isNotEmpty) {
+                              saldo = int.parse(saldoController.text);
+                            }
+
                             var bulan = (widget.akun_saldo.bulan.isNotEmpty) ? widget.akun_saldo.bulan : listbulan[DateTime.now().month];
                             var tahun = (widget.akun_saldo.tahun > 0) ? widget.akun_saldo.tahun : DateTime.now().year;
 
@@ -329,7 +333,7 @@ class EditCOAState extends State<EditCOA> {
                                       ),
                                       saldo: Saldo(
                                           kode_akun: kode_akun,
-                                          saldo: int.parse(saldo),
+                                          saldo: saldo,
                                           bulan: bulan!!,
                                           tahun: tahun
                                       ),

@@ -2,9 +2,10 @@ import 'package:sistem_akuntansi/bloc/Event.dart';
 import 'package:sistem_akuntansi/model/response/transaksi_debit_kredit.dart';
 import 'package:sistem_akuntansi/model/response/transaksi_model.dart';
 
-class TransaksiInserted extends Event {
-  final TransaksiModel transaksiModel;
-  final List<TransaksiDK> transaksi_dk;
+class BukuBesarFetched extends Event {
+  final int bulan;
+  final int tahun;
+  final String kode_akun;
 
-  TransaksiInserted({required this.transaksiModel, required this.transaksi_dk});
+  BukuBesarFetched({this.bulan = 0, this.tahun = 0, this.kode_akun = ""});
 }

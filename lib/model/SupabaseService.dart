@@ -1,5 +1,10 @@
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_Pendapatan_detail.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_akun.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_aset_detail.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal.dart';
@@ -98,12 +103,47 @@ class SupabaseService {
 
       if (response == null) {
         return ServiceStatus(
-            datastore: List<VJurnalExpand>.from([]), message: response.toString());
+            datastore: List<VJurnalExpand>.from([]),
+            message: response.toString());
       }
 
       var data = List<Map<String, dynamic>>.from(response);
 
-      return ServiceStatus(datastore: List<VJurnalExpand>.from(response.map((e) => VJurnalExpand.fromJson(e)).toList()));
+      return ServiceStatus(
+          datastore: List<VJurnalExpand>.from(
+              response.map((e) => VJurnalExpand.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      Error.throwWithStackTrace(error, stackTrace);
+    }
+  }
+
+  Future<ServiceStatus> getBukuBesar(
+      String table_name, Map<String, dynamic> equivalent) async {
+    try {
+      final response = (equivalent['kode_akun'] != "")
+          ? await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq("month", equivalent['bulan'])
+          .eq("year", equivalent['tahun'])
+          .eq("coa_kode_akun", equivalent['coa_kode_akun'])
+          : await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq("month", equivalent['bulan'])
+          .eq("year", equivalent['tahun']);
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: List<VJurnalExpand>.from([]),
+            message: response.toString());
+      }
+
+      var data = List<Map<String, dynamic>>.from(response);
+
+      return ServiceStatus(
+          datastore: List<VJurnalExpand>.from(
+              response.map((e) => VJurnalExpand.fromJson(e)).toList()));
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(error, stackTrace);
     }
@@ -146,6 +186,122 @@ class SupabaseService {
     }
   }
 
+  Future<ServiceStatus> getAmortisasiAset(
+      String table_name, Map<String, dynamic> equivalent) async {
+    try {
+      final response = (equivalent['tahun'] > 0 &&
+              equivalent['id_amortisasi_akun'] != "")
+          ? await _supabaseClient
+              .from(table_name)
+              .select()
+              .eq("id_amortisasi_akun", equivalent['id_amortisasi_akun'])
+              .eq("tahun", equivalent['tahun'])
+          : (equivalent['tahun'] > 0)
+              ? await _supabaseClient
+                  .from(table_name)
+                  .select()
+                  .eq("tahun", equivalent['tahun'])
+              : (equivalent['id_amortisasi_akun'] != "")
+                  ? await _supabaseClient.from(table_name).select().eq(
+                      "id_amortisasi_akun", equivalent['id_amortisasi_akun'])
+                  : await _supabaseClient.from(table_name).select();
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: List<AmortisasiAset>.from([]),
+            message: response.toString());
+      }
+
+      return ServiceStatus(
+          datastore: List<AmortisasiAset>.from(
+              response.map((e) => AmortisasiAset.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      return ServiceStatus(
+          datastore: List<AmortisasiAset>.from([]),
+          message: stackTrace.toString());
+    }
+  }
+
+  Future<ServiceStatus> getDetailAmortisasiAset(
+      String table_name, Map<String, String> keyword) async {
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq(keyword.keys.first, keyword.values.first)
+          .single();
+
+      if (response == null) {
+        return ServiceStatus(datastore: AmortisasiAsetDetail(), message: "");
+      }
+
+      return ServiceStatus(datastore: AmortisasiAsetDetail.fromJson(response));
+    } on PostgrestException catch (error) {
+      return ServiceStatus(datastore: AmortisasiAsetDetail());
+    } on NoSuchMethodError catch (error) {
+      return ServiceStatus(
+          datastore: AmortisasiAsetDetail(), message: error.stackTrace.toString());
+    }
+  }
+
+  Future<ServiceStatus> getAmortisasiPendapatan(
+      String table_name, Map<String, dynamic> equivalent) async {
+    try {
+      final response = (equivalent['semester'] != "" &&
+              equivalent['id_amortisasi_akun'] != "")
+          ? await _supabaseClient
+              .from(table_name)
+              .select()
+              .eq("semester", equivalent['semester'])
+              .eq("tahun", equivalent['tahun'])
+          : (equivalent['semester'] > 0)
+              ? await _supabaseClient
+                  .from(table_name)
+                  .select()
+                  .eq("semester", equivalent['semester'])
+              : (equivalent['id_amortisasi_akun'] != "")
+                  ? await _supabaseClient.from(table_name).select().eq(
+                      "id_amortisasi_akun", equivalent['id_amortisasi_akun'])
+                  : await _supabaseClient.from(table_name).select();
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: List<AmortisasiPendapatan>.from([]),
+            message: response.toString());
+      }
+
+      return ServiceStatus(
+          datastore: List<AmortisasiPendapatan>.from(
+              response.map((e) => AmortisasiPendapatan.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      return ServiceStatus(
+          datastore: List<AmortisasiPendapatan>.from([]),
+          message: stackTrace.toString());
+    }
+  }
+
+  Future<ServiceStatus> getDetailAmortisasiPendapatan(
+      String table_name, Map<String, String> keyword) async {
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq(keyword.keys.first, keyword.values.first)
+          .single();
+
+      if (response == null) {
+        return ServiceStatus(datastore: AmortisasiPendapatanDetail(), message: "");
+      }
+
+      return ServiceStatus(datastore: AmortisasiPendapatanDetail.fromJson(response));
+    } on PostgrestException catch (error) {
+      return ServiceStatus(datastore: AmortisasiPendapatanDetail());
+    } on NoSuchMethodError catch (error) {
+      return ServiceStatus(
+          datastore: AmortisasiPendapatanDetail(), message: error.stackTrace.toString());
+    }
+  }
+
   Future<ServiceStatus> getAllJurnal(
       String table_name, Map<String, dynamic> equivalent) async {
     try {
@@ -166,6 +322,28 @@ class SupabaseService {
     } catch (error, stackTrace) {
       return ServiceStatus(
           datastore: List<JenisJurnalModel>.from([]),
+          message: stackTrace.toString());
+    }
+  }
+
+  Future<ServiceStatus> getAmortisasiAkun(String table_name) async {
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select();
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: List<AmortisasiAkun>.from([]),
+            message: "");
+      }
+
+      return ServiceStatus(
+          datastore: List<AmortisasiAkun>.from(
+              response.map((e) => AmortisasiAkun.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      return ServiceStatus(
+          datastore: List<AmortisasiAkun>.from([]),
           message: stackTrace.toString());
     }
   }
@@ -212,20 +390,4 @@ class SupabaseService {
       Error.throwWithStackTrace(error, stackTrace);
     }
   }
-
-/*addData() async{
-
-  }
-
-  readData() async{
-
-  }
-
-  updateData() async{
-
-  }
-
-  deleteData() async{
-
-  }*/
 }

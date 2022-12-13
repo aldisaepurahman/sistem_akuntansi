@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
+import 'package:sistem_akuntansi/bloc/amortisasi_akun/amortisasi_akun_bloc.dart';
+import 'package:sistem_akuntansi/bloc/amortisasi_akun/amortisasi_akun_event.dart';
+import 'package:sistem_akuntansi/bloc/amortisasi_aset/amortisasi_aset_bloc.dart';
+import 'package:sistem_akuntansi/bloc/amortisasi_aset/amortisasi_aset_event.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
+import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
+import 'package:sistem_akuntansi/model/SupabaseService.dart';
+import 'package:sistem_akuntansi/model/response/akun.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_akun.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
-import 'package:sistem_akuntansi/utils/AmortisasiAset.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
+import 'package:sistem_akuntansi/utils/table_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
@@ -29,8 +41,45 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
   bool disable_button = false;
 
   var tableRow;
+  var list_aset = <AmortisasiAset>[];
+  var list_coa = <AmortisasiAkun>[];
+  late AmortisasiAsetBloc _asetBloc;
+  late AmortisasiAkunBloc _akunBloc;
 
-  void _navigateToDetailAset(BuildContext context){
+  Map<int, String> listbulan = {
+    1: "Januari",
+    2: "Februari",
+    3: "Maret",
+    4: "April",
+    5: "Mei",
+    6: "Juni",
+    7: "Juli",
+    8: "Agustus",
+    9: "September",
+    10: "Oktober",
+    11: "November",
+    12: "Desember"
+  };
+
+  void _navigateSelf(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SideNavigationBar(
+              index: 6,
+              coaIndex: 0,
+              jurnalUmumIndex: 0,
+              bukuBesarIndex: 0,
+              neracaLajurIndex: 0,
+              labaRugiIndex: 0,
+              amortisasiIndex: 0,
+              jurnalPenyesuaianIndex: 0,
+              client: widget.client,
+            )
+    )
+    );
+  }
+
+  void _navigateToDetailAset(BuildContext context, AmortisasiAset aset){
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
             SideNavigationBar(
@@ -43,6 +92,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
               amortisasiIndex: 1,
               jurnalPenyesuaianIndex: 0,
               client: widget.client,
+              params: {"aset": aset},
             )
     )
     );
@@ -89,14 +139,17 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
     super.initState();
     _saat_perolehan = DateTime.now();
     tableRow = new AmortisasiAsetTable(
-      contentData: content,
-      seeDetail: () {
+      contentData: const <AmortisasiAset>[],
+      seeDetail: (int index) {
         setState(() {
-          _navigateToDetailAset(context);
+          _navigateToDetailAset(context, AmortisasiAset());
         });
       },
       context: context,
     );
+
+    _asetBloc = AmortisasiAsetBloc(service: SupabaseService(supabaseClient: widget.client))..add(AmortisasiAsetFetched());
+    _akunBloc = AmortisasiAkunBloc(service: SupabaseService(supabaseClient: widget.client))..add(AmortisasiAkunFetched());
   }
 
   void showForm() {
@@ -168,9 +221,14 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
         title: 'List Amortisasi Aset',
         home: Scaffold(
             backgroundColor: background,
-            body: ListView(
-              children: [
-                /*Container(
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => _asetBloc),
+                BlocProvider(create: (context) => _akunBloc),
+              ],
+              child: ListView(
+                children: [
+                  /*Container(
                     margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -185,303 +243,379 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                         )
                       ],
                     )),*/
-                Container(
-                    margin: EdgeInsets.only(top: 25, left: 25),
-                    child: HeaderText(
-                        content: "Amortisasi Aset", size: 32, color: hitam)),
-                Container(
-                    width: 30,
-                    margin: EdgeInsets.only(left: 25, top: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: kuning,
-                                padding: const EdgeInsets.all(18)),
-                            onPressed: (disable_button ? null : showForm),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 13,
-                                      color: hitam,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Tambah Amortisasi",
-                                      style: TextStyle(
-                                        fontFamily: "Inter",
-                                        color: hitam,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: kuning,
-                                padding: const EdgeInsets.all(18)),
-                            onPressed: () {
-                              setState(() {
-                                _navigateToPendapatan(context);
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(
-                                      Icons.list_alt_rounded,
-                                      size: 13,
-                                      color: hitam,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Amortisasi Pendapatan",
-                                      style: TextStyle(
-                                        fontFamily: "Inter",
-                                        color: hitam,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: kuning,
-                                padding: const EdgeInsets.all(18)),
-                            onPressed: () {
-                              setState(() {
-                                _navigateToTambahAkun(context);
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(
-                                      Icons.list_alt_rounded,
-                                      size: 13,
-                                      color: hitam,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Akun Amortisasi",
-                                      style: TextStyle(
-                                        fontFamily: "Inter",
-                                        color: hitam,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ))
-                      ],
-                    )),
-                Visibility(
-                    visible: show,
-                    child: Container(
-                      margin: EdgeInsets.all(25),
-                      padding: EdgeInsets.all(25),
-                      color: background2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                      margin: EdgeInsets.only(top: 25, left: 25),
+                      child: HeaderText(
+                          content: "Amortisasi Aset", size: 32, color: hitam)),
+                  Container(
+                      width: 30,
+                      margin: EdgeInsets.only(left: 25, top: 25),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: HeaderText(
-                                content: "Tambah Amortisasi Aset",
-                                size: 18,
-                                color: hitam),
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.2,
-                                    child: TextForm(
-                                        hintText: "Masukkan keterangan...",
-                                        textController: keterangan)),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.2,
-                                    child: TextForm(
-                                        hintText: "Masukkan masa guna...",
-                                        textController: masa_guna)),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: TextForm(
-                                      hintText: "Masukkan nilai perolehan...",
-                                      textController: nilai_perolehan,
-                                      label: "Rp"),
-                                )
-                              ]),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.2,
-                                    child: TextForm(
-                                      hintText:
-                                          "Masukkan penyusutan tahun lalu...",
-                                      textController:
-                                          akumulasi_penyusutan_tahun_lalu,
-                                      label: "Rp",
-                                    )),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.2,
-                                    child: DropdownSearchButton(
-                                        controller: akun,
-                                        hintText: "Masukkan Akun Amortisasi...",
-                                        notFoundText: 'Akun tidak ditemukan',
-                                        items: namaAkunList,
-                                        onChange: (String? new_value) {},
-                                        isNeedChangeColor: false)),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.2,
-                                    child: Container(
-                                        margin: EdgeInsets.only(bottom: 3),
-                                        child: TextField(
-                                          controller: saat_perolehan,
-                                          style: TextStyle(fontSize: 13),
-                                          readOnly: true,
-                                          onTap: () {
-                                            showMonthPicker(
-                                                    unselectedMonthTextColor:
-                                                        hitam,
-                                                    headerColor: kuning,
-                                                    headerTextColor: hitam,
-                                                    selectedMonthBackgroundColor:
-                                                        kuning,
-                                                    selectedMonthTextColor:
-                                                        hitam,
-                                                    context: context,
-                                                    firstDate: DateTime(1900),
-                                                    lastDate: DateTime.now(),
-                                                    initialDate: DateTime.now())
-                                                .then((date) {
-                                              if (date != null) {
-                                                setState(() {
-                                                  _saat_perolehan = date;
-                                                });
-                                              }
-                                            });
-
-                                            String formattedDate = DateFormat()
-                                                .add_yM()
-                                                .format(_saat_perolehan!);
-                                            saat_perolehan.text = formattedDate;
-                                          },
-                                          decoration: InputDecoration(
-                                              hintText:
-                                                  "Masukkan saat perolehan",
-                                              prefixIcon:
-                                                  Icon(Icons.calendar_today),
-                                              contentPadding:
-                                                  const EdgeInsets.all(5),
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8))),
-                                        )))
-                              ]),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ButtonNoIcon(
-                                  bg_color: background2,
-                                  text_color: merah,
-                                  onPressed: disableForm,
-                                  content: "Batal"),
-                              SizedBox(width: 20),
-                              ButtonNoIcon(
-                                  bg_color: kuning,
-                                  text_color: hitam,
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          Future.delayed(Duration(seconds: 1),
-                                              () {
-                                            Navigator.of(context).pop(true);
-                                          });
-                                          return DialogNoButton(
-                                              content: "Berhasil Ditambahkan!",
-                                              content_detail:
-                                                  "Amortisasi Aset baru berhasil ditambahkan",
-                                              path_image:
-                                                  'assets/images/tambah_coa.png');
-                                        });
-                                  },
-                                  content: "Simpan")
-                            ],
-                          )
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kuning,
+                                  padding: const EdgeInsets.all(18)),
+                              onPressed: (disable_button ? null : showForm),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 13,
+                                        color: hitam,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Tambah Amortisasi",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: hitam,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          const SizedBox(width: 10),
+                          /*ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kuning,
+                                  padding: const EdgeInsets.all(18)),
+                              onPressed: () {
+                                setState(() {
+                                  _navigateToPendapatan(context);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.list_alt_rounded,
+                                        size: 13,
+                                        color: hitam,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Amortisasi Pendapatan",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: hitam,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          */const SizedBox(width: 10),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: kuning,
+                                  padding: const EdgeInsets.all(18)),
+                              onPressed: () {
+                                setState(() {
+                                  _navigateToTambahAkun(context);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.list_alt_rounded,
+                                        size: 13,
+                                        color: hitam,
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Akun Amortisasi",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: hitam,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ))
                         ],
-                      ),
-                    )),
-                Container(
-                  margin:
-                      EdgeInsets.only(top: 25, bottom: 80, right: 25, left: 25),
-                  padding: EdgeInsets.all(25),
-                  color: background2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          DropdownFilter(
+                      )),
+                  Visibility(
+                      visible: show,
+                      child: Container(
+                        margin: EdgeInsets.all(25),
+                        padding: EdgeInsets.all(25),
+                        color: background2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: HeaderText(
+                                  content: "Tambah Amortisasi Aset",
+                                  size: 18,
+                                  color: hitam),
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: TextForm(
+                                          hintText: "Masukkan keterangan...",
+                                          textController: keterangan)),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: TextForm(
+                                          hintText: "Masukkan masa guna...",
+                                          textController: masa_guna)),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width:
+                                    MediaQuery.of(context).size.width * 0.2,
+                                    child: TextForm(
+                                        hintText: "Masukkan nilai perolehan (Rp.)...",
+                                        textController: nilai_perolehan),
+                                  )
+                                ]),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: TextForm(
+                                        hintText:
+                                        "Masukkan penyusutan tahun lalu (Rp.)...",
+                                        textController:
+                                        akumulasi_penyusutan_tahun_lalu,
+                                      )),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  BlocBuilder<AmortisasiAkunBloc, SiakState>(
+                                      builder: (_, state) {
+                                        if (state is LoadingState || state is FailureState) {
+                                          return const SizedBox(width: 30);
+                                        }
+                                        if (state is SuccessState) {
+                                          list_coa = state.datastore;
+                                          namaAkunList.clear();
+                                          namaAkunList = list_coa.where((element) => element.amortisasi_jenis == "Aset").map((e) => e.nama_akun).toList();
+                                          return SizedBox(
+                                              width: MediaQuery.of(context).size.width *
+                                                  0.2,
+                                              child: DropdownSearchButton(
+                                                  controller: akun,
+                                                  hintText: "Masukkan Akun Amortisasi...",
+                                                  notFoundText: 'Akun tidak ditemukan',
+                                                  items: namaAkunList,
+                                                  onChange: (String? new_value) {},
+                                                  isNeedChangeColor: false));
+                                        }
+                                        return const SizedBox(width: 30);
+                                      },
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Container(
+                                          margin: EdgeInsets.only(bottom: 3),
+                                          child: TextField(
+                                            controller: saat_perolehan,
+                                            style: TextStyle(fontSize: 13),
+                                            readOnly: true,
+                                            onTap: () {
+                                              showMonthPicker(
+                                                  unselectedMonthTextColor:
+                                                  hitam,
+                                                  headerColor: kuning,
+                                                  headerTextColor: hitam,
+                                                  selectedMonthBackgroundColor:
+                                                  kuning,
+                                                  selectedMonthTextColor:
+                                                  hitam,
+                                                  context: context,
+                                                  firstDate: DateTime(1900),
+                                                  lastDate: DateTime.now(),
+                                                  initialDate: DateTime.now())
+                                                  .then((date) {
+                                                if (date != null) {
+                                                  setState(() {
+                                                    _saat_perolehan = date;
+                                                  });
+                                                }
+                                              });
+
+                                              String formattedDate = DateFormat()
+                                                  .add_yM()
+                                                  .format(_saat_perolehan!);
+                                              saat_perolehan.text = formattedDate;
+                                            },
+                                            decoration: InputDecoration(
+                                                hintText:
+                                                "Masukkan saat perolehan",
+                                                prefixIcon:
+                                                Icon(Icons.calendar_today),
+                                                contentPadding:
+                                                const EdgeInsets.all(5),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        8))),
+                                          )))
+                                ]),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ButtonNoIcon(
+                                    bg_color: background2,
+                                    text_color: merah,
+                                    onPressed: disableForm,
+                                    content: "Batal"),
+                                SizedBox(width: 20),
+                                ButtonNoIcon(
+                                    bg_color: kuning,
+                                    text_color: hitam,
+                                    onPressed: () {
+                                      var id_amortisasi_aset = "${DateFormat(
+                                          'yyyy-MM-dd').format(
+                                          DateTime.now())}_${getRandomString(9)}";
+                                      var id = list_coa.indexWhere((element) => element.nama_akun == akun.text);
+                                      var id_amortisasi_akun = list_coa[id].id_amortisasi_akun;
+                                      var text_keterangan = keterangan.text;
+                                      var masaGuna = 0;
+
+                                      if (masa_guna.text.isNotEmpty) {
+                                        masaGuna = int.parse(masa_guna.text);
+                                      }
+                                      var perolehan = 0;
+                                      if (nilai_perolehan.text.isNotEmpty) {
+                                        perolehan = int.parse(nilai_perolehan.text);
+                                      }
+
+                                      var penyusutan_thn_lalu = 0;
+                                      if (akumulasi_penyusutan_tahun_lalu.text.isNotEmpty) {
+                                        penyusutan_thn_lalu = int.parse(akumulasi_penyusutan_tahun_lalu.text);
+                                      }
+
+                                      var penyusutan_sekarang = (perolehan/4)~/12;
+                                      var tahun = DateTime.now().year;
+                                      var saatPerolehan = saat_perolehan.text.split("/");
+                                      var bulan_perolehan = "";
+                                      bulan_perolehan = listbulan[int.parse(saatPerolehan[0])]!;
+                                      var tahun_perolehan = int.parse(saatPerolehan[1]);
+
+                                      if (id_amortisasi_akun.isNotEmpty && text_keterangan.isNotEmpty &&
+                                      bulan_perolehan.isNotEmpty && masaGuna > 0 && penyusutan_thn_lalu > 0 && perolehan > 0) {
+                                        _asetBloc.add(AmortisasiAsetInserted(
+                                            aset: AmortisasiAset(
+                                              id_amortisasi_aset: id_amortisasi_aset,
+                                              id_amortisasi_akun: id_amortisasi_akun,
+                                              keterangan: text_keterangan,
+                                              masa_guna: masaGuna,
+                                              nilai_awal: perolehan,
+                                              akumulasi: penyusutan_thn_lalu,
+                                              penyusutan: penyusutan_sekarang,
+                                              tahun: tahun,
+                                              tahun_perolehan: tahun_perolehan,
+                                              bulan_perolehan: bulan_perolehan
+                                            )
+                                        ));
+
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              Future.delayed(Duration(seconds: 2),
+                                                      () {
+                                                    _navigateSelf(context);
+                                                  });
+                                              return DialogNoButton(
+                                                  content: "Berhasil Ditambahkan!",
+                                                  content_detail:
+                                                  "Amortisasi Aset baru berhasil ditambahkan",
+                                                  path_image:
+                                                  'assets/images/tambah_coa.png');
+                                            });
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text("Pastikan semua kolom inputan terisi."))
+                                        );
+                                      }
+
+                                      /*showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            Future.delayed(Duration(seconds: 1),
+                                                    () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                            return DialogNoButton(
+                                                content: "Berhasil Ditambahkan!",
+                                                content_detail:
+                                                "Amortisasi Aset baru berhasil ditambahkan",
+                                                path_image:
+                                                'assets/images/tambah_coa.png');
+                                          });*/
+                                    },
+                                    content: "Simpan")
+                              ],
+                            )
+                          ],
+                        ),
+                      )),
+                  Container(
+                    margin:
+                    EdgeInsets.only(top: 25, bottom: 80, right: 25, left: 25),
+                    padding: EdgeInsets.all(25),
+                    color: background2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            /*DropdownFilter(
                             onChanged: (String? newValue) {
                               setState(() {
                                 if (newValue != null) {
@@ -504,157 +638,185 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                             content: _selectedAkunFilter,
                             items: namaAkunList,
                           ),
-                          SizedBox(width: 20),
-                          DropdownFilter(
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                if (newValue != null) {
-                                  _selectedEntryFilter = newValue;
-                                }
-                              });
-                            },
-                            content: _selectedEntryFilter,
-                            items: entry,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 25),
-                      Container(
-                        width: double.infinity,
-                        child: PaginatedDataTable(
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "No.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Keterangan",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Saat Perolehan",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Masa Guna",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Nilai Perolehan (Rp.)",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Penyusutan (Rp.)",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                  child: Container(
-                                    color: greyHeaderColor,
-                                    height: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Action",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: "Inter",
-                                      ),
-                                    ),
-                                  )
-                              ),
+                          SizedBox(width: 20),*/
+                            DropdownFilter(
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (newValue != null) {
+                                    _selectedEntryFilter = newValue;
+                                  }
+                                });
+                              },
+                              content: _selectedEntryFilter,
+                              items: entry,
                             ),
                           ],
-                          source: tableRow,
-                          rowsPerPage: int.parse(_selectedEntryFilter),
-                          showCheckboxColumn: false,
-                          dataRowHeight: 70,
-                          columnSpacing: 0,
-                          horizontalMargin: 0,
                         ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        SizedBox(height: 25),
+                        BlocConsumer<AmortisasiAsetBloc, SiakState>(
+                            builder: (_, state) {
+                              if (state is LoadingState) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              if (state is FailureState) {
+                                return Center(child: Text(state.error));
+                              }
+                              if (state is SuccessState) {
+                                return Container(
+                                  width: double.infinity,
+                                  child: PaginatedDataTable(
+                                    columns: <DataColumn>[
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "No.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Keterangan",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Saat Perolehan",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Masa Guna",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Nilai Perolehan (Rp.)",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Penyusutan (Rp.)",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                            child: Container(
+                                              color: greyHeaderColor,
+                                              height: double.infinity,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Action",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Inter",
+                                                ),
+                                              ),
+                                            )
+                                        ),
+                                      ),
+                                    ],
+                                    source: AmortisasiAsetTable(
+                                      contentData: list_aset,
+                                      seeDetail: (int index) {
+                                        setState(() {
+                                          _navigateToDetailAset(context, list_aset[index]);
+                                        });
+                                      },
+                                      context: context,
+                                    ),
+                                    rowsPerPage: int.parse(_selectedEntryFilter),
+                                    showCheckboxColumn: false,
+                                    dataRowHeight: 70,
+                                    columnSpacing: 0,
+                                    horizontalMargin: 0,
+                                  ),
+                                );
+                              }
+                              return const SizedBox(height: 30, width: 30);
+                            },
+                            listener: (_, state) {
+                              if (state is SuccessState) {
+                                list_aset.clear();
+                                list_aset = state.datastore;
+                              }
+                            },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             )));
   }
 }
