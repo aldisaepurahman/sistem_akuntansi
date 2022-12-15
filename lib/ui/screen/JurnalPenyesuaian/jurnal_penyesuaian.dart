@@ -28,7 +28,9 @@ class JurnalPenyesuaianList extends StatefulWidget {
 
 class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
   @override
-  void dispose() {}
+  void dispose() {
+    super.dispose();
+  }
 
   bool show = false;
   bool disable_button = false;
@@ -251,7 +253,7 @@ class JurnalPenyesuaianListState extends State<JurnalPenyesuaianList> {
                                       },
                                       context: context,
                                     ),
-                                    rowsPerPage: 10,
+                                    rowsPerPage: 5,
                                     showCheckboxColumn: false,
                                     columnSpacing: 0,
                                     horizontalMargin: 0,

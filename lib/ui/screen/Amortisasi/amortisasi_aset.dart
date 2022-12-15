@@ -286,7 +286,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 ],
                               )),
                           const SizedBox(width: 10),
-                          /*ElevatedButton(
+                          ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: kuning,
                                   padding: const EdgeInsets.all(18)),
@@ -322,7 +322,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                   ),
                                 ],
                               )),
-                          */const SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: kuning,
@@ -479,14 +479,13 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                                 if (date != null) {
                                                   setState(() {
                                                     _saat_perolehan = date;
+                                                    String formattedDate = DateFormat()
+                                                        .add_yM()
+                                                        .format(_saat_perolehan!);
+                                                    saat_perolehan.text = formattedDate;
                                                   });
                                                 }
                                               });
-
-                                              String formattedDate = DateFormat()
-                                                  .add_yM()
-                                                  .format(_saat_perolehan!);
-                                              saat_perolehan.text = formattedDate;
                                             },
                                             decoration: InputDecoration(
                                                 hintText:
@@ -581,21 +580,6 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                             SnackBar(content: Text("Pastikan semua kolom inputan terisi."))
                                         );
                                       }
-
-                                      /*showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            Future.delayed(Duration(seconds: 1),
-                                                    () {
-                                                  Navigator.of(context).pop(true);
-                                                });
-                                            return DialogNoButton(
-                                                content: "Berhasil Ditambahkan!",
-                                                content_detail:
-                                                "Amortisasi Aset baru berhasil ditambahkan",
-                                                path_image:
-                                                'assets/images/tambah_coa.png');
-                                          });*/
                                     },
                                     content: "Simpan")
                               ],

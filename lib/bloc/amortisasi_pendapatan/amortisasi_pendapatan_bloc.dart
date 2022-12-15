@@ -3,7 +3,8 @@ import 'package:sistem_akuntansi/bloc/Event.dart';
 import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/amortisasi_pendapatan/amortisasi_pendapatan_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
-import 'package:sistem_akuntansi/model/response/amortisasi_Pendapatan.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan_detail.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/utils/table_view.dart';
 
 class AmortisasiPendapatanBloc extends Bloc<Event, SiakState> {
@@ -47,11 +48,11 @@ class AmortisasiPendapatanBloc extends Bloc<Event, SiakState> {
     try {
       emit(LoadingState());
       await service.getDetailAmortisasiPendapatan(
-          TableViewType.amortisasi_pendapatan.name, {
+          TableViewType.amortisasi_pendapatan_detail.name, {
         "id_amortisasi_pendapatan": event.id_amortisasi_pendapatan
       })
           .then((asset) {
-        var list_Pendapatan = asset.datastore as AmortisasiPendapatan;
+        var list_Pendapatan = asset.datastore as AmortisasiPendapatanDetail;
         emit((asset.message.isEmpty)
             ? SuccessState(list_Pendapatan)
             : FailureState((asset.message.isNotEmpty)

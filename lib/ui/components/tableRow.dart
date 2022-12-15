@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_akun.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
@@ -10,7 +11,6 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:sistem_akuntansi/utils/AkunAmortisasi.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
-import 'package:sistem_akuntansi/utils/AmortisasiPendapatan.dart';
 import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
 import 'package:sistem_akuntansi/utils/Buku_besar.dart';
@@ -548,7 +548,7 @@ class RowTableDetail extends DataTableSource {
 }
 
 class AmortisasiPendapatanTable extends DataTableSource {
-  Function seeDetail;
+  Function(int) seeDetail;
   BuildContext context;
   AmortisasiPendapatanTable(
       {required List<AmortisasiPendapatan> contentData,
@@ -611,7 +611,7 @@ class AmortisasiPendapatanTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.total_harga}",
+                    "${_content.jumlah}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -628,7 +628,7 @@ class AmortisasiPendapatanTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.jumlah_mahasiswa}",
+                    "${_content.jumlah_mhs}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -664,7 +664,7 @@ class AmortisasiPendapatanTable extends DataTableSource {
                 padding: EdgeInsets.all(20),
               ),
               onPressed: () {
-                seeDetail();
+                seeDetail(index);
               },
               child: const Text(
                 "Lihat Detail",

@@ -240,7 +240,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
                                   },
                                   context: context,
                                 ),
-                                rowsPerPage: 10,
+                                rowsPerPage: 5,
                                 showCheckboxColumn: false,
                               ),
                             );

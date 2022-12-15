@@ -98,12 +98,14 @@ class TextForm extends StatelessWidget {
   final String hintText;
   final TextEditingController textController;
   String? label;
+  Function(String)? onChanged;
 
   TextForm(
       {super.key,
       required this.hintText,
       required this.textController,
-      this.label});
+      this.label,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +117,7 @@ class TextForm extends StatelessWidget {
           fontSize: 13,
           fontFamily: 'Inter',
         ),
+        onChanged: onChanged,
         decoration: InputDecoration(
             labelText: label,
             hintText: hintText,

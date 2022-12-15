@@ -815,7 +815,7 @@ class JurnalUmumListState extends State<JurnalUmumList> {
                                   },
                                   context: context,
                                 ),
-                                rowsPerPage: 10,
+                                rowsPerPage: 5,
                                 showCheckboxColumn: false,
                               ),
                             );

@@ -1,6 +1,6 @@
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
-import 'package:sistem_akuntansi/model/response/amortisasi_Pendapatan_detail.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan_detail.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_akun.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset_detail.dart';
@@ -254,7 +254,7 @@ class SupabaseService {
               .select()
               .eq("semester", equivalent['semester'])
               .eq("tahun", equivalent['tahun'])
-          : (equivalent['semester'] > 0)
+          : (equivalent['semester'] != "")
               ? await _supabaseClient
                   .from(table_name)
                   .select()

@@ -6,6 +6,7 @@ class AmortisasiPendapatan extends Equatable {
   int jumlah;
   String keterangan;
   int jumlah_mhs;
+  int tahun_angkatan;
   String semester;
   int penyusutan;
 
@@ -16,7 +17,9 @@ class AmortisasiPendapatan extends Equatable {
       this.keterangan = "",
       this.jumlah_mhs = 0,
       this.semester = "",
-      this.penyusutan = 0});
+      this.penyusutan = 0,
+        this.tahun_angkatan = 0
+      });
 
   factory AmortisasiPendapatan.fromJson(Map<String, dynamic> json) {
     return AmortisasiPendapatan(
@@ -26,7 +29,8 @@ class AmortisasiPendapatan extends Equatable {
         keterangan: json['keterangan'],
         jumlah_mhs: json['jumlah_mahasiswa'],
         semester: json['semester'],
-        penyusutan: json['penyusutan']
+        penyusutan: json['penyusutan'],
+      tahun_angkatan: json['tahun_angkatan']
     );
   }
 
@@ -38,7 +42,8 @@ class AmortisasiPendapatan extends Equatable {
       'keterangan': this.keterangan,
       'jumlah_mahasiswa': this.jumlah_mhs,
       'semester': this.semester,
-      'penyusutan': this.penyusutan
+      'penyusutan': this.penyusutan,
+      'tahun_angkatan': this.tahun_angkatan
     };
   }
 
@@ -50,6 +55,7 @@ class AmortisasiPendapatan extends Equatable {
     keterangan,
     jumlah_mhs,
     semester,
-    penyusutan
+    penyusutan,
+    tahun_angkatan
   ];
 }

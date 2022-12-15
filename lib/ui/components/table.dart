@@ -44,7 +44,7 @@ class TableDashboard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                nama_transaksi,
+                nama_transaksi.length > 60 ? '${nama_transaksi.substring(0, 60)}...' : nama_transaksi,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

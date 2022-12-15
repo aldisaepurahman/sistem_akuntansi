@@ -1,6 +1,6 @@
 import 'package:sistem_akuntansi/bloc/Event.dart';
-import 'package:sistem_akuntansi/model/response/amortisasi_Pendapatan.dart';
-import 'package:sistem_akuntansi/model/response/amortisasi_Pendapatan_detail.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan_detail.dart';
 
 class AmortisasiPendapatanFetched extends Event {
   final String semester;

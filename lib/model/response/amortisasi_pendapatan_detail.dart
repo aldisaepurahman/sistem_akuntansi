@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
 class AmortisasiPendapatanDetail extends Equatable {
-  int id_detail;
+  String id_detail;
   String id_amortisasi_pendapatan;
   String bulan;
   int tahun;
   double kali;
 
   AmortisasiPendapatanDetail(
-      {this.id_detail = 0,
+      {this.id_detail = "",
       this.id_amortisasi_pendapatan = "",
       this.bulan = "",
       this.tahun = 0,
@@ -20,12 +20,13 @@ class AmortisasiPendapatanDetail extends Equatable {
       id_amortisasi_pendapatan: json['id_amortisasi_pendapatan'],
       bulan: json['bulan'],
       tahun: json['tahun'],
-      kali: json['kali_penyusutan']
+      kali: json['kali_penyusutan'].toDouble()
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id_pendapatan_detail': this.id_detail,
       'id_amortisasi_pendapatan': this.id_amortisasi_pendapatan,
       'bulan': this.bulan,
       'tahun': this.tahun,

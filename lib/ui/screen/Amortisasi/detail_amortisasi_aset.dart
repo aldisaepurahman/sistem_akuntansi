@@ -77,6 +77,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
               amortisasiIndex: 2,
               jurnalPenyesuaianIndex: 0,
               client: widget.client,
+              params: {"aset": widget.aset},
             )
     )
     );
@@ -141,7 +142,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                           ButtonBack(
                             onPressed: () {
                               setState(() {
-                                Navigator.pop(context);
+                                _navigateToAset(context);
                               });
                             },
                           )
@@ -176,7 +177,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                                                 context: context,
                                                 builder: (BuildContext context) {
                                                   return DialogPenyusutan(
-                                                      penyusutan: penyusutan,
+                                                      penyusutan: widget.aset.penyusutan,
                                                       persentase: persentase,
                                                       onPressed: () {
                                                         var bulan = listbulan[DateTime.now().month-1];
@@ -266,8 +267,8 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4 - 50,
+                            Expanded(
+                              // width: MediaQuery.of(context).size.width * 0.4 - 50,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -283,8 +284,8 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4 - 50,
+                            Expanded(
+                              // width: MediaQuery.of(context).size.width * 0.4 - 50,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -304,7 +305,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                         SizedBox(
                           height: 25,
                         ),
-                        /*Container(
+                        Container(
                           margin: EdgeInsets.only(top: 40, bottom: 20),
                           width: double.infinity,
                           child: ElevatedButton(
@@ -325,7 +326,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                               ),
                             ),
                           ),
-                        ),*/
+                        ),
                         Container(
                           margin: EdgeInsets.only(bottom: 25),
                           width: double.infinity,

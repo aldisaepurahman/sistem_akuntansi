@@ -8,6 +8,7 @@ import 'package:sistem_akuntansi/ui/screen/Amortisasi/detail_amortisasi_pendapat
 import 'package:sistem_akuntansi/ui/screen/Amortisasi/tambah_akun_amortisasi.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/screen/login.dart';
+import 'package:window_manager/window_manager.dart';
 
 
 import 'ui/screen/Amortisasi/detail_amortisasi_aset.dart';
@@ -15,12 +16,25 @@ import 'ui/screen/Amortisasi/edit_amortisasi_aset.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = const WindowOptions(
+    maximumSize: Size(2560, 1440),
+    minimumSize: Size(1366, 768),
+    title: "Sistem Informasi Akuntansi STIKes Borromeus",
+    center: true,
+  );
 
   await Supabase.initialize(
       url: 'https://eohvczegrspdvlfqeody.supabase.co',
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvaHZjemVncnNwZHZsZnFlb2R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njk4Nzg1MjIsImV4cCI6MTk4NTQ1NDUyMn0.lu0_-WgadrCo8x2kn9bQmocjTO0Oo98aeLSeQU1BSso'
   );
   Bloc.observer = SiakBlocObserver();
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
 
   runApp(MyApp(client: Supabase.instance.client));
 }

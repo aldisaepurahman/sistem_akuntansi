@@ -137,7 +137,7 @@ class DialogNoButton extends StatelessWidget {
 }
 
 class DialogPenyusutan extends StatelessWidget {
-  final String penyusutan;
+  final int penyusutan;
   final TextEditingController persentase;
   Function onPressed;
   Function onPressed2;
@@ -172,7 +172,7 @@ class DialogPenyusutan extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(text: "Nilai Penyusutan dalam bulan ini sebesar"),
                   TextSpan(
-                      text: " Rp" + penyusutan,
+                      text: " Rp $penyusutan",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontFamily: "Inner",

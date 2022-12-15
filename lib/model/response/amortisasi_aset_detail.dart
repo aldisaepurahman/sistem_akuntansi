@@ -20,7 +20,7 @@ class AmortisasiAsetDetail extends Equatable {
       id_amortisasi_aset: json['id_amortisasi_aset'],
       bulan: json['bulan'],
       tahun: json['tahun'],
-      kali: json['kali_penyusutan']
+      kali: json['kali_penyusutan'].toDouble()
     );
   }
 

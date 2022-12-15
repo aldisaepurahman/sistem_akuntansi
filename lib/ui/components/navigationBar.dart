@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
+import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
@@ -137,11 +138,11 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     if (selectedAmortisasiIndex == 1) {
       return DetailAmortisasiAset(client: widget.client, aset: widget.params?['aset'] as AmortisasiAset);
     } else if (selectedAmortisasiIndex == 2) {
-      return EditAmortisasiAset(client: widget.client);
+      return EditAmortisasiAset(client: widget.client, aset: widget.params?['aset'] as AmortisasiAset);
     } else if (selectedAmortisasiIndex == 3) {
       return AmortisasiPendapatanList(client: widget.client);
     } else if (selectedAmortisasiIndex == 4) {
-      return DetailAmortisasiPendapatan(client: widget.client);
+      return DetailAmortisasiPendapatan(client: widget.client, pendapatan: widget.params?['pendapatan'] as AmortisasiPendapatan);
     } else if (selectedAmortisasiIndex == 5) {
       return EditAmortisasiPendapatan(client: widget.client);
     } else if (selectedAmortisasiIndex == 6) {
