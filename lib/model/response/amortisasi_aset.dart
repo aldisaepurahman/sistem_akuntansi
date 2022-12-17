@@ -11,6 +11,7 @@ class AmortisasiAset extends Equatable {
   int tahun;
   int tahun_perolehan;
   String bulan_perolehan;
+  int persentase_bunga;
 
   AmortisasiAset(
       {this.id_amortisasi_aset = "",
@@ -22,7 +23,8 @@ class AmortisasiAset extends Equatable {
       this.penyusutan = 0,
       this.tahun = 0,
         this.tahun_perolehan = 0,
-        this.bulan_perolehan = ""
+        this.bulan_perolehan = "",
+        this.persentase_bunga = 0
       });
 
   factory AmortisasiAset.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class AmortisasiAset extends Equatable {
       tahun: json['tahun_input'],
       tahun_perolehan: json['tahun_perolehan'],
       bulan_perolehan: json['bulan_perolehan'],
+      persentase_bunga: json['persentase_bunga'],
     );
   }
 
@@ -52,6 +55,7 @@ class AmortisasiAset extends Equatable {
       'tahun_input': this.tahun,
       'tahun_perolehan': this.tahun_perolehan,
       'bulan_perolehan': this.bulan_perolehan,
+      'persentase_bunga': this.persentase_bunga,
     };
   }
 
@@ -66,6 +70,7 @@ class AmortisasiAset extends Equatable {
         penyusutan,
   tahun,
   tahun_perolehan,
-  bulan_perolehan
+  bulan_perolehan,
+    persentase_bunga
       ];
 }

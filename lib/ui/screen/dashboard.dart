@@ -89,7 +89,7 @@ class DashboardState extends State<Dashboard> {
                                   total: "${temp_transaksi.length}",
                                   fontColor: textColor,
                                   bgColor: yellowTextColor,
-                                  textCard: "Total Transaksi",
+                                  textCard: "Jumlah Transaksi",
                                   imgPath: "assets/icons/EmptyWallet.svg",
                                 ),
                                 SizedBox(

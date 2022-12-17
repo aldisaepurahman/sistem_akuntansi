@@ -138,6 +138,8 @@ class DialogNoButton extends StatelessWidget {
 
 class DialogPenyusutan extends StatelessWidget {
   final int penyusutan;
+  final String first_desc;
+  final String sec_desc;
   final TextEditingController persentase;
   Function onPressed;
   Function onPressed2;
@@ -145,6 +147,8 @@ class DialogPenyusutan extends StatelessWidget {
   DialogPenyusutan(
       {Key? key,
       required this.penyusutan,
+        required this.first_desc,
+        required this.sec_desc,
       required this.persentase,
       required this.onPressed,
       required this.onPressed2})
@@ -170,7 +174,7 @@ class DialogPenyusutan extends StatelessWidget {
                 style:
                     TextStyle(fontFamily: "Inner", fontSize: 15, color: hitam),
                 children: <TextSpan>[
-                  TextSpan(text: "Nilai Penyusutan dalam bulan ini sebesar"),
+                  TextSpan(text: first_desc),
                   TextSpan(
                       text: " Rp $penyusutan",
                       style: TextStyle(
@@ -179,14 +183,13 @@ class DialogPenyusutan extends StatelessWidget {
                           fontSize: 15,
                           color: hitam)),
                   TextSpan(
-                      text:
-                          ". Apakah Anda ingin menggunakan 100% nilai penyusutan ini? Jika tidak, masukkan persentase penggunaan nilai penyusutan yang baru.")
+                      text: sec_desc)
                 ],
               ),
             ),
             SizedBox(height: 15),
             TextForm(
-                hintText: "Masukkan persentase (dalam %)",
+                hintText: "Masukkan nominal (Rp.)",
                 textController: persentase),
             ButtonNoIcon(
                 bg_color: kuning,

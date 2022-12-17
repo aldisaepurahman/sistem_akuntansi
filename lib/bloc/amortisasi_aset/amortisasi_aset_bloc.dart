@@ -14,6 +14,7 @@ class AmortisasiAsetBloc extends Bloc<Event, SiakState> {
     on<AmortisasiAsetInserted>(_insertDataAset);
     on<AmortisasiDetailAsetInserted>(_insertDataDetail);
     on<AmortisasiAsetUpdated>(_updateDataAset);
+    on<AmortisasiDetailAsetUpdated>(_updateDataDetailAset);
     on<AmortisasiAsetDeleted>(_deleteDataAset);
   }
 
@@ -49,10 +50,11 @@ class AmortisasiAsetBloc extends Bloc<Event, SiakState> {
       emit(LoadingState());
       await service.getDetailAmortisasiAset(
           TableViewType.amortisasi_aset_detail.name, {
-        "id_amortisasi_aset": event.id_amortisasi_aset
+        "id_amortisasi_aset": event.id_amortisasi_aset,
+        "tahun": DateTime.now().year
       })
           .then((asset) {
-        var list_aset = asset.datastore as AmortisasiAsetDetail;
+        var list_aset = List<AmortisasiAsetDetail>.from(asset.datastore);
         emit((asset.message.isEmpty)
             ? SuccessState(list_aset)
             : FailureState((asset.message.isNotEmpty)
@@ -91,6 +93,17 @@ class AmortisasiAsetBloc extends Bloc<Event, SiakState> {
       emit(LoadingState());
       await service.update(TableViewType.amortisasi_aset.name, event.aset.toJson(),
           {"id_amortisasi_aset": event.id_amortisasi_aset});
+      emit(CrudState(true));
+    } catch (error) {
+      emit(FailureState(error.toString()));
+    }
+  }
+
+  Future<void> _updateDataDetailAset(AmortisasiDetailAsetUpdated event, Emitter<SiakState> emit) async {
+    try {
+      emit(LoadingState());
+      await service.update(TableViewType.amortisasi_aset_detail.name, event.aset_detail.toJson(),
+          {"id_aset_detail": event.id_amortisasi_detail});
       emit(CrudState(true));
     } catch (error) {
       emit(FailureState(error.toString()));

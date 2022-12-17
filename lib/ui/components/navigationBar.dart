@@ -144,7 +144,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
     } else if (selectedAmortisasiIndex == 4) {
       return DetailAmortisasiPendapatan(client: widget.client, pendapatan: widget.params?['pendapatan'] as AmortisasiPendapatan);
     } else if (selectedAmortisasiIndex == 5) {
-      return EditAmortisasiPendapatan(client: widget.client);
+      return EditAmortisasiPendapatan(client: widget.client, pendapatan: widget.params?['pendapatan'] as AmortisasiPendapatan);
     } else if (selectedAmortisasiIndex == 6) {
       return TambahAkunAmortisasiList(client: widget.client);
     }

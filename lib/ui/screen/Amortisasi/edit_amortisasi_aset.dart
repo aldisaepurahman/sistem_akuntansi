@@ -96,6 +96,7 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
   late TextEditingController akumulasi_penyusutan_tahun_lalu;
   late TextEditingController saat_perolehan;
   late TextEditingController akun;
+  late TextEditingController bunga;
 
   var list_coa = <AmortisasiAkun>[];
   late AmortisasiAsetBloc _asetBloc;
@@ -123,6 +124,7 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
     keterangan = TextEditingController(text: widget.aset.keterangan);
     nilai_perolehan = TextEditingController(text: widget.aset.nilai_awal.toString());
     masa_guna = TextEditingController(text: widget.aset.masa_guna.toString());
+    bunga = TextEditingController(text: widget.aset.persentase_bunga.toString());
     akumulasi_penyusutan_tahun_lalu = TextEditingController(text: widget.aset.akumulasi.toString());
     saat_perolehan = TextEditingController(text: "${listbulan.keys.firstWhere((k) => listbulan[k] == widget.aset.bulan_perolehan, orElse: () => 0)}/${widget.aset.tahun_perolehan}");
     akun = TextEditingController();
@@ -200,6 +202,12 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                                     hintText: "Masukkan nilai perolehan...",
                                     textController: nilai_perolehan,
                                     label: "Rp"),
+                              ),
+                              SizedBox(width: 10,),
+                              Expanded(
+                                child: TextForm(
+                                    hintText: "Masukkan Persentase bunga (%)...",
+                                    textController: bunga),
                               )
                             ]),
                         SizedBox(
@@ -344,7 +352,12 @@ class EditAmortisasiAsetState extends State<EditAmortisasiAset> {
                                     penyusutan_thn_lalu = int.parse(akumulasi_penyusutan_tahun_lalu.text);
                                   }
 
-                                  var penyusutan_sekarang = (perolehan/4)~/12;
+                                  var persentase_bunga = 0;
+                                  if (bunga.text.isNotEmpty) {
+                                    persentase_bunga = int.parse(bunga.text);
+                                  }
+
+                                  var penyusutan_sekarang = ((perolehan*persentase_bunga)~/100)~/12;
                                   var tahun = DateTime.now().year;
                                   var saatPerolehan = saat_perolehan.text.split("/");
                                   var bulan_perolehan = "";

@@ -34,6 +34,13 @@ class AmortisasiPendapatanUpdated extends Event {
   AmortisasiPendapatanUpdated({required this.pendapatan, required this.id_amortisasi_pendapatan});
 }
 
+class AmortisasiDetailPendapatanUpdated extends Event {
+  final AmortisasiPendapatanDetail pendapatan_detail;
+  final String id_amortisasi_detail;
+
+  AmortisasiDetailPendapatanUpdated({required this.pendapatan_detail, required this.id_amortisasi_detail});
+}
+
 class AmortisasiPendapatanDeleted extends Event {
   final String id_amortisasi_pendapatan;
 

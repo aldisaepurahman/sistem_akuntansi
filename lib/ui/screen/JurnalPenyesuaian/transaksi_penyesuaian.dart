@@ -625,10 +625,13 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                         );
 
                                         var transaksi_dk = <TransaksiDK>[];
+                                        var total_debit = 0;
+                                        var total_kredit = 0;
 
                                         for (var i = 0; i < akunControllers.length; i += 1) {
                                           if (akunControllers[i].text.isNotEmpty) {
                                             var indexItem = list_coa.indexWhere((element) => element.nama_akun == akunControllers[i].text);
+                                            total_debit += int.parse(jumlahControllers[i].text);
 
                                             transaksi_dk.add(
                                                 TransaksiDK(
@@ -645,6 +648,8 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                           if (akunKreditControllers[i].text.isNotEmpty) {
                                             var indexItem = list_coa.indexWhere((element) => element.nama_akun == akunKreditControllers[i].text);
 
+                                            total_kredit += int.parse(jumlahKreditControllers[i].text);
+
                                             transaksi_dk.add(
                                                 TransaksiDK(
                                                     id_transaksi: idTransaksi,
@@ -656,21 +661,27 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                                           }
                                         }
 
-                                        _jurnalBloc.add(JurnalInserted(transaksiModel: transaksi, transaksi_dk: transaksi_dk));
+                                        if (total_debit == total_kredit) {
+                                          _jurnalBloc.add(JurnalInserted(transaksiModel: transaksi, transaksi_dk: transaksi_dk));
 
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              Future.delayed(Duration(seconds: 2), () {
-                                                _navigateToDaftarTransaksi(context);
-                                                // Navigator.of(context).pop();
-                                              });
-                                              return DialogNoButton(
-                                                  content: (_case == 1 ? "Berhasil Ditambahkan!" : "Berhasil Diubah!"),
-                                                  content_detail: (_case == 1 ? "Transaksi baru berhasil ditambahkan" : "Transaksi berhasil diubah"),
-                                                  path_image: 'assets/images/tambah_coa.png');
-                                            }
-                                        );
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                Future.delayed(Duration(seconds: 2), () {
+                                                  _navigateToDaftarTransaksi(context);
+                                                  // Navigator.of(context).pop();
+                                                });
+                                                return DialogNoButton(
+                                                    content: (_case == 1 ? "Berhasil Ditambahkan!" : "Berhasil Diubah!"),
+                                                    content_detail: (_case == 1 ? "Transaksi baru berhasil ditambahkan" : "Transaksi berhasil diubah"),
+                                                    path_image: 'assets/images/tambah_coa.png');
+                                              }
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(content: Text("Pastikan total saldo debit sama dengan saldo kredit."))
+                                          );
+                                        }
                                       } else {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(content: Text("Pastikan semua kolom inputan terisi."))
@@ -934,9 +945,7 @@ class DynamicDebitInsertWidgetState extends State<DynamicDebitInsertWidget> {
                     var filter_akun = List<Akun>.from(state.datastore);
                     list_coa = filter_akun;
                     for (var akun in filter_akun) {
-                      if (akun.keterangan_akun.contains("Debit")) {
-                        widget.namaAkunList.add(akun.nama_akun);
-                      }
+                      widget.namaAkunList.add(akun.nama_akun);
                     }
                     return SizedBox(
                       width: MediaQuery.of(context).size.width * 0.25,
@@ -1039,9 +1048,7 @@ class DynamicKreditInsertWidgetState extends State<DynamicKreditInsertWidget> {
                     widget.namaAkunList.clear();
                     var filter_akun = List<Akun>.from(state.datastore);
                     for (var akun in filter_akun) {
-                      if (akun.keterangan_akun.contains("Kredit")) {
-                        widget.namaAkunList.add(akun.nama_akun);
-                      }
+                      widget.namaAkunList.add(akun.nama_akun);
                     }
                     return SizedBox(
                       width: MediaQuery.of(context).size.width * 0.25,
