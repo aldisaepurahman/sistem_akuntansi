@@ -286,7 +286,7 @@ class InsertCOAState extends State<InsertCOA> {
                                     akun: Akun(
                                       kode_akun: kode_akun,
                                       nama_akun: nama_akun,
-                                      keterangan_akun: keterangan,
+                                      keterangan_akun: keterangan.replaceAll(",", "_"),
                                       indentasi: int.parse(indentasi)
                                     ),
                                     saldo: Saldo(

@@ -366,7 +366,7 @@ class RowTableCOA extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.keterangan_akun}",
+                    "${_content.keterangan_akun.replaceAll("_", ",")}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),

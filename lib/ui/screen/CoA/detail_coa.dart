@@ -102,9 +102,6 @@ class DetailCOAState extends State<DetailCOA> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ButtonBack(
-                          /*onPressed: () {
-                            _navigateToEditCoa(context);
-                          },*/
                             onPressed: () {
                               setState(() {
                                 _navigateToListCoa(context);
@@ -168,7 +165,7 @@ class DetailCOAState extends State<DetailCOA> {
                                         DetailText(
                                             header: "Keterangan",
                                             content:
-                                                widget.akun.keterangan_akun),
+                                                widget.akun.keterangan_akun.replaceAll("_", ",")),
                                         DetailText(
                                             header: "Saldo Awal Bulan ini",
                                             content: (state.datastate.id_saldo > 0 && state.datastate.saldo > 0)
