@@ -187,6 +187,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
   TextEditingController akumulasi_penyusutan_tahun_lalu = TextEditingController();
   TextEditingController saat_perolehan = TextEditingController();
   TextEditingController akun = TextEditingController();
+  TextEditingController bunga = TextEditingController();
 
   @override
   void dispose(){
@@ -196,6 +197,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
     akumulasi_penyusutan_tahun_lalu.dispose();
     saat_perolehan.dispose();
     akun.dispose();
+    bunga.dispose();
     super.dispose();
   }
 
@@ -228,21 +230,6 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
               ],
               child: ListView(
                 children: [
-                  /*Container(
-                    margin: EdgeInsets.only(top: 25, bottom: 15, left: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ButtonBack(
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          },
-                        )
-                      ],
-                    )),*/
                   Container(
                       margin: EdgeInsets.only(top: 25, left: 25),
                       child: HeaderText(
@@ -381,30 +368,30 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
+                                  Expanded(
                                       child: TextForm(
                                           hintText: "Masukkan keterangan...",
                                           textController: keterangan)),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
+                                  Expanded(
                                       child: TextForm(
                                           hintText: "Masukkan masa guna...",
                                           textController: masa_guna)),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  SizedBox(
-                                    width:
-                                    MediaQuery.of(context).size.width * 0.2,
+                                  Expanded(
                                     child: TextForm(
                                         hintText: "Masukkan nilai perolehan (Rp.)...",
                                         textController: nilai_perolehan),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Expanded(
+                                    child: TextForm(
+                                        hintText: "Masukkan Persentase bunga (%)...",
+                                        textController: bunga),
                                   )
                                 ]),
                             SizedBox(
@@ -414,9 +401,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
+                                  Expanded(
                                       child: TextForm(
                                         hintText:
                                         "Masukkan penyusutan tahun lalu (Rp.)...",
@@ -435,9 +420,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                           list_coa = state.datastore;
                                           namaAkunList.clear();
                                           namaAkunList = list_coa.where((element) => element.amortisasi_jenis == "Aset").map((e) => e.nama_akun).toList();
-                                          return SizedBox(
-                                              width: MediaQuery.of(context).size.width *
-                                                  0.2,
+                                          return Expanded(
                                               child: DropdownSearchButton(
                                                   controller: akun,
                                                   hintText: "Masukkan Akun Amortisasi...",
@@ -452,9 +435,7 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
+                                  Expanded(
                                       child: Container(
                                           margin: EdgeInsets.only(bottom: 3),
                                           child: TextField(

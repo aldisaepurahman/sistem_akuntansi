@@ -122,14 +122,14 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
 
   Widget getNeracaLajurPage(){
     if (selectedNeracaLajurIndex == 1) {
-      return LaporanNeracaLajur(client: widget.client);
+      return LaporanNeracaLajur(client: widget.client, bulan: widget.params?["bulan"] as String, tahun: widget.params?["tahun"] as int);
     }
     return NeracaLajurList(client: widget.client);
   }
 
   Widget getLabaRugiPage(){
     if (selectedLabaRugiIndex == 1) {
-      return LaporanLabaRugi(client: widget.client);
+      return LaporanLabaRugi(client: widget.client, bulan: widget.params?["bulan"] as String, tahun: widget.params?["tahun"] as int);
     }
     return LabaRugiList(client: widget.client);
   }

@@ -5,9 +5,13 @@ import 'package:sistem_akuntansi/ui/components/pdf.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:sistem_akuntansi/ui/components/pdf_styles.dart';
 
-Future<void> labarugi_pdf() async {
+Future<void> labarugi_pdf(
+    List<Map> list_pendapatan,
+    List<Map> list_beban,
+    String bulan,
+    int tahun) async {
   var total_beban, total_pendapatan, total_laba;
-  String periode = '31 Maret 2022';
+  String periode = "$bulan $tahun";
 
   PdfDocument document = PdfDocument();
 
@@ -21,9 +25,9 @@ Future<void> labarugi_pdf() async {
   grid_pendapatan.columns.add(count: 4);
   grid_pendapatan.columns[0].width = 230;
 
-  add_data_labarugi(grid_pendapatan, "Pendapatan Jasa", 0, 678379000);
-  add_data_labarugi(grid_pendapatan, "Retur dan Potongan", 2000000, 0);
-  add_data_labarugi(grid_pendapatan, "Diskon Penjualan", -500000, 0);
+  for (var pendapatan in list_pendapatan) {
+    add_data_labarugi(grid_pendapatan, pendapatan["nama_akun"], pendapatan["debit"], pendapatan["kredit"]);
+  }
   total_pendapatan = laba_rugi_hitung_saldo(
       grid_pendapatan, "Pendapatan Bersih", total_pendapatan);
   labarugi_saldo_style(grid_pendapatan);
@@ -33,10 +37,9 @@ Future<void> labarugi_pdf() async {
   grid_beban.columns.add(count: 4);
   grid_beban.columns[0].width = 230;
 
-  add_data_labarugi(grid_beban, "Beban Gaji", 108951000, 0);
-  add_data_labarugi(grid_beban, "Beban Sewa", 2751000, 0);
-  add_data_labarugi(grid_beban, "Beban Asuransi", 45900000, 0);
-  add_data_labarugi(grid_beban, "Beban Listrik", 2897000, 0);
+  for (var beban in list_beban) {
+    add_data_labarugi(grid_beban, beban["nama_akun"], beban["debit"], beban["kredit"]);
+  }
   total_beban = laba_rugi_hitung_saldo(grid_beban, "Total Beban", total_beban);
 
   labarugi_saldo_style(grid_beban);
@@ -49,6 +52,7 @@ Future<void> labarugi_pdf() async {
         bounds: Rect.fromLTWH(0, 143, pageSize.width, 40));
     page.graphics.drawString("LABA : Rp" + total_laba.toString(),
         PdfStandardFont(PdfFontFamily.timesRoman, 14, style: PdfFontStyle.bold),
+        brush: PdfSolidBrush(PdfColor(255, 255, 255)),
         bounds: Rect.fromLTWH(10, 150, 250, 25),
         format: PdfStringFormat(
             alignment: PdfTextAlignment.left,
@@ -59,6 +63,7 @@ Future<void> labarugi_pdf() async {
         bounds: Rect.fromLTWH(0, 143, pageSize.width, 40));
     page.graphics.drawString("RUGI : Rp" + total_laba.toString(),
         PdfStandardFont(PdfFontFamily.timesRoman, 14, style: PdfFontStyle.bold),
+        brush: PdfSolidBrush(PdfColor(255, 255, 255)),
         bounds: Rect.fromLTWH(10, 150, 250, 25),
         format: PdfStringFormat(
             alignment: PdfTextAlignment.left,
@@ -114,5 +119,5 @@ Future<void> labarugi_pdf() async {
   List<int> bytes = await document.save();
   document.dispose();
 
-  await FileSaveHelper.saveAndLaunchFile(bytes, 'LabaRugi_Maret2022.pdf');
+  await FileSaveHelper.saveAndLaunchFile(bytes, 'LabaRugi_${bulan}${tahun}.pdf');
 }

@@ -10,6 +10,7 @@ import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
+import 'package:sistem_akuntansi/model/response/vneraca_lajur.dart';
 import 'package:supabase/supabase.dart';
 
 class SupabaseService {
@@ -117,29 +118,73 @@ class SupabaseService {
     }
   }
 
+  Future<ServiceStatus> getLabaRugi(
+      String table_name, Map<String, dynamic> equivalent) async {
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq("bulan", equivalent['bulan'])
+          .eq("tahun", equivalent['tahun'])
+          .like("kode_akun", "2.%");
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: List<VNeracaLajur>.from([]),
+            message: "");
+      }
+
+      return ServiceStatus(
+          datastore: List<VNeracaLajur>.from(
+              response.map((e) => VNeracaLajur.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      Error.throwWithStackTrace(error, stackTrace);
+    }
+  }
+
+  Future<ServiceStatus> getNeracaLajur(
+      String table_name, Map<String, dynamic> equivalent) async {
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq("bulan", equivalent['bulan'])
+          .eq("tahun", equivalent['tahun']);
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: List<VNeracaLajur>.from([]), message: response.toString());
+      }
+
+      return ServiceStatus(
+          datastore: List<VNeracaLajur>.from(
+              response.map((e) => VNeracaLajur.fromJson(e)).toList()));
+    } catch (error, stackTrace) {
+      Error.throwWithStackTrace(error, stackTrace);
+    }
+  }
+
   Future<ServiceStatus> getBukuBesar(
       String table_name, Map<String, dynamic> equivalent) async {
     try {
       final response = (equivalent['kode_akun'] != "")
           ? await _supabaseClient
-          .from(table_name)
-          .select()
-          .eq("month", equivalent['bulan'])
-          .eq("year", equivalent['tahun'])
-          .eq("coa_kode_akun", equivalent['coa_kode_akun'])
+              .from(table_name)
+              .select()
+              .eq("month", equivalent['bulan'])
+              .eq("year", equivalent['tahun'])
+              .eq("coa_kode_akun", equivalent['coa_kode_akun'])
           : await _supabaseClient
-          .from(table_name)
-          .select()
-          .eq("month", equivalent['bulan'])
-          .eq("year", equivalent['tahun']);
+              .from(table_name)
+              .select()
+              .eq("month", equivalent['bulan'])
+              .eq("year", equivalent['tahun']);
 
       if (response == null) {
         return ServiceStatus(
             datastore: List<VJurnalExpand>.from([]),
             message: response.toString());
       }
-
-      var data = List<Map<String, dynamic>>.from(response);
 
       return ServiceStatus(
           datastore: List<VJurnalExpand>.from(
@@ -240,7 +285,8 @@ class SupabaseService {
       return ServiceStatus(datastore: AmortisasiAsetDetail());
     } on NoSuchMethodError catch (error) {
       return ServiceStatus(
-          datastore: AmortisasiAsetDetail(), message: error.stackTrace.toString());
+          datastore: AmortisasiAsetDetail(),
+          message: error.stackTrace.toString());
     }
   }
 
@@ -290,15 +336,18 @@ class SupabaseService {
           .single();
 
       if (response == null) {
-        return ServiceStatus(datastore: AmortisasiPendapatanDetail(), message: "");
+        return ServiceStatus(
+            datastore: AmortisasiPendapatanDetail(), message: "");
       }
 
-      return ServiceStatus(datastore: AmortisasiPendapatanDetail.fromJson(response));
+      return ServiceStatus(
+          datastore: AmortisasiPendapatanDetail.fromJson(response));
     } on PostgrestException catch (error) {
       return ServiceStatus(datastore: AmortisasiPendapatanDetail());
     } on NoSuchMethodError catch (error) {
       return ServiceStatus(
-          datastore: AmortisasiPendapatanDetail(), message: error.stackTrace.toString());
+          datastore: AmortisasiPendapatanDetail(),
+          message: error.stackTrace.toString());
     }
   }
 
@@ -328,14 +377,11 @@ class SupabaseService {
 
   Future<ServiceStatus> getAmortisasiAkun(String table_name) async {
     try {
-      final response = await _supabaseClient
-          .from(table_name)
-          .select();
+      final response = await _supabaseClient.from(table_name).select();
 
       if (response == null) {
         return ServiceStatus(
-            datastore: List<AmortisasiAkun>.from([]),
-            message: "");
+            datastore: List<AmortisasiAkun>.from([]), message: "");
       }
 
       return ServiceStatus(

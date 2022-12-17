@@ -28,7 +28,9 @@ class NeracaLajurList extends StatefulWidget {
 
 class NeracaLajurListState extends State<NeracaLajurList> {
   @override
-  void dispose() {}
+  void dispose() {
+    super.dispose();
+  }
 
   bool show = false;
   bool disable_button = false;
@@ -50,7 +52,7 @@ class NeracaLajurListState extends State<NeracaLajurList> {
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
           client: widget.client,
-          params: {"bulan":bulan, "tahun":tahun},
+          params: {"bulan": listbulan[bulan], "tahun":tahun},
         )
       )
     );
@@ -89,6 +91,21 @@ class NeracaLajurListState extends State<NeracaLajurList> {
 
   String _selectedMonthInsert = 'Januari';
   String _selectedYearInsert = '2022';
+
+  Map<int, String> listbulan = {
+    1: "Januari",
+    2: "Februari",
+    3: "Maret",
+    4: "April",
+    5: "Mei",
+    6: "Juni",
+    7: "Juli",
+    8: "Agustus",
+    9: "September",
+    10: "Oktober",
+    11: "November",
+    12: "Desember"
+  };
 
   List<String> month = [
     'Januari',
