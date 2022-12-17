@@ -14,6 +14,7 @@ class AmortisasiPendapatanBloc extends Bloc<Event, SiakState> {
     on<AmortisasiPendapatanInserted>(_insertDataPendapatan);
     on<AmortisasiDetailPendapatanInserted>(_insertDataDetail);
     on<AmortisasiPendapatanUpdated>(_updateDataPendapatan);
+    on<AmortisasiDetailPendapatanUpdated>(_updateDetailDataPendapatan);
     on<AmortisasiPendapatanDeleted>(_deleteDataPendapatan);
   }
 
@@ -49,10 +50,11 @@ class AmortisasiPendapatanBloc extends Bloc<Event, SiakState> {
       emit(LoadingState());
       await service.getDetailAmortisasiPendapatan(
           TableViewType.amortisasi_pendapatan_detail.name, {
-        "id_amortisasi_pendapatan": event.id_amortisasi_pendapatan
+        "id_amortisasi_pendapatan": event.id_amortisasi_pendapatan,
+        "tahun": DateTime.now().year
       })
           .then((asset) {
-        var list_Pendapatan = asset.datastore as AmortisasiPendapatanDetail;
+        var list_Pendapatan = List<AmortisasiPendapatanDetail>.from(asset.datastore);
         emit((asset.message.isEmpty)
             ? SuccessState(list_Pendapatan)
             : FailureState((asset.message.isNotEmpty)
@@ -91,6 +93,17 @@ class AmortisasiPendapatanBloc extends Bloc<Event, SiakState> {
       emit(LoadingState());
       await service.update(TableViewType.amortisasi_pendapatan.name, event.pendapatan.toJson(),
           {"id_amortisasi_pendapatan": event.id_amortisasi_pendapatan});
+      emit(CrudState(true));
+    } catch (error) {
+      emit(FailureState(error.toString()));
+    }
+  }
+
+  Future<void> _updateDetailDataPendapatan(AmortisasiDetailPendapatanUpdated event, Emitter<SiakState> emit) async {
+    try {
+      emit(LoadingState());
+      await service.update(TableViewType.amortisasi_pendapatan_detail.name, event.pendapatan_detail.toJson(),
+          {"id_pendapatan_detail": event.id_amortisasi_detail});
       emit(CrudState(true));
     } catch (error) {
       emit(FailureState(error.toString()));

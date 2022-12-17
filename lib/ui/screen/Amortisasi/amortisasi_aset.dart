@@ -518,7 +518,12 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                         penyusutan_thn_lalu = int.parse(akumulasi_penyusutan_tahun_lalu.text);
                                       }
 
-                                      var penyusutan_sekarang = (perolehan/4)~/12;
+                                      var persentase_bunga = 0;
+                                      if (bunga.text.isNotEmpty) {
+                                        persentase_bunga = int.parse(bunga.text);
+                                      }
+
+                                      var penyusutan_sekarang = ((perolehan*persentase_bunga)~/100)~/12;
                                       var tahun = DateTime.now().year;
                                       var saatPerolehan = saat_perolehan.text.split("/");
                                       var bulan_perolehan = "";
@@ -538,7 +543,8 @@ class AmortisasiAsetListState extends State<AmortisasiAsetList> {
                                               penyusutan: penyusutan_sekarang,
                                               tahun: tahun,
                                               tahun_perolehan: tahun_perolehan,
-                                              bulan_perolehan: bulan_perolehan
+                                              bulan_perolehan: bulan_perolehan,
+                                              persentase_bunga: persentase_bunga
                                             )
                                         ));
 

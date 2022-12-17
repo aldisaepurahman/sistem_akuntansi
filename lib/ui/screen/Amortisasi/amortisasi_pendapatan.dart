@@ -150,6 +150,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
   TextEditingController total_harga = TextEditingController();
   TextEditingController jumlah_mahasiswa = TextEditingController();
   TextEditingController akun = TextEditingController();
+  TextEditingController thn_angkatan = TextEditingController();
 
   String _selectedSemesterFilter = 'Ganjil';
   String _selectedAkunFilter = 'Beban Kesekretariatan';
@@ -160,6 +161,7 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
 
   List<String> semester = ['Ganjil', 'Genap'];
   List<String> semester_filter = ['Ganjil', 'Genap'];
+
   List<String> namaAkunList = [
     'Beban Kesekretariatan',
     'Beban ART',
@@ -305,6 +307,14 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                   Expanded(
                                       child: TextForm(
                                           hintText:
+                                          "Masukkan tahun masuk (Misal: 2019)...",
+                                          textController: thn_angkatan)),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                      child: TextForm(
+                                          hintText:
                                           "Masukkan jumlah mahasiswa...",
                                           textController: jumlah_mahasiswa)),
                                   SizedBox(
@@ -366,6 +376,11 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                         jumlahMhs = int.parse(jumlah_mahasiswa.text);
                                       }
 
+                                      var tahun_angkatan = 0;
+                                      if (thn_angkatan.text.isNotEmpty) {
+                                        tahun_angkatan = int.parse(thn_angkatan.text);
+                                      }
+
                                       var penyusutan_per_bulan = (jumlahBayar~/6);
 
                                       if (id_amortisasi_akun.isNotEmpty && text_keterangan.isNotEmpty &&
@@ -378,7 +393,8 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                                 jumlah: jumlahBayar,
                                               jumlah_mhs: jumlahMhs,
                                               semester: semester,
-                                              penyusutan: penyusutan_per_bulan
+                                              penyusutan: penyusutan_per_bulan,
+                                              tahun_angkatan: tahun_angkatan
                                             )
                                         ));
 
@@ -401,21 +417,6 @@ class AmortisasiPendapatanListState extends State<AmortisasiPendapatanList> {
                                             SnackBar(content: Text("Pastikan semua kolom inputan terisi."))
                                         );
                                       }
-
-                                      /*showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            Future.delayed(Duration(seconds: 1),
-                                                    () {
-                                                  Navigator.of(context).pop(true);
-                                                });
-                                            return DialogNoButton(
-                                                content: "Berhasil Ditambahkan!",
-                                                content_detail:
-                                                "Amortisasi Pendapatan baru berhasil ditambahkan",
-                                                path_image:
-                                                'assets/images/tambah_coa.png');
-                                          });*/
                                     },
                                     content: "Simpan")
                               ],

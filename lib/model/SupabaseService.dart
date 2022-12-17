@@ -268,24 +268,25 @@ class SupabaseService {
   }
 
   Future<ServiceStatus> getDetailAmortisasiAset(
-      String table_name, Map<String, String> keyword) async {
+      String table_name, Map<String, dynamic> keyword) async {
     try {
       final response = await _supabaseClient
           .from(table_name)
           .select()
-          .eq(keyword.keys.first, keyword.values.first)
-          .single();
+          .eq("id_amortisasi_aset", keyword["id_amortisasi_aset"])
+          .eq("tahun", keyword["tahun"]);
 
       if (response == null) {
-        return ServiceStatus(datastore: AmortisasiAsetDetail(), message: "");
+        return ServiceStatus(datastore: List<AmortisasiAsetDetail>.from([]), message: "");
       }
 
-      return ServiceStatus(datastore: AmortisasiAsetDetail.fromJson(response));
+      return ServiceStatus(datastore: List<AmortisasiAsetDetail>.from(
+          response.map((e) => AmortisasiAsetDetail.fromJson(e)).toList()));
     } on PostgrestException catch (error) {
-      return ServiceStatus(datastore: AmortisasiAsetDetail());
+      return ServiceStatus(datastore: List<AmortisasiAsetDetail>.from([]));
     } on NoSuchMethodError catch (error) {
       return ServiceStatus(
-          datastore: AmortisasiAsetDetail(),
+          datastore: List<AmortisasiAsetDetail>.from([]),
           message: error.stackTrace.toString());
     }
   }
@@ -327,26 +328,28 @@ class SupabaseService {
   }
 
   Future<ServiceStatus> getDetailAmortisasiPendapatan(
-      String table_name, Map<String, String> keyword) async {
+      String table_name, Map<String, dynamic> keyword) async {
     try {
       final response = await _supabaseClient
           .from(table_name)
           .select()
-          .eq(keyword.keys.first, keyword.values.first)
-          .single();
+          .eq("id_amortisasi_pendapatan", keyword["id_amortisasi_pendapatan"])
+          .eq("tahun", keyword["tahun"]);
 
       if (response == null) {
         return ServiceStatus(
-            datastore: AmortisasiPendapatanDetail(), message: "");
+            datastore: List<AmortisasiPendapatanDetail>.from([]), message: "");
       }
 
       return ServiceStatus(
-          datastore: AmortisasiPendapatanDetail.fromJson(response));
+          datastore: List<AmortisasiPendapatanDetail>.from(
+            response.map((e) => AmortisasiPendapatanDetail.fromJson(e)).toList()
+          ));
     } on PostgrestException catch (error) {
-      return ServiceStatus(datastore: AmortisasiPendapatanDetail());
+      return ServiceStatus(datastore: List<AmortisasiPendapatanDetail>.from([]));
     } on NoSuchMethodError catch (error) {
       return ServiceStatus(
-          datastore: AmortisasiPendapatanDetail(),
+          datastore: List<AmortisasiPendapatanDetail>.from([]),
           message: error.stackTrace.toString());
     }
   }

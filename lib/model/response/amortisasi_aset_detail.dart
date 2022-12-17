@@ -5,14 +5,14 @@ class AmortisasiAsetDetail extends Equatable {
   String id_amortisasi_aset;
   String bulan;
   int tahun;
-  double kali;
+  int nominal_penyusutan;
 
   AmortisasiAsetDetail(
       {this.id_detail = 0,
       this.id_amortisasi_aset = "",
       this.bulan = "",
       this.tahun = 0,
-      this.kali = 0.0});
+      this.nominal_penyusutan = 0});
 
   factory AmortisasiAsetDetail.fromJson(Map<String, dynamic> json) {
     return AmortisasiAsetDetail(
@@ -20,7 +20,7 @@ class AmortisasiAsetDetail extends Equatable {
       id_amortisasi_aset: json['id_amortisasi_aset'],
       bulan: json['bulan'],
       tahun: json['tahun'],
-      kali: json['kali_penyusutan'].toDouble()
+      nominal_penyusutan: json['nominal_penyusutan'].toInt()
     );
   }
 
@@ -29,10 +29,10 @@ class AmortisasiAsetDetail extends Equatable {
       'id_amortisasi_aset': this.id_amortisasi_aset,
       'bulan': this.bulan,
       'tahun': this.tahun,
-      'kali_penyusutan': this.kali
+      'nominal_penyusutan': this.nominal_penyusutan
     };
   }
 
   @override
-  List<Object> get props => [id_detail, id_amortisasi_aset, bulan, tahun, kali];
+  List<Object> get props => [id_detail, id_amortisasi_aset, bulan, tahun, nominal_penyusutan];
 }

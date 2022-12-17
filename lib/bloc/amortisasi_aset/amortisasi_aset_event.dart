@@ -34,6 +34,13 @@ class AmortisasiAsetUpdated extends Event {
   AmortisasiAsetUpdated({required this.aset, required this.id_amortisasi_aset});
 }
 
+class AmortisasiDetailAsetUpdated extends Event {
+  final AmortisasiAsetDetail aset_detail;
+  final int id_amortisasi_detail;
+
+  AmortisasiDetailAsetUpdated({required this.aset_detail, required this.id_amortisasi_detail});
+}
+
 class AmortisasiAsetDeleted extends Event {
   final String id_amortisasi_aset;
 

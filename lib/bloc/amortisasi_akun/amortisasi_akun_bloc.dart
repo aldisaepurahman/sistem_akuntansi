@@ -50,6 +50,10 @@ class AmortisasiAkunBloc extends Bloc<Event, SiakState> {
     try {
       emit(LoadingState());
       await service
+          .delete(TableViewType.amortisasi_aset.name, {"id_amortisasi_akun": event.id_amortisasi_akun});
+      await service
+          .delete(TableViewType.amortisasi_pendapatan.name, {"id_amortisasi_akun": event.id_amortisasi_akun});
+      await service
           .delete(TableViewType.amortisasi_akun.name, {"id_amortisasi_akun": event.id_amortisasi_akun});
       emit(CrudState(true));
     } catch (error) {
