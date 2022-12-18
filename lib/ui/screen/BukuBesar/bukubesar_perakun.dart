@@ -212,15 +212,29 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                                   ],
                                 ),
                                 SizedBox(height: 5),
-                                Text(
-                                  widget.nama_akun,
-                                  style: TextStyle(
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Color.fromARGB(255, 50, 52, 55)
-                                  ),
-                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Nama Akun: ",
+                                      style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Color.fromARGB(255, 50, 52, 55)
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      widget.nama_akun,
+                                      style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Color.fromARGB(255, 50, 52, 55)
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
