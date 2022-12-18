@@ -214,7 +214,7 @@ class JenisJurnalState extends State<JenisJurnal> {
                   Container(
                       margin: EdgeInsets.only(bottom: 15, left: 25),
                       child: HeaderText(
-                        content: "Jurnal Umum - Maret 2022",
+                        content: "Jurnal Umum - ${month[widget.bulan-1]} ${widget.tahun}",
                         size: 18,
                         color: hitam,
                       )

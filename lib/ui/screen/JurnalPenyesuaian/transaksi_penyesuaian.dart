@@ -351,7 +351,7 @@ class TransaksiPenyesuaianListState extends State<TransaksiPenyesuaianList> {
                   Container(
                     margin: EdgeInsets.only(bottom: 15, left: 25),
                     child: HeaderText(
-                        content: "Jurnal Maret 2022", size: 18, color: hitam
+                        content: "Jurnal ${month[widget.bulan-1]} ${widget.tahun}", size: 18, color: hitam
                     ),
                   ),
                   Container(
