@@ -24,12 +24,12 @@ class VLookup extends Equatable {
   factory VLookup.fromJson(Map<String, dynamic> json) {
     return VLookup(
         nama_akun: json['nama_akun'],
+        keterangan: json['keterangan_akun'],
         kode: json['kode_akun'],
         id_saldo: json['id_saldo'],
-        saldo: json['saldo'],
         bulan: json['bulan'],
         tahun: json['tahun'],
-        keterangan: json['keterangan_akun'],
+        saldo: json['saldo'],
         indentasi: json['indentasi']);
   }
 

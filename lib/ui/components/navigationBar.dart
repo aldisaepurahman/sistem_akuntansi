@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
@@ -84,6 +85,13 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   List<Widget> _mainContents = [];
   bool isExtended = false;
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> _clearSession() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.remove("user");
+  }
+
   Widget dashboardPage(){
     return Dashboard(client: widget.client);
   }
@@ -115,7 +123,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
   Widget getBukuBesarPage() {
     if (selectedBukuBesarIndex == 1) {
       return BukuBesarPerAkun(
-          client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, kode_akun: widget.params?['kode_akun'] as String); // tabel buku besar per akun
+          client: widget.client, bulan: widget.params?['bulan'] as int, tahun: widget.params?['tahun'] as int, kode_akun: widget.params?['kode_akun'] as String, nama_akun: widget.params?['nama_akun'] as String); // tabel buku besar per akun
     }
     return ListBukuBesar(client: widget.client); // tabel bulan tahun buku besar
   }
@@ -206,6 +214,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
                     });
                   },
                   onPressed2: () {
+                    _clearSession();
                     Future.delayed(Duration(seconds: 2), () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
                         return Login(client: widget.client);

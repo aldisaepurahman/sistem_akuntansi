@@ -6,6 +6,7 @@ import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset_detail.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_pendapatan.dart';
 import 'package:sistem_akuntansi/model/response/jenis_jurnal.dart';
+import 'package:sistem_akuntansi/model/response/users.dart';
 import 'package:sistem_akuntansi/model/response/vbulan_jurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
@@ -18,6 +19,29 @@ class SupabaseService {
       : _supabaseClient = supabaseClient;
 
   final SupabaseClient _supabaseClient;
+
+  Future<ServiceStatus> signIn(
+      String table_name, String email, String password) async {
+    try {
+      final response = await _supabaseClient
+          .from(table_name)
+          .select()
+          .eq("email", email)
+          .single();
+
+      if (response == null) {
+        return ServiceStatus(
+            datastore: Users(), message: response.toString());
+      }
+
+      return ServiceStatus(datastore: Users.fromJson(response));
+    } on PostgrestException catch (error) {
+      return ServiceStatus(datastore: Users(), message: error.toString());
+    } on NoSuchMethodError catch (error) {
+      return ServiceStatus(
+          datastore: Users(), message: error.stackTrace.toString());
+    }
+  }
 
   Future<ServiceStatus> getAllCOA(
       String table_name, Map<String, String> keyword) async {

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 
 class TableDashboard extends StatelessWidget {
   final tanggal;
@@ -44,7 +45,7 @@ class TableDashboard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                nama_transaksi.length > 60 ? '${nama_transaksi.substring(0, 60)}...' : nama_transaksi,
+                nama_transaksi.length > 50 ? '${nama_transaksi.substring(0, 50)}...' : nama_transaksi,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
@@ -68,7 +69,7 @@ class TableDashboard extends StatelessWidget {
           ),
           Spacer(),
           Text(
-            keterangan == "Debit" ? "+ $saldo"  : "- $saldo",
+            keterangan == "Debit" ? "+ Rp ${CurrencyFormat.convertToCurrency(saldo)}"  : "- Rp ${CurrencyFormat.convertToCurrency(saldo)}",
             style: TextStyle(
               color: keterangan == "Debit" ? greenColor : redColor,
               fontSize: 20,

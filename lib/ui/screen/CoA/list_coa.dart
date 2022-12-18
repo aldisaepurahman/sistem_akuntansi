@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
-import 'package:sistem_akuntansi/bloc/vlookup/vlookup_cubit.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
-import 'package:sistem_akuntansi/bloc/vlookup/vlookup_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/vlookup.dart';
@@ -15,7 +13,6 @@ import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
-import 'package:sistem_akuntansi/utils/V_lookup.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';

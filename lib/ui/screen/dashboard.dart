@@ -9,6 +9,7 @@ import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/card.dart';
 import 'package:sistem_akuntansi/ui/components/table.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:supabase/supabase.dart';
 
 class Dashboard extends StatefulWidget {
@@ -96,7 +97,7 @@ class DashboardState extends State<Dashboard> {
                                   width: 20,
                                 ),
                                 CardSaldo(
-                                  total: "+ Rp " + "$total_saldo_kredit",
+                                  total: "Rp ${CurrencyFormat.convertToCurrency(total_saldo_kredit)}",
                                   fontColor: greenColor,
                                   bgColor: whiteColor,
                                   textCard: "Total Pemasukan",
@@ -106,7 +107,7 @@ class DashboardState extends State<Dashboard> {
                                   width: 20,
                                 ),
                                 CardSaldo(
-                                  total: "- Rp " + "$total_saldo_debit",
+                                  total: "- Rp ${CurrencyFormat.convertToCurrency(total_saldo_debit)}",
                                   fontColor: redColor,
                                   bgColor: whiteColor,
                                   textCard: "Total Pengeluaran",
@@ -161,19 +162,22 @@ class DashboardState extends State<Dashboard> {
                       list_transaksi.clear();
 
                       temp_transaksi = state.datastore;
-                      temp_transaksi.sort((b, a) => a.id_transaksi.compareTo(b.id_transaksi));
+                      if (temp_transaksi.isNotEmpty) {
+                        temp_transaksi.sort(
+                            (b, a) => a.id_transaksi.compareTo(b.id_transaksi));
 
-                      for(var i = 0; i < 5; i += 1) {
-                        list_transaksi.add(temp_transaksi[i]);
-                      }
+                        for (var i = 0; i < 5; i += 1) {
+                          list_transaksi.add(temp_transaksi[i]);
+                        }
 
-                      for(var trans in temp_transaksi) {
-                        if (trans.jenis_transaksi.contains("Debit")) {
-                          total_saldo -= trans.nominal_transaksi;
-                          total_saldo_debit += trans.nominal_transaksi;
-                        } else {
-                          total_saldo += trans.nominal_transaksi;
-                          total_saldo_kredit += trans.nominal_transaksi;
+                        for (var trans in temp_transaksi) {
+                          if (trans.jenis_transaksi.contains("Debit")) {
+                            total_saldo -= trans.nominal_transaksi;
+                            total_saldo_debit += trans.nominal_transaksi;
+                          } else {
+                            total_saldo += trans.nominal_transaksi;
+                            total_saldo_kredit += trans.nominal_transaksi;
+                          }
                         }
                       }
                     }

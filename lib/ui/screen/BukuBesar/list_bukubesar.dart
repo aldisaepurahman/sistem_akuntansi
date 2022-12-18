@@ -11,7 +11,6 @@ import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
-import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ListBukuBesar extends StatefulWidget {
@@ -69,7 +68,7 @@ class ListBukuBesarState extends State<ListBukuBesar> {
           amortisasiIndex: 0,
           jurnalPenyesuaianIndex: 0,
           client: widget.client,
-          params: {"bulan": bulan, "tahun": tahun, "kode_akun": ""},
+          params: {"bulan": bulan, "tahun": tahun, "kode_akun": "", "nama_akun": ""},
         )
       )
     );

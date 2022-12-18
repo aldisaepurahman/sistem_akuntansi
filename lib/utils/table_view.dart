@@ -24,7 +24,8 @@ enum TableViewType {
   amortisasi_aset,
   amortisasi_aset_detail,
   amortisasi_pendapatan,
-  amortisasi_pendapatan_detail
+  amortisasi_pendapatan_detail,
+  stibo_users
 }
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

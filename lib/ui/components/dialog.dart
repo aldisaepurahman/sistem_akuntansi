@@ -3,6 +3,7 @@ import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 
 class Dialog2Button extends StatelessWidget {
   final String content_detail;
@@ -176,7 +177,7 @@ class DialogPenyusutan extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(text: first_desc),
                   TextSpan(
-                      text: " Rp $penyusutan",
+                      text: " Rp ${CurrencyFormat.convertToCurrency(penyusutan)}",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontFamily: "Inner",

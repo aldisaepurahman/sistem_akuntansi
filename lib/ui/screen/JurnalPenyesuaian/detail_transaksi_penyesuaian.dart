@@ -12,7 +12,6 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
 
 class DetailTransaksiPenyesuaian extends StatefulWidget {
   final SupabaseClient client;
