@@ -21,7 +21,7 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
-import 'package:sistem_akuntansi/utils/Transaksi.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:sistem_akuntansi/utils/table_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
@@ -1224,7 +1224,7 @@ class TransaksiTableData extends DataTableSource {
                           children: [
                             SizedBox(height: 10),
                             Text(
-                              "${_debitContent[i].nominal_transaksi}",
+                              "${CurrencyFormat.convertToCurrency(_debitContent[i].nominal_transaksi)}",
                               style: TextStyle(
                                 fontFamily: "Inter",
                               ),
@@ -1275,7 +1275,7 @@ class TransaksiTableData extends DataTableSource {
                           children: [
                             SizedBox(height: 10),
                             Text(
-                              "${_kreditContent[i].nominal_transaksi}",
+                              "${CurrencyFormat.convertToCurrency(_kreditContent[i].nominal_transaksi)}",
                               style: TextStyle(
                                 fontFamily: "Inter",
                               ),

@@ -3,7 +3,6 @@ import 'package:sistem_akuntansi/bloc/Event.dart';
 import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_event.dart';
-import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_state.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';

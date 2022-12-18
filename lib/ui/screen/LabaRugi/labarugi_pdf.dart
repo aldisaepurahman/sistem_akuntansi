@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sistem_akuntansi/ui/components/pdf.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:sistem_akuntansi/ui/components/pdf_styles.dart';
 
@@ -50,7 +51,7 @@ Future<void> labarugi_pdf(
     page.graphics.drawRectangle(
         brush: PdfSolidBrush(PdfColor(99, 231, 106)),
         bounds: Rect.fromLTWH(0, 143, pageSize.width, 40));
-    page.graphics.drawString("LABA : Rp" + total_laba.toString(),
+    page.graphics.drawString("LABA : Rp ${CurrencyFormat.convertToCurrency(total_laba)}",
         PdfStandardFont(PdfFontFamily.timesRoman, 14, style: PdfFontStyle.bold),
         brush: PdfSolidBrush(PdfColor(255, 255, 255)),
         bounds: Rect.fromLTWH(10, 150, 250, 25),
@@ -61,7 +62,7 @@ Future<void> labarugi_pdf(
     page.graphics.drawRectangle(
         brush: PdfSolidBrush(PdfColor(225, 60, 60)),
         bounds: Rect.fromLTWH(0, 143, pageSize.width, 40));
-    page.graphics.drawString("RUGI : Rp" + total_laba.toString(),
+    page.graphics.drawString("RUGI : Rp ${CurrencyFormat.convertToCurrency(total_laba)}",
         PdfStandardFont(PdfFontFamily.timesRoman, 14, style: PdfFontStyle.bold),
         brush: PdfSolidBrush(PdfColor(255, 255, 255)),
         bounds: Rect.fromLTWH(10, 150, 250, 25),
@@ -106,7 +107,7 @@ Future<void> labarugi_pdf(
 
   result = PdfTextElement(
           format: PdfStringFormat(alignment: PdfTextAlignment.right),
-          text: total_laba.toString(),
+          text: CurrencyFormat.convertToCurrency(total_laba),
           font: new PdfStandardFont(PdfFontFamily.timesRoman, 12,
               style: PdfFontStyle.bold))
       .draw(

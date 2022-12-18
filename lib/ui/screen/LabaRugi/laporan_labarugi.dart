@@ -11,11 +11,9 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
 import 'package:sistem_akuntansi/ui/screen/LabaRugi/labarugi_pdf.dart';
-import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
-
-import '../../../utils/V_LabaRugi.dart';
 
 class LaporanLabaRugi extends StatefulWidget {
   const LaporanLabaRugi(
@@ -127,7 +125,7 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                item["debit"].toString(),
+                CurrencyFormat.convertToCurrency(item["debit"]),
                 style: TextStyle(
                   fontFamily: "Inter",
                 ),
@@ -142,7 +140,7 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                item["kredit"].toString(),
+                CurrencyFormat.convertToCurrency(item["kredit"]),
                 style: TextStyle(
                   fontFamily: "Inter",
                 ),
@@ -309,12 +307,10 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                                 width: double.infinity,
                                 color: kuning,
                                 child: Text(
-                                    "Laba : Rp" +
-                                        ((total_kredit_pendapatan -
-                                            total_debit_pendapatan) +
-                                            (total_kredit_beban -
-                                                total_debit_beban))
-                                            .toString(),
+                                    "Laba : Rp ${CurrencyFormat.convertToCurrency(((total_kredit_pendapatan -
+                                        total_debit_pendapatan) +
+                                        (total_kredit_beban -
+                                            total_debit_beban)))}",
                                     style: TextStyle(
                                         fontFamily: "Inner",
                                         fontWeight: FontWeight.bold,
@@ -366,9 +362,8 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                                                 fontSize: 14,
                                                 color: hitam)),
                                         Text(
-                                            (total_kredit_pendapatan -
-                                                total_debit_pendapatan)
-                                                .toString(),
+                                            "Rp ${CurrencyFormat.convertToCurrency((total_kredit_pendapatan -
+                                                total_debit_pendapatan))}",
                                             style: TextStyle(
                                                 fontFamily: "Inner",
                                                 fontWeight: FontWeight.bold,
@@ -417,8 +412,7 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                                                 fontSize: 14,
                                                 color: hitam)),
                                         Text(
-                                            (total_kredit_beban - total_debit_beban)
-                                                .toString(),
+                                            "Rp ${CurrencyFormat.convertToCurrency((total_kredit_beban - total_debit_beban))}",
                                             style: TextStyle(
                                                 fontFamily: "Inner",
                                                 fontWeight: FontWeight.bold,
@@ -443,11 +437,10 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                                                 fontSize: 14,
                                                 color: hitam)),
                                         Text(
-                                            ((total_kredit_pendapatan -
+                                            "Rp ${CurrencyFormat.convertToCurrency(((total_kredit_pendapatan -
                                                 total_debit_pendapatan) +
                                                 (total_kredit_beban -
-                                                    total_debit_beban))
-                                                .toString(),
+                                                    total_debit_beban)))}",
                                             style: TextStyle(
                                                 fontFamily: "Inner",
                                                 fontWeight: FontWeight.bold,

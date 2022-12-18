@@ -11,6 +11,7 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailAmortisasiAset extends StatefulWidget {
@@ -312,15 +313,15 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                                           header: "Keterangan", content: widget.aset.keterangan),
                                       DetailText(
                                           header: "Nilai Perolehan",
-                                          content: "Rp ${widget.aset.nilai_awal}"),
+                                          content: "Rp ${CurrencyFormat.convertToCurrency(widget.aset.nilai_awal)}"),
                                       DetailText(
                                           header: "Akumulasi Penyusutan Tahun Lalu",
                                           content:
-                                          "Rp ${widget.aset.akumulasi}"),
+                                          "Rp ${CurrencyFormat.convertToCurrency(widget.aset.akumulasi)}"),
                                       DetailText(
                                           header: "Nilai Akhir Penyusutan",
                                           content:
-                                          "Rp $total_penyusutan")
+                                          "Rp ${CurrencyFormat.convertToCurrency(total_penyusutan)}")
                                     ],
                                   ),
                                 ),
@@ -336,7 +337,7 @@ class DetailAmortisasiAsetState extends State<DetailAmortisasiAset> {
                                           content: "${widget.aset.bulan_perolehan} ${widget.aset.tahun_perolehan}"),
                                       DetailText(
                                           header: "Nilai Penyusutan Normal",
-                                          content: "Rp ${widget.aset.penyusutan}")
+                                          content: "Rp ${CurrencyFormat.convertToCurrency(widget.aset.penyusutan)}")
                                     ],
                                   ),
                                 ),

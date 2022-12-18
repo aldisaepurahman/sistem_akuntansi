@@ -20,7 +20,6 @@ import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
-import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
 import 'package:sistem_akuntansi/utils/table_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';

@@ -12,7 +12,7 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
-import 'package:sistem_akuntansi/utils/V_LabaRugi.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:sistem_akuntansi/utils/table_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -311,10 +311,10 @@ class DetailAmortisasiPendapatanState
                                             content: "${widget.pendapatan.tahun_angkatan}"),
                                         DetailText(
                                             header: "Jumlah Pendapatan",
-                                            content: "Rp ${widget.pendapatan.jumlah}"),
+                                            content: "Rp ${CurrencyFormat.convertToCurrency(widget.pendapatan.jumlah)}"),
                                         DetailText(
                                             header: "Estimasi Pendapatan Bulan ini",
-                                            content: "Rp ${widget.pendapatan.penyusutan * widget.pendapatan.jumlah_mhs}")
+                                            content: "Rp ${CurrencyFormat.convertToCurrency(widget.pendapatan.penyusutan * widget.pendapatan.jumlah_mhs)}")
                                       ],
                                     ),
                                   ),
@@ -330,10 +330,10 @@ class DetailAmortisasiPendapatanState
                                             header: "Semester", content: widget.pendapatan.semester),
                                         DetailText(
                                             header: "Penyusutan",
-                                            content: "Rp ${widget.pendapatan.penyusutan}"),
+                                            content: "Rp ${CurrencyFormat.convertToCurrency(widget.pendapatan.penyusutan)}"),
                                         DetailText(
                                             header: "Pendapatan Bulan ini",
-                                            content: "Rp ${idx >= 0 ? amortisasiDetail[idx].nominal_penyusutan : 0}")
+                                            content: "Rp ${idx >= 0 ? CurrencyFormat.convertToCurrency(amortisasiDetail[idx].nominal_penyusutan) : 0}")
                                       ],
                                     ),
                                   ),

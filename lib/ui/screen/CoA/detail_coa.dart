@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/akun/akun_bloc.dart';
 import 'package:sistem_akuntansi/bloc/akun/akun_event.dart';
 import 'package:sistem_akuntansi/bloc/bloc_constants.dart';
 import 'package:sistem_akuntansi/bloc/detail_akun/detail_akun_bloc.dart';
-import 'package:sistem_akuntansi/bloc/detail_akun/detail_akun_state.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
@@ -15,6 +15,7 @@ import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailCOA extends StatefulWidget {
@@ -138,58 +139,60 @@ class DetailCOAState extends State<DetailCOA> {
                               fontSize: 24,
                               color: Color.fromARGB(255, 255, 204, 0)),
                         )),
-                        BlocBuilder<DetailAkunBloc, DetailAkunState>(
+                        BlocBuilder<DetailAkunBloc, SiakState>(
                           builder: (_, state) {
-                            switch (state.status) {
-                              case SystemStatus.loading:
-                                return const Center(child: CircularProgressIndicator());
-                              case SystemStatus.success:
-                                akun_saldo.id_saldo = state.datastate.id_saldo;
-                                akun_saldo.saldo = state.datastate.saldo;
-                                akun_saldo.kode_akun = state.datastate.kode;
-                                akun_saldo.bulan = state.datastate.bulan;
-                                akun_saldo.tahun = state.datastate.tahun;
-                                return Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        DetailText(
-                                            header: "Kode",
-                                            content: widget.akun.kode_akun),
-                                        DetailText(
-                                            header: "Keterangan",
-                                            content:
-                                                widget.akun.keterangan_akun.replaceAll("_", ",")),
-                                        DetailText(
-                                            header: "Saldo Awal Bulan ini",
-                                            content: (state.datastate.id_saldo > 0 && state.datastate.saldo > 0)
-                                                ? state.datastate.saldo.toString()
-                                                : "0 (tentukan saldo awal bulan ini)")
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        DetailText(
-                                            header: "Nama Akun",
-                                            content: widget.akun.nama_akun),
-                                        DetailText(
-                                            header: "Indentasi",
-                                            content: widget.akun.indentasi.toString()),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              case SystemStatus.failure:
+                            if (state is LoadingState) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            if (state is SuccessState){
+                              akun_saldo.id_saldo = state.datastore.id_saldo;
+                              akun_saldo.saldo = state.datastore.saldo;
+                              akun_saldo.kode_akun = state.datastore.kode;
+                              akun_saldo.bulan = state.datastore.bulan;
+                              akun_saldo.tahun = state.datastore.tahun;
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      DetailText(
+                                          header: "Kode",
+                                          content: widget.akun.kode_akun),
+                                      DetailText(
+                                          header: "Keterangan",
+                                          content:
+                                          widget.akun.keterangan_akun.replaceAll("_", ",")),
+                                      DetailText(
+                                          header: "Saldo Awal Bulan ini",
+                                          content: (state.datastore.id_saldo > 0 && state.datastore.saldo > 0)
+                                              ? "Rp ${CurrencyFormat.convertToCurrency(state.datastore.saldo)}"
+                                              : "Rp 0 (tentukan saldo awal bulan ini)")
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      DetailText(
+                                          header: "Nama Akun",
+                                          content: widget.akun.nama_akun),
+                                      DetailText(
+                                          header: "Indentasi",
+                                          content: widget.akun.indentasi.toString()),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
+                            if (state is FailureState) {
                                 return Center(child: Text(state.error));
                             }
+                            return const Center(child: SizedBox(width: 30));
                           },
                         ),
                         Container(

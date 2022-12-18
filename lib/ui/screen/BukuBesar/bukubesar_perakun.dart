@@ -3,28 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sistem_akuntansi/bloc/SiakState.dart';
 import 'package:sistem_akuntansi/bloc/buku_besar/buku_besar_bloc.dart';
 import 'package:sistem_akuntansi/bloc/buku_besar/buku_besar_event.dart';
-import 'package:sistem_akuntansi/bloc/vjurnal/vjurnal_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_bloc.dart';
 import 'package:sistem_akuntansi/bloc/vlookup/vlookup_event.dart';
 import 'package:sistem_akuntansi/model/SupabaseService.dart';
 import 'package:sistem_akuntansi/model/response/akun.dart';
 import 'package:sistem_akuntansi/model/response/vjurnal_expand.dart';
-import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/text_template.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/navigationBar.dart';
 import 'package:sistem_akuntansi/ui/components/form.dart';
 import 'package:sistem_akuntansi/ui/components/tableRow.dart';
-import 'package:sistem_akuntansi/utils/Buku_besar.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BukuBesarPerAkun extends StatefulWidget {
   final SupabaseClient client;
   final int bulan, tahun;
-  final String kode_akun;
+  final String kode_akun, nama_akun;
 
-  BukuBesarPerAkun({required this.client, required this.bulan, required this.tahun, this.kode_akun = "", Key? key}) : super(key: key);
+  BukuBesarPerAkun({required this.client, required this.bulan, required this.tahun, this.kode_akun = "", this.nama_akun = "", Key? key}) : super(key: key);
 
   @override
   BukuBesarPerAkunState createState() {
@@ -64,12 +62,14 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
   void getAkunText(String? newValue) {
     setState(() {
       var kode_akun = "";
+      var nama_akun = "";
       if(newValue != null) {
         textAkunController.text = newValue;
         int idx = list_coa.indexWhere((element) => element.nama_akun == textAkunController.text);
         kode_akun = list_coa[idx].kode_akun;
+        nama_akun = list_coa[idx].nama_akun;
       }
-      _navigateSelf(context, kode_akun);
+      _navigateSelf(context, kode_akun, nama_akun);
     });
   }
 
@@ -109,7 +109,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
     );
   }
 
-  void _navigateSelf(BuildContext context, String kode_akun){
+  void _navigateSelf(BuildContext context, String kode_akun, String nama_akun){
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) =>
             SideNavigationBar(
@@ -122,7 +122,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                 amortisasiIndex: 0,
                 jurnalPenyesuaianIndex: 0,
                 client: widget.client,
-              params: {"bulan": widget.bulan, "tahun": widget.tahun, "kode_akun": kode_akun},
+              params: {"bulan": widget.bulan, "tahun": widget.tahun, "kode_akun": kode_akun, "nama_akun": nama_akun},
             )
         )
     );
@@ -212,15 +212,15 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                                   ],
                                 ),
                                 SizedBox(height: 5),
-                                /*Text(
-                                  "Akun, Debit",
+                                Text(
+                                  widget.nama_akun,
                                   style: TextStyle(
                                       fontFamily: "Inter",
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
                                       color: Color.fromARGB(255, 50, 52, 55)
                                   ),
-                                ),*/
+                                ),
                               ],
                             ),
                           ),
@@ -270,6 +270,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                         }
                         if (state is SuccessState) {
                           var total_saldo = 0;
+
                           list_buku_besar.forEach((items) {
                             if (items.jenis_transaksi.contains("Debit")) {
                               total_saldo += items.nominal_transaksi;
@@ -303,7 +304,7 @@ class BukuBesarPerAkunState extends State<BukuBesarPerAkun> {
                                                 )
                                             ),
                                             Text(
-                                                'Rp $total_saldo',
+                                                "Rp ${CurrencyFormat.convertToCurrency(total_saldo)}",
                                                 style: TextStyle(
                                                   fontSize: 18,
                                                   fontFamily: "Inter",

@@ -1,3 +1,4 @@
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -64,16 +65,16 @@ void add_data(
   final PdfGridRow row = grid.rows.add();
   row.cells[0].value = kode;
   row.cells[1].value = nama_akun;
-  row.cells[2].value = ns_debit.toString();
-  row.cells[3].value = ns_kredit.toString();
-  row.cells[4].value = penyesuaian_debit.toString();
-  row.cells[5].value = penyesuaian_kredit.toString();
-  row.cells[6].value = nsDisesuai_debit.toString();
-  row.cells[7].value = nsDisesuai_kredit.toString();
-  row.cells[8].value = lr_debit.toString();
-  row.cells[9].value = lr_kredit.toString();
-  row.cells[10].value = nrc_debit.toString();
-  row.cells[11].value = nrc_kredit.toString();
+  row.cells[2].value = CurrencyFormat.convertToCurrency(ns_debit);
+  row.cells[3].value = CurrencyFormat.convertToCurrency(ns_kredit);
+  row.cells[4].value = CurrencyFormat.convertToCurrency(penyesuaian_debit);
+  row.cells[5].value = CurrencyFormat.convertToCurrency(penyesuaian_kredit);
+  row.cells[6].value = CurrencyFormat.convertToCurrency(nsDisesuai_debit);
+  row.cells[7].value = CurrencyFormat.convertToCurrency(nsDisesuai_kredit);
+  row.cells[8].value = CurrencyFormat.convertToCurrency(lr_debit);
+  row.cells[9].value = CurrencyFormat.convertToCurrency(lr_kredit);
+  row.cells[10].value = CurrencyFormat.convertToCurrency(nrc_debit);
+  row.cells[11].value = CurrencyFormat.convertToCurrency(nrc_kredit);
 }
 
 PdfPage header_laporan(
@@ -166,7 +167,8 @@ void jumlah_neraca(PdfGrid grid) {
 
   for (int i = 2; i < row.cells.count; i++) {
     PdfGridCell cell = row.cells[i];
-    cell.value = total_saldo(grid, i).toString();
+    var total = total_saldo(grid, i);
+    cell.value = CurrencyFormat.convertToCurrency(total);
     right_style(cell);
   }
 }
@@ -185,35 +187,45 @@ void hitung_balance(PdfGrid grid) {
 
   int total_row = grid.rows.count - 3;
 
-  int lr_debit = int.parse(grid.rows[total_row].cells[8].value);
-  int lr_kredit = int.parse(grid.rows[total_row].cells[9].value);
-  int nrc_debit = int.parse(grid.rows[total_row].cells[10].value);
-  int nrc_kredit = int.parse(grid.rows[total_row].cells[11].value);
+  var grid_lr_debit = grid.rows[total_row].cells[8].value as String;
+  var grid_lr_kredit = grid.rows[total_row].cells[9].value as String;
+  var grid_nrc_debit = grid.rows[total_row].cells[10].value as String;
+  var grid_nrc_kredit = grid.rows[total_row].cells[11].value as String;
+
+  grid_lr_debit = grid_lr_debit.replaceAll(".", "");
+  grid_lr_kredit = grid_lr_kredit.replaceAll(".", "");
+  grid_nrc_debit = grid_nrc_debit.replaceAll(".", "");
+  grid_nrc_kredit = grid_nrc_kredit.replaceAll(".", "");
+
+  int lr_debit = int.parse(grid_lr_debit);
+  int lr_kredit = int.parse(grid_lr_kredit);
+  int nrc_debit = int.parse(grid_nrc_debit);
+  int nrc_kredit = int.parse(grid_nrc_kredit);
 
   var hitung_lr_debit, hitung_lr_kredit, hitung_nrc_debit, hitung_nrc_kredit;
 
   if (lr_debit > lr_kredit) {
     hitung_lr_debit = 0;
     hitung_lr_kredit = lr_debit - lr_kredit;
-    row.cells[8].value = hitung_lr_debit.toString();
-    row.cells[9].value = hitung_lr_kredit.toString();
+    row.cells[8].value = CurrencyFormat.convertToCurrency(hitung_lr_debit);
+    row.cells[9].value = CurrencyFormat.convertToCurrency(hitung_lr_kredit);
   } else if (lr_kredit > lr_debit) {
     hitung_lr_debit = lr_kredit - lr_debit;
     hitung_lr_kredit = 0;
-    row.cells[8].value = hitung_lr_debit.toString();
-    row.cells[9].value = hitung_lr_kredit.toString();
+    row.cells[8].value = CurrencyFormat.convertToCurrency(hitung_lr_debit);
+    row.cells[9].value = CurrencyFormat.convertToCurrency(hitung_lr_kredit);
   }
 
   if (nrc_debit > nrc_kredit) {
     hitung_nrc_debit = 0;
     hitung_nrc_kredit = nrc_debit - nrc_kredit;
-    row.cells[10].value = hitung_nrc_debit.toString();
-    row.cells[11].value = hitung_nrc_kredit.toString();
+    row.cells[10].value = CurrencyFormat.convertToCurrency(hitung_nrc_debit);
+    row.cells[11].value = CurrencyFormat.convertToCurrency(hitung_nrc_kredit);
   } else if (nrc_kredit > nrc_debit) {
     hitung_nrc_debit = nrc_kredit - nrc_debit;
     hitung_nrc_kredit = 0;
-    row.cells[10].value = hitung_nrc_debit.toString();
-    row.cells[11].value = hitung_nrc_kredit.toString();
+    row.cells[10].value = CurrencyFormat.convertToCurrency(hitung_nrc_debit);
+    row.cells[11].value = CurrencyFormat.convertToCurrency(hitung_nrc_kredit);
   }
 
   for (int i = 8; i < 12; i++) {
@@ -233,11 +245,11 @@ void hitung_balance(PdfGrid grid) {
   balance_nrc_debit = nrc_debit + hitung_nrc_debit;
   balance_nrc_kredit = nrc_kredit + hitung_nrc_kredit;
 
-  row2.cells[8].value = balance_lr_debit.toString();
-  row2.cells[9].value = balance_lr_kredit.toString();
+  row2.cells[8].value = CurrencyFormat.convertToCurrency(balance_lr_debit);
+  row2.cells[9].value = CurrencyFormat.convertToCurrency(balance_lr_kredit);
 
-  row2.cells[10].value = balance_nrc_debit.toString();
-  row2.cells[11].value = balance_nrc_kredit.toString();
+  row2.cells[10].value = CurrencyFormat.convertToCurrency(balance_nrc_debit);
+  row2.cells[11].value = CurrencyFormat.convertToCurrency(balance_nrc_kredit);
 
   if ((balance_lr_debit == balance_lr_kredit) &&
       (balance_nrc_debit == balance_nrc_kredit)) {
@@ -250,7 +262,8 @@ void hitung_balance(PdfGrid grid) {
 int total_saldo(PdfGrid grid, int i) {
   int total = 0;
   for (int j = 0; j < grid.rows.count - 1; j++) {
-    final String value = grid.rows[j].cells[i].value as String;
+    String value = grid.rows[j].cells[i].value as String;
+    value = value.replaceAll(".", "");
     total += int.parse(value);
   }
   return total;
@@ -264,15 +277,15 @@ void add_data_labarugi(PdfGrid grid, String nama_akun, int debit, int kredit) {
   labarugi_coa_style(row.cells[0]);
 
   if (debit > 0 || debit < 0) {
-    row.cells[1].value = debit.toString();
+    row.cells[1].value = CurrencyFormat.convertToCurrency(debit);
   } else {
-    row.cells[1].value = 0.toString();
+    row.cells[1].value = CurrencyFormat.convertToCurrency(0);
   }
 
   if (kredit > 0 || kredit < 0) {
-    row.cells[2].value = kredit.toString();
+    row.cells[2].value = CurrencyFormat.convertToCurrency(kredit);
   } else {
-    row.cells[2].value = 0.toString();
+    row.cells[2].value = CurrencyFormat.convertToCurrency(0);
   }
 }
 
@@ -284,8 +297,11 @@ int laba_rugi_hitung_saldo(PdfGrid grid, String nama_kolom, var jumlah) {
   labarugi_header_style(row.cells[0]);
 
   for (int j = 0; j < grid.rows.count - 1; j++) {
-    final String value = grid.rows[j].cells[1].value as String;
-    final String value2 = grid.rows[j].cells[2].value as String;
+    String value = grid.rows[j].cells[1].value as String;
+    String value2 = grid.rows[j].cells[2].value as String;
+    value = value.replaceAll(".", "");
+    value2 = value2.replaceAll(".", "");
+
     debit += int.parse(value);
     kredit += int.parse(value2);
   }
@@ -293,9 +309,9 @@ int laba_rugi_hitung_saldo(PdfGrid grid, String nama_kolom, var jumlah) {
   jumlah = kredit - debit;
 
   if (jumlah > 0 || jumlah < 0) {
-    row.cells[3].value = jumlah.toString();
+    row.cells[3].value = CurrencyFormat.convertToCurrency(jumlah);
   } else {
-    row.cells[3].value = 0.toString();
+    row.cells[3].value = CurrencyFormat.convertToCurrency(0);
   }
 
   return jumlah;

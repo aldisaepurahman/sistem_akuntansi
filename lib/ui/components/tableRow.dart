@@ -9,14 +9,8 @@ import 'package:sistem_akuntansi/model/response/vlookup.dart';
 import 'package:sistem_akuntansi/ui/components/button.dart';
 import 'package:sistem_akuntansi/ui/components/color.dart';
 import 'package:sistem_akuntansi/ui/components/dialog.dart';
-import 'package:sistem_akuntansi/utils/AkunAmortisasi.dart';
 import 'package:sistem_akuntansi/model/response/amortisasi_aset.dart';
-import 'package:sistem_akuntansi/utils/V_bulan_jurnal.dart';
-import 'package:sistem_akuntansi/utils/Jenis_jurnal.dart';
-import 'package:sistem_akuntansi/utils/Buku_besar.dart';
-import 'package:sistem_akuntansi/utils/V_detail_transaksi.dart';
-import 'package:sistem_akuntansi/utils/V_lookup.dart';
-import 'package:sistem_akuntansi/utils/V_LabaRugi.dart';
+import 'package:sistem_akuntansi/utils/currency_format.dart';
 
 class BukuBesarTableData extends DataTableSource {
   BuildContext context;
@@ -117,7 +111,7 @@ class BukuBesarTableData extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.nominal_transaksi}",
+                    "${CurrencyFormat.convertToCurrency(_content.nominal_transaksi)}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -487,7 +481,7 @@ class RowTableDetail extends DataTableSource {
                   Column(
                     children: [
                       SizedBox(height: 10),
-                      Text("${_contentDataDebit[i].nominal_transaksi}")
+                      Text("${CurrencyFormat.convertToCurrency(_contentDataDebit[i].nominal_transaksi)}")
                     ],
                   ),
               ],
@@ -525,7 +519,7 @@ class RowTableDetail extends DataTableSource {
                   Column(
                     children: [
                       SizedBox(height: 10),
-                      Text("${_contentDataKredit[i].nominal_transaksi}"),
+                      Text("${CurrencyFormat.convertToCurrency(_contentDataKredit[i].nominal_transaksi)}"),
                     ],
                   ),
               ],
@@ -611,7 +605,7 @@ class AmortisasiPendapatanTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.jumlah}",
+                    "${CurrencyFormat.convertToCurrency(_content.jumlah)}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -645,7 +639,7 @@ class AmortisasiPendapatanTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.penyusutan}",
+                    "${CurrencyFormat.convertToCurrency(_content.penyusutan)}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -788,7 +782,7 @@ class AmortisasiAsetTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.nilai_awal}",
+                    "${CurrencyFormat.convertToCurrency(_content.nilai_awal)}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
@@ -806,7 +800,7 @@ class AmortisasiAsetTable extends DataTableSource {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${_content.penyusutan}",
+                    "${CurrencyFormat.convertToCurrency(_content.penyusutan)}",
                     style: TextStyle(
                       fontFamily: "Inter",
                     ),
