@@ -384,7 +384,7 @@ class SupabaseService {
       final response = await _supabaseClient
           .from(table_name)
           .select()
-          .eq("tipe_jurnal", equivalent['tipe_jurnal']);
+          .like("tipe_jurnal", "%${equivalent['tipe_jurnal']}%");
 
       if (response == null) {
         return ServiceStatus(

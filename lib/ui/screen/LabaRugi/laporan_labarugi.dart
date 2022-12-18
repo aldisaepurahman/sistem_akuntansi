@@ -220,8 +220,8 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                         list_laba.forEach((coa) {
                           var mapData = {};
                           mapData["nama_akun"] = coa.nama_akun;
-                          if (coa.kode_akun.contains("2.4") && coa.keterangan.contains("Kredit")) {
-                            if (coa.neraca_saldo_disesuaikan! > 0) {
+                          if (coa.kode_akun.contains("2.4")) {
+                            if (coa.neraca_saldo_disesuaikan! >= 0) {
                               mapData["debit"] = coa.neraca_saldo_disesuaikan;
                               mapData["kredit"] = 0;
                               total_debit_pendapatan += coa.neraca_saldo_disesuaikan!;
@@ -231,8 +231,8 @@ class LaporanLabaRugiState extends State<LaporanLabaRugi> {
                               total_kredit_pendapatan += coa.neraca_saldo_disesuaikan!.abs();
                             }
                             datalistpendapatan.add(mapData);
-                          } else if (coa.kode_akun.contains("2.5") && coa.keterangan.contains("Debit")) {
-                            if (coa.neraca_saldo_disesuaikan! > 0) {
+                          } else if (coa.kode_akun.contains("2.5")) {
+                            if (coa.neraca_saldo_disesuaikan! >= 0) {
                               mapData["debit"] = coa.neraca_saldo_disesuaikan;
                               mapData["kredit"] = 0;
                               total_debit_beban += coa.neraca_saldo_disesuaikan!;

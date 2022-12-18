@@ -31,7 +31,7 @@ Future<void> neraca_pdf(List<VNeracaLajur> list_neraca, String bulan, int tahun)
     var neraca_debit = 0;
     var neraca_kredit = 0;
 
-    if (neraca.kode_akun.contains("1.1") && neraca.keterangan.contains("Debit")) {
+    if (neraca.kode_akun.contains("1.1")) {
       if (neraca.neraca_saldo! >= 0) {
         neraca_saldo_debit = neraca.neraca_saldo!;
       } else {
@@ -51,7 +51,7 @@ Future<void> neraca_pdf(List<VNeracaLajur> list_neraca, String bulan, int tahun)
         ns_disesuaikan_kredit = neraca.neraca_saldo_disesuaikan!.abs();
         neraca_kredit = neraca.neraca_saldo_disesuaikan!.abs();
       }
-    } else if (neraca.kode_akun.contains("1.2") && neraca.keterangan.contains("Kredit")) {
+    } else if (neraca.kode_akun.contains("1.2")) {
       if (neraca.neraca_saldo! < 0) {
         neraca_saldo_kredit = neraca.neraca_saldo!.abs();
       } else {
@@ -71,7 +71,7 @@ Future<void> neraca_pdf(List<VNeracaLajur> list_neraca, String bulan, int tahun)
         ns_disesuaikan_debit = neraca.neraca_saldo_disesuaikan!;
         neraca_debit = neraca.neraca_saldo_disesuaikan!;
       }
-    } else if (neraca.kode_akun.contains("1.3") && neraca.keterangan.contains("Kredit")) {
+    } else if (neraca.kode_akun.contains("1.3")) {
       if (neraca.neraca_saldo! < 0) {
         neraca_saldo_kredit = neraca.neraca_saldo!.abs();
       } else {
@@ -91,7 +91,7 @@ Future<void> neraca_pdf(List<VNeracaLajur> list_neraca, String bulan, int tahun)
         ns_disesuaikan_debit = neraca.neraca_saldo_disesuaikan!;
         neraca_debit = neraca.neraca_saldo_disesuaikan!;
       }
-    } else if (neraca.kode_akun.contains("2.4") && neraca.keterangan.contains("Kredit")) {
+    } else if (neraca.kode_akun.contains("2.4")) {
       if (neraca.neraca_saldo! < 0) {
         neraca_saldo_kredit = neraca.neraca_saldo!.abs();
       } else {
@@ -111,7 +111,7 @@ Future<void> neraca_pdf(List<VNeracaLajur> list_neraca, String bulan, int tahun)
         ns_disesuaikan_debit = neraca.neraca_saldo_disesuaikan!;
         laba_debit = neraca.neraca_saldo_disesuaikan!;
       }
-    } else if (neraca.kode_akun.contains("2.5") && neraca.keterangan.contains("Debit")) {
+    } else if (neraca.kode_akun.contains("2.5")) {
       if (neraca.neraca_saldo! >= 0) {
         neraca_saldo_debit = neraca.neraca_saldo!;
       } else {
